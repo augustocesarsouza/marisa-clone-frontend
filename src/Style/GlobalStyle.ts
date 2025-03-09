@@ -1,13 +1,6 @@
 import { createGlobalStyle } from 'styled-components';
 
 export const GlobalStyle = createGlobalStyle`
-  @font-face {
-    font-family: 'Pluto Sans';
-    src: url('/fonts/PlutoSans-Regular.woff2') format('woff2'),
-         url('/fonts/PlutoSans-Regular.woff') format('woff'),
-         url('/fonts/PlutoSans-Regular.ttf') format('truetype');
-  }
-
   *{
     margin: 0;
     padding: 0;
@@ -29,7 +22,8 @@ export const GlobalStyle = createGlobalStyle`
 
   body {
     font-size: 1.6rem;
-    font-family: ${({theme}) => theme.font.family.default}, sans-serif;
+    font-family: ${({theme}) => theme.font.family.default};
+    /* font-family: Montserrat; */
     height: 100%;
     margin: 0;
   }

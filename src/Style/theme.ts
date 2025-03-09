@@ -7,7 +7,7 @@ export const theme = {
   },
   font: {
     family: {
-      default: "'Pluto Sans'",
+      default: "'Montserrat'",
       secondary: "'Arial'",
     },
     sizes: {
