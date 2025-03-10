@@ -1,8 +1,10 @@
 import { useRef } from 'react';
 import * as Styled from './styled';
 import LoupaSvg from '../../../Svg/LoupaSvg/LoupaSvg';
+import { useNavigate } from 'react-router-dom';
 
 const FirstHeaderBody = () => {
+  const nav = useNavigate();
   const RefContainerMyPurchase = useRef<HTMLDivElement | null>(null);
 
   const onMouseEnterMyPurchase = () => {
@@ -20,12 +22,20 @@ const FirstHeaderBody = () => {
   };
 
   const onClickContainerLoginAndRegister = () => {
-    console.log('redirect');
+    if (typeof window === 'undefined') return;
+    nav('/login', { replace: false });
+    window.location.reload();
+  };
+
+  const onClickContainerImgMarisa = () => {
+    if (typeof window === 'undefined') return;
+    nav('/', { replace: false });
+    window.location.reload();
   };
 
   return (
     <Styled.ContainerFirstHeaderBody>
-      <Styled.ContainerImgMarisa>
+      <Styled.ContainerImgMarisa onClick={onClickContainerImgMarisa}>
         <Styled.Img
           src="https://res.cloudinary.com/dyqsqg7pk/image/upload/q_100/v1741443432/imgs-backend-frontend-marisa/frontend/logo-marisa_gsegyb.svg"
           alt="logo-home-body-marisa"

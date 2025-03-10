@@ -14,6 +14,7 @@ export const ContainerImgMarisa = styled.div`
   width: 175px;
   height: 40px;
   margin-right: 80px;
+  cursor: pointer;
 `;
 
 export const Img = styled.img`

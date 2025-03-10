@@ -1,13 +1,14 @@
 import { Route, Routes } from 'react-router-dom';
 import * as Styled from './style';
 import Home from '../Home/Home';
+import LoginMain from '../../Components/LoginComponents/LoginMain/LoginMain';
 
 const AppContent = () => {
   return (
     <Styled.ContainerMain>
       <Routes>
         <Route path="/" element={<Home />} />
-        {/* <Route path="/login" element={<LoginComponentMain />} /> */}
+        <Route path="/login" element={<LoginMain />} />
 
         {/* <Route path="/verify" element={<VerifyPassword />} />
         <Route path="/verify/password" element={<VerifyPasswordStep2 />} /> */}
