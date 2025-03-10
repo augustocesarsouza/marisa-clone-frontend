@@ -89,6 +89,8 @@ export const ContainerMyPurchase = styled.div`
   display: flex;
   justify-content: space-evenly;
   width: 170px;
+  position: relative;
+  cursor: pointer;
 `;
 
 export const ContainerImgPurchase = styled.div`
@@ -125,5 +127,39 @@ export const ContainerSecondPurchase = styled.div`
   >span {
     font-size: 13px;
     font-weight: 500;
+  }
+`;
+
+export const ContainerModalMyPurchase = styled.div`
+  display: none;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  right: 0px;
+  bottom: -100px;
+  border: 1px solid #ccc;
+  background-color: #fff;
+  width: 400px;
+  height: 85px;
+
+  >span {
+    font-size: 17px;
+    font-weight: 600;
+    color: #777;
+  }
+
+  &::before {
+    content: " ";
+    position: absolute;
+    width: 15px;
+    height: 15px;
+    border: 1px solid #ccc;
+    border-right-color: transparent;
+    border-bottom-color: transparent;
+    background-color: #fff;
+    backface-visibility: hidden;
+    left: 255px;
+    top: 0px;
+    transform: rotate(45deg) translate(-100%, 20%) scale(1, 1);
   }
 `;

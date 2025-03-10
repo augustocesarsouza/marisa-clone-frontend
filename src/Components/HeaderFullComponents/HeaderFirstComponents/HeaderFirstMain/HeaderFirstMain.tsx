@@ -2,7 +2,7 @@ import HeaderFirst from '../HeaderFirst/HeaderFirst';
 import HeaderSecond from '../HeaderSecond/HeaderSecond';
 import * as Styled from './styled';
 
-const HeaderMain = () => {
+const HeaderFirstMain = () => {
   return (
     <Styled.ContainerMain>
       <HeaderFirst></HeaderFirst>
@@ -11,4 +11,4 @@ const HeaderMain = () => {
   );
 };
 
-export default HeaderMain;
+export default HeaderFirstMain;

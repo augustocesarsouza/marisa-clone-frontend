@@ -7,6 +7,8 @@ const AppContent = () => {
     <Styled.ContainerMain>
       <Routes>
         <Route path="/" element={<Home />} />
+        {/* <Route path="/login" element={<LoginComponentMain />} /> */}
+
         {/* <Route path="/verify" element={<VerifyPassword />} />
         <Route path="/verify/password" element={<VerifyPasswordStep2 />} /> */}
 
