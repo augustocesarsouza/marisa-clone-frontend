@@ -4,6 +4,4 @@ export const Span = styled.span``;
 
 export const Container = styled.div``;
 
-export const ContainerMain = styled.div`
-  padding-bottom: 600px;
-`;
+export const ContainerMain = styled.div``;
