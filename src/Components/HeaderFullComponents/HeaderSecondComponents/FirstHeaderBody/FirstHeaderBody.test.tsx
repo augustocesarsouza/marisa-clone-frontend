@@ -1,10 +1,15 @@
 import { render } from '@testing-library/react';
 import { screen } from '@testing-library/dom';
 import FirstHeaderBody from './FirstHeaderBody';
+import { MemoryRouter } from 'react-router-dom';
 
 describe('FirstHeaderBody', () => {
   test('should render itens', () => {
-    render(<FirstHeaderBody />);
+    render(
+      <MemoryRouter>
+        <FirstHeaderBody />
+      </MemoryRouter>
+    );
 
     // const h1 = screen.getByRole('heading', { name: 'O que é CVV?' });
 
