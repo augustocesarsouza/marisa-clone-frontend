@@ -13,6 +13,7 @@ export const ContainerMain = styled.div`
   padding-bottom: 70px;
   align-items: center;
   background-color: #f2f1ef;
+  margin-top: 30px;
 `;
 
 export const ContainerSecuritySeals = styled.div`
@@ -21,6 +22,10 @@ export const ContainerSecuritySeals = styled.div`
 
   width: 1100px;
   margin-bottom: 30px;
+
+  >img {
+    margin-right: 20px;
+  }
 `;
 
 export const ContainerSecuritySealsSvgAndSpan = styled.div`
@@ -43,6 +48,10 @@ export const ContainerSecuritySealsSvgAndSpan = styled.div`
 export const ContainerPaymentMethods = styled.div`
   display: flex;
   width: 1100px;
+
+  >img {
+    margin-right: 15px;
+  }
 `;
 
 export const ContainerPaymentMethodsSvgAndSpan = styled.div`
