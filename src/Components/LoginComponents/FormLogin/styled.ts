@@ -36,7 +36,6 @@ export const ContainerLabelInput = styled.div`
   display: flex;
   flex-direction: column;
   line-height: 1;
-  /* margin-bottom: 20px; */
   margin-bottom: 10px;
   position: relative;
 
@@ -132,6 +131,7 @@ export const ContainerSpanYetNotHaveAccount = styled.div`
 
   >span:nth-of-type(2){
     color: #ec008c;
+    cursor: pointer;
   }
 `;
 

@@ -2,6 +2,7 @@ import { useRef, useState } from 'react';
 import * as Styled from './styled';
 import SvgEyeOpen from '../../Svg/SvgEyeOpen/SvgEyeOpen';
 import SvgEyeClose from '../../Svg/SvgEyeClose/SvgEyeClose';
+import { useNavigate } from 'react-router-dom';
 
 const FormLogin = () => {
   const inputPassword = useRef<HTMLInputElement>(null);
@@ -18,6 +19,8 @@ const FormLogin = () => {
 
   const [errorInputEmailCpf, setErrorInputEmailCpf] = useState(false);
   const [errorPassword, setErrorPassword] = useState(false);
+
+  const nav = useNavigate();
 
   const onClickSvgEye = () => {
     const input = inputPassword.current as HTMLInputElement;
@@ -152,6 +155,12 @@ const FormLogin = () => {
     }
   };
 
+  const onClickCreateAccount = () => {
+    if (typeof window === 'undefined') return;
+    nav('/register', { replace: false });
+    window.location.reload();
+  };
+
   return (
     <Styled.ContainerLoginMain>
       <Styled.ContainerLogin>
@@ -207,7 +216,7 @@ const FormLogin = () => {
 
           <Styled.ContainerSpanYetNotHaveAccount>
             <Styled.Span>Ainda não tem um cadastro?</Styled.Span>
-            <Styled.Span>Crie sua conta</Styled.Span>
+            <Styled.Span onClick={onClickCreateAccount}>Crie sua conta</Styled.Span>
           </Styled.ContainerSpanYetNotHaveAccount>
         </Styled.Form>
       </Styled.ContainerLogin>

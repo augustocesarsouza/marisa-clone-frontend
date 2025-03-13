@@ -2,6 +2,7 @@ import { Route, Routes } from 'react-router-dom';
 import * as Styled from './style';
 import Home from '../Home/Home';
 import LoginMain from '../../Components/LoginComponents/LoginMain/LoginMain';
+import RegisterMain from '../../Components/RegisterComponents/RegisterMain/RegisterMain';
 
 const AppContent = () => {
   return (
@@ -9,6 +10,7 @@ const AppContent = () => {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<LoginMain />} />
+        <Route path="/register" element={<RegisterMain />} />
 
         {/* <Route path="/verify" element={<VerifyPassword />} />
         <Route path="/verify/password" element={<VerifyPasswordStep2 />} /> */}
