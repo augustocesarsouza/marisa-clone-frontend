@@ -43,8 +43,7 @@ const RegisterMain = () => {
   const SpanErrorToken = useRef<HTMLSpanElement>(null);
 
   const buttonCompleteRegistration = useRef<HTMLButtonElement>(null);
-
-  const [canSendToCreate, setCanSendToCreate] = useState(false);
+  const buttonReceiveTokenToRegister = useRef<HTMLButtonElement>(null);
 
   const [whichTypePersonalWasClicked, setWhichTypePersonalWasClicked] = useState('individual');
   const [whichGender, setWhichGender] = useState('feminine');
@@ -59,83 +58,36 @@ const RegisterMain = () => {
     const containerDoNotInform = ContainerCheckboxDoNotInform.current as HTMLDivElement;
     checkboxNotClicked(containerDoNotInform);
 
-    const inputBirthdate = inputBirthDate.current as HTMLInputElement;
-
-    if (inputBirthdate) {
+    const applyMask = (
+      element: HTMLInputElement | null,
+      maskPattern: string,
+      placeholder: string
+    ) => {
+      if (!element) return;
       const mask = new Inputmask({
-        mask: '99/99/9999',
-        placeholder: '__/__/___',
-        insertMode: true, // Ensure the mask does not insert mode to avoid jumping characters
-        showMaskOnHover: false,
-        showMaskOnFocus: false,
-      });
-      mask.mask(inputBirthdate);
-    }
-
-    const inputCpfMask = inputCpf.current as HTMLInputElement;
-
-    if (inputCpfMask) {
-      const mask = new Inputmask({
-        mask: '999.999.999-99',
-        placeholder: '___.___.___-__',
+        mask: maskPattern,
+        placeholder,
         insertMode: true,
         showMaskOnHover: false,
         showMaskOnFocus: false,
       });
-      mask.mask(inputCpfMask);
-    }
+      mask.mask(element);
+    };
 
-    const inputDDDCellPhoneMask = inputDDDCellPhone.current as HTMLInputElement;
+    const maskConfigs = [
+      { element: inputBirthDate.current, mask: '99/99/9999', placeholder: '__/__/____' },
+      { element: inputCpf.current, mask: '999.999.999-99', placeholder: '___.___.___-__' },
+      { element: inputDDDCellPhone.current, mask: '99', placeholder: '__' },
+      { element: inputDDDTelephone.current, mask: '99', placeholder: '__' },
+      { element: inputCellPhone.current, mask: '99999-9999', placeholder: '_____-____' },
+      { element: inputTelephone.current, mask: '9999-9999', placeholder: '____-____' },
+      { element: inputToken.current, mask: '999999', placeholder: '' },
+    ];
 
-    if (inputDDDCellPhoneMask) {
-      const mask = new Inputmask({
-        mask: '99',
-        placeholder: '__',
-        insertMode: true,
-        showMaskOnHover: false,
-        showMaskOnFocus: false,
-      });
-      mask.mask(inputDDDCellPhoneMask);
-    }
-
-    const inputDDDTelephoneMask = inputDDDTelephone.current as HTMLInputElement;
-
-    if (inputDDDTelephoneMask) {
-      const mask = new Inputmask({
-        mask: '99',
-        placeholder: '__',
-        insertMode: true,
-        showMaskOnHover: false,
-        showMaskOnFocus: false,
-      });
-      mask.mask(inputDDDTelephoneMask);
-    }
-
-    const inputCellPhoneMask = inputCellPhone.current as HTMLInputElement;
-
-    if (inputCellPhoneMask) {
-      const mask = new Inputmask({
-        mask: '99999-9999',
-        placeholder: '_____-____',
-        insertMode: true,
-        showMaskOnHover: false,
-        showMaskOnFocus: false,
-      });
-      mask.mask(inputCellPhoneMask);
-    }
-
-    const inputTelephoneMask = inputTelephone.current as HTMLInputElement;
-
-    if (inputTelephoneMask) {
-      const mask = new Inputmask({
-        mask: '9999-9999',
-        placeholder: '____-____',
-        insertMode: true,
-        showMaskOnHover: false,
-        showMaskOnFocus: false,
-      });
-      mask.mask(inputTelephoneMask);
-    }
+    // Aplica todas as máscaras usando a função genérica
+    maskConfigs.forEach(({ element, mask, placeholder }) => {
+      applyMask(element as HTMLInputElement, mask, placeholder);
+    });
   }, []);
 
   const onClickIndividual = () => {
@@ -223,9 +175,6 @@ const RegisterMain = () => {
   const [password, setPassword] = useState('a');
   const [confirmPassword, setConfirmPassword] = useState('b');
 
-  const [passwordIsEqualToTheConfirmPassword, setPasswordIsEqualToTheConfirmPassword] =
-    useState(false);
-
   const onChangeInputPassword = async (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
 
@@ -247,14 +196,12 @@ const RegisterMain = () => {
 
       inputPasswordActualInner.style.backgroundColor = '#fff';
       inputConfirmPasswordInner.style.backgroundColor = '#fff';
-      setPasswordIsEqualToTheConfirmPassword(true);
     } else {
       spanOne.style.display = 'block';
       spanTwo.style.display = 'block';
 
       inputPasswordActualInner.style.backgroundColor = 'rgba(197, 49, 49, 0.2)';
       inputConfirmPasswordInner.style.backgroundColor = 'rgba(197, 49, 49, 0.2)';
-      setPasswordIsEqualToTheConfirmPassword(false);
     }
   };
 
@@ -279,22 +226,16 @@ const RegisterMain = () => {
 
       inputPasswordActualInner.style.backgroundColor = '#fff';
       inputConfirmPasswordInner.style.backgroundColor = '#fff';
-      setPasswordIsEqualToTheConfirmPassword(true);
     } else {
       spanOne.style.display = 'block';
       spanTwo.style.display = 'block';
 
       inputPasswordActualInner.style.backgroundColor = 'rgba(197, 49, 49, 0.2)';
       inputConfirmPasswordInner.style.backgroundColor = 'rgba(197, 49, 49, 0.2)';
-      setPasswordIsEqualToTheConfirmPassword(false);
     }
   };
 
   const onClickCompleteRegistration = () => {
-    // if (!canSendToCreate) return;
-
-    // if (!passwordIsEqualToTheConfirmPassword) return;
-
     const inputCheckboxInner = inputCheckbox.current as HTMLInputElement;
 
     if (!inputCheckboxInner.checked) return;
@@ -413,24 +354,32 @@ const RegisterMain = () => {
         putErrorSpanAndInput(spanTwo, inputConfirmPasswordInner);
       }
 
-      // colocar o erro agora em qual input estiver erro e coloca o erro dos spans
       return;
     }
 
     const obj = {
       typePersonal: whichTypePersonalWasClicked,
-      name: inputFullNameHere.value,
-      birthdate: inputBirthDate.current?.value,
-      cpf: inputCpf.current?.value,
+      fullName: inputFullNameHere.value,
+      birthDate: inputBirthDateHere.value,
+      cpf: inputCpfHere.value,
       gender: whichGender,
-      cellphone: cellPhoneFull,
+      cellPhone: cellPhoneFull,
       telephone: cellTelephone,
-      email: inputEmail.current?.value,
-      token: inputToken.current?.value,
-      password: inputPasswordActual.current?.value,
+      email: inputEmailHere.value,
+      token: inputTokenHere.value,
+      password: password,
     };
 
     console.log(obj);
+  };
+
+  const onClickReceiveToken = () => {
+    const emailInput = inputEmail.current as HTMLInputElement;
+    const emailValue = emailInput.value;
+    const emailIsValid = validateEmail(emailValue);
+    if (!emailIsValid) return;
+
+    console.log('send token email');
   };
 
   const onChangeInputNameFull = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -551,10 +500,15 @@ const RegisterMain = () => {
     const emailIsValid = validateEmail(inputValue);
 
     const span = SpanErrorEmail.current as HTMLSpanElement;
+    const buttonToken = buttonReceiveTokenToRegister.current as HTMLButtonElement;
 
     if (!emailIsValid) {
+      buttonToken.style.backgroundColor = 'rgb(172, 171, 171)';
+      buttonToken.style.cursor = 'auto';
       putErrorSpanAndInput(span, input);
     } else {
+      buttonToken.style.backgroundColor = '#ec008c';
+      buttonToken.style.cursor = 'pointer';
       withoutErrorSpanAndInput(span, input);
     }
   };
@@ -790,10 +744,10 @@ const RegisterMain = () => {
 
             <Styled.ContainerSecondRegister>
               <Styled.ContainerLabelAndInput>
-                <Styled.Label htmlFor="ddd-telephone">E-mail*</Styled.Label>
+                <Styled.Label htmlFor="email">E-mail*</Styled.Label>
                 <Styled.Input
                   type="text"
-                  id="ddd-telephone"
+                  id="email"
                   placeholder="Informe o e-mail"
                   ref={inputEmail}
                   onChange={onChangeInputEmail}
@@ -804,15 +758,17 @@ const RegisterMain = () => {
               </Styled.ContainerLabelAndInput>
 
               <Styled.ContainerButtonReceiveToken>
-                <Styled.Button>RECEBER TOKEN DE CADASTRO</Styled.Button>
+                <Styled.Button ref={buttonReceiveTokenToRegister} onClick={onClickReceiveToken}>
+                  RECEBER TOKEN DE CADASTRO
+                </Styled.Button>
                 <Styled.Span>O token será enviado por e-mail/SMS*</Styled.Span>
               </Styled.ContainerButtonReceiveToken>
 
               <Styled.ContainerLabelAndInput>
-                <Styled.Label htmlFor="ddd-telephone">Token*</Styled.Label>
+                <Styled.Label htmlFor="token">Token*</Styled.Label>
                 <Styled.Input
                   type="text"
-                  id="ddd-telephone"
+                  id="token"
                   placeholder="Informe o seu token de cadastro"
                   ref={inputToken}
                   onChange={onChangeInputToken}
@@ -823,11 +779,11 @@ const RegisterMain = () => {
               </Styled.ContainerLabelAndInput>
 
               <Styled.ContainerLabelAndInput>
-                <Styled.Label htmlFor="ddd-telephone">Senha *</Styled.Label>
+                <Styled.Label htmlFor="password">Senha *</Styled.Label>
                 <Styled.ContainerInputAndEye>
                   <Styled.Input
                     type="password"
-                    id="ddd-telephone"
+                    id="password"
                     placeholder="Insira a senha"
                     ref={inputPasswordActual}
                     autoComplete="new-password"
@@ -853,11 +809,11 @@ const RegisterMain = () => {
               </Styled.ContainerLabelAndInput>
 
               <Styled.ContainerLabelAndInput>
-                <Styled.Label htmlFor="ddd-telephone">Confirmar Senha *</Styled.Label>
+                <Styled.Label htmlFor="confirm-password">Confirmar Senha *</Styled.Label>
                 <Styled.ContainerInputAndEye>
                   <Styled.Input
                     type="password"
-                    id="ddd-telephone"
+                    id="confirm-password"
                     placeholder="Insiria a senha novamente"
                     ref={inputConfirmPassword}
                     onChange={onChangeInputConfirmPassword}
