@@ -124,7 +124,7 @@ export const ContainerLabelAndInput = styled.div`
   flex-direction: column;
   line-height: 1;
   margin-bottom: 10px;
-  position: relative;
+  /* position: relative; */
 
   >label {
     font-size: 14px;
@@ -313,4 +313,33 @@ export const SpanLink = styled.span`
   color: #ec008c;
   text-decoration: underline;
   cursor: pointer;
+`;
+
+export const SpanError = styled.span`
+  display: none;
+  font-size: 14px;
+  font-weight: 500;
+  color: red;
+  margin-top: 5px;
+  line-height: 1.2;
+`;
+
+export const ContainerInputAndEye = styled.div`
+  display: flex;
+  position: relative;
+
+  >input {
+    padding: 8px 12px;
+    outline: none;
+    border: 1px solid rgba(0, 0, 0, 0.27);
+    transition: border-color 0.1s ease-in-out;
+    border-radius: 3px;
+    font-size: 15px;
+    width: 100%;
+
+    &:focus {
+      outline: none;
+      border-color: #FF69B4;
+    }
+  }
 `;

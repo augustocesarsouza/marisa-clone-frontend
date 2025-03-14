@@ -175,6 +175,7 @@ const FormLogin = () => {
               placeholder="Informe e-mail ou CPF"
               ref={inputEmailOrCpf}
               onChange={onChangeInputEmailCpf}
+              autoComplete="on"
             />
             <Styled.SpanError ref={spanErrorEmailCpf}>Informe E-mail ou CPF</Styled.SpanError>
           </Styled.ContainerLabelInput>
@@ -186,6 +187,7 @@ const FormLogin = () => {
               placeholder="Informe senha"
               ref={inputPassword}
               onChange={onChangeInputPassword}
+              autoComplete="new-password"
             />
             <Styled.SpanError ref={spanErrorPassword}>Informe Senha</Styled.SpanError>
             <Styled.ContainerSvgEyeOpen
