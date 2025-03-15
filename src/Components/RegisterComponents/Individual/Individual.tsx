@@ -557,7 +557,7 @@ const Individual = ({ whichTypePersonalWasClicked }: IndividualProps) => {
   };
 
   return (
-    <div>
+    <Styled.Container>
       <Styled.ContainerMainBodyOfRegister>
         <Styled.ContainerFirstRegister>
           <Styled.ContainerThird>
@@ -605,14 +605,16 @@ const Individual = ({ whichTypePersonalWasClicked }: IndividualProps) => {
           </Styled.ContainerThird>
 
           <Styled.ContainerFourth>
-            <Styled.H1>Gênero*</Styled.H1>
+            <Styled.H1 data-testid="header-gender">Gênero*</Styled.H1>
 
             <Styled.ContainerAllGenders>
               <Styled.ContainerCheckboxMain
                 onClick={() =>
                   onClickCheckboxGender(ContainerCheckboxFeminine.current, 'feminine')
                 }>
-                <Styled.ContainerCheckbox ref={ContainerCheckboxFeminine}>
+                <Styled.ContainerCheckbox
+                  ref={ContainerCheckboxFeminine}
+                  data-testid="container-checkbox-feminine">
                   <Styled.Container></Styled.Container>
                 </Styled.ContainerCheckbox>
 
@@ -623,7 +625,9 @@ const Individual = ({ whichTypePersonalWasClicked }: IndividualProps) => {
                 onClick={() =>
                   onClickCheckboxGender(ContainerCheckboxMasculine.current, 'masculine')
                 }>
-                <Styled.ContainerCheckbox ref={ContainerCheckboxMasculine}>
+                <Styled.ContainerCheckbox
+                  ref={ContainerCheckboxMasculine}
+                  data-testid="container-checkbox-masculine">
                   <Styled.Container></Styled.Container>
                 </Styled.ContainerCheckbox>
 
@@ -634,7 +638,9 @@ const Individual = ({ whichTypePersonalWasClicked }: IndividualProps) => {
                 onClick={() =>
                   onClickCheckboxGender(ContainerCheckboxDoNotInform.current, 'notInform')
                 }>
-                <Styled.ContainerCheckbox ref={ContainerCheckboxDoNotInform}>
+                <Styled.ContainerCheckbox
+                  ref={ContainerCheckboxDoNotInform}
+                  data-testid="container-checkbox-not-inform">
                   <Styled.Container></Styled.Container>
                 </Styled.ContainerCheckbox>
 
@@ -792,7 +798,7 @@ const Individual = ({ whichTypePersonalWasClicked }: IndividualProps) => {
       <Styled.ContainerCheckboxButtonCompleteRegistration>
         <Styled.ContainerCheckboxIUnderstandAndAgree>
           <Styled.Input type="checkbox" ref={inputCheckbox} onChange={handleChange} />
-          <Styled.Span>
+          <Styled.Span data-testid="span-checkbox">
             Li, compreendi e concordo com as <Styled.SpanLink>Condições Gerais</Styled.SpanLink>,
             inclusive com relação à proteção de dados pessoais, finalidades e hipóteses de
             tratamento de dados.
@@ -803,7 +809,7 @@ const Individual = ({ whichTypePersonalWasClicked }: IndividualProps) => {
           FINALIZAR CADASTRO
         </Styled.Button>
       </Styled.ContainerCheckboxButtonCompleteRegistration>
-    </div>
+    </Styled.Container>
   );
 };
 
