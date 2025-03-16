@@ -3,12 +3,13 @@ import FooterMain from '../../FooterMainComponents/FooterMain/FooterMain';
 import HeaderFullMain from '../../HeaderFullComponents/HeaderFullMain/HeaderFullMain';
 import * as Styled from './styled';
 import Individual from '../Individual/Individual';
+import LegalEntity from '../LegalEntity/LegalEntity';
 
 const RegisterMain = () => {
   const ContainerCheckboxFirst = useRef<HTMLDivElement>(null);
   const ContainerCheckboxSecond = useRef<HTMLDivElement>(null);
 
-  const [whichTypePersonalWasClicked, setWhichTypePersonalWasClicked] = useState('individual');
+  const [whichTypePersonalWasClicked, setWhichTypePersonalWasClicked] = useState('legalEntity');
 
   useLayoutEffect(() => {
     const containerSecond = ContainerCheckboxSecond.current as HTMLDivElement;
@@ -79,6 +80,10 @@ const RegisterMain = () => {
 
           {whichTypePersonalWasClicked === 'individual' && (
             <Individual whichTypePersonalWasClicked={whichTypePersonalWasClicked} />
+          )}
+
+          {whichTypePersonalWasClicked === 'legalEntity' && (
+            <LegalEntity whichTypePersonalWasClicked={whichTypePersonalWasClicked} />
           )}
         </Styled.ContainerRegiser>
       </Styled.ContainerRegiserMain>
