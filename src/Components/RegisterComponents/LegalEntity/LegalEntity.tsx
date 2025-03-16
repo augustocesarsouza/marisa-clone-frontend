@@ -2,6 +2,7 @@ import { useLayoutEffect, useRef, useState } from 'react';
 import * as Styled from './styled';
 import SvgEyeOpen from '../../Svg/SvgEyeOpen/SvgEyeOpen';
 import SvgEyeClose from '../../Svg/SvgEyeClose/SvgEyeClose';
+import Inputmask from 'inputmask';
 
 interface LegalEntityProps {
   whichTypePersonalWasClicked: string;
@@ -690,7 +691,7 @@ const LegalEntity = ({ whichTypePersonalWasClicked }: LegalEntityProps) => {
             <Styled.ContainerUfAndIcms>
               <Styled.ContainerLabelAndInput>
                 <Styled.Label htmlFor="uf">UF *</Styled.Label>
-                <Styled.Select ref={SelectUfRef} onClick={() => handleClickSelectUfRef()}>
+                <Styled.Select id="uf" ref={SelectUfRef} onClick={() => handleClickSelectUfRef()}>
                   <Styled.Option></Styled.Option>
                   {brazilianStates &&
                     brazilianStates.map((el) => (
@@ -703,10 +704,10 @@ const LegalEntity = ({ whichTypePersonalWasClicked }: LegalEntityProps) => {
 
               <Styled.ContainerLabelAndInput>
                 <Styled.Label htmlFor="cnpj">Situação tributária (ICMS) *</Styled.Label>
-                <Styled.SelectTaxSituation ref={SelectICMSRef}>
-                  <Styled.Option>ISENTO</Styled.Option>
-                  <Styled.Option>Contribuinte de ICMS</Styled.Option>
-                  <Styled.Option>Não contribuinte de ICMS</Styled.Option>
+                <Styled.SelectTaxSituation id="cnpj" ref={SelectICMSRef}>
+                  <Styled.Option data-testid="option-icms">ISENTO</Styled.Option>
+                  <Styled.Option data-testid="option-icms">Contribuinte de ICMS</Styled.Option>
+                  <Styled.Option data-testid="option-icms">Não contribuinte de ICMS</Styled.Option>
                 </Styled.SelectTaxSituation>
               </Styled.ContainerLabelAndInput>
             </Styled.ContainerUfAndIcms>
@@ -875,10 +876,10 @@ const LegalEntity = ({ whichTypePersonalWasClicked }: LegalEntityProps) => {
 
       <Styled.ContainerCheckboxButtonCompleteRegistration>
         <Styled.ContainerOffers>
-          <Styled.H1>Ofertas</Styled.H1>
+          <Styled.H1 data-testid="header-offers">Ofertas</Styled.H1>
 
           <Styled.ContainerAllCheckboxSpan>
-            <Styled.Span>
+            <Styled.Span data-testid="span-do-you-want-to-receive-a-newsletter">
               Deseja receber um boletim com novidades e promoções da Marisa?
             </Styled.Span>
 
@@ -889,7 +890,7 @@ const LegalEntity = ({ whichTypePersonalWasClicked }: LegalEntityProps) => {
                   ref={inputCheckboxForEmail}
                   onChange={handleChangeForEmail}
                 />
-                <Styled.Span>Por e-mail</Styled.Span>
+                <Styled.Span data-testid="span-checkbox-for-email">Por e-mail</Styled.Span>
               </Styled.ContainerCheckboxIUnderstandAndAgree>
 
               <Styled.ContainerCheckboxIUnderstandAndAgree>
@@ -898,7 +899,7 @@ const LegalEntity = ({ whichTypePersonalWasClicked }: LegalEntityProps) => {
                   ref={inputCheckboxForCellphone}
                   onChange={handleChangeForCellphone}
                 />
-                <Styled.Span>Por celular</Styled.Span>
+                <Styled.Span data-testid="span-checkbox-for-cellphone">Por celular</Styled.Span>
               </Styled.ContainerCheckboxIUnderstandAndAgree>
             </Styled.ContainerAllCheckbox>
           </Styled.ContainerAllCheckboxSpan>
