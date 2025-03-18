@@ -7,8 +7,8 @@ import { useNavigate } from 'react-router-dom';
 const UserLoggedOut = () => {
   const RefContainerSvgArrow = useRef<HTMLDivElement | null>(null);
   const [, setWasClickedUserLogged] = useState(false);
-  const nav = useNavigate();
 
+  const nav = useNavigate();
   const [showUserName, setShowUserName] = useState<string | null>(null);
 
   useEffect(() => {
@@ -50,6 +50,7 @@ const UserLoggedOut = () => {
   const onClickMyOrders = () => {
     // navigate('/dashboard');
     setShowModalInfoUser(false);
+    nav('/my-account');
   };
 
   return (
