@@ -2,6 +2,9 @@ import styled from "styled-components";
 
 export const Span = styled.span``;
 
+export const Input = styled.input`
+`;
+
 export const ContainerFirstHeaderBody = styled.div`
   display: flex;
   align-items: center;
@@ -45,9 +48,6 @@ export const ContainerInputSearch = styled.div`
   }
 `;
 
-export const Input = styled.input`
-`;
-
 export const ContainerSvgLoupa = styled.div`
   display: flex;
   align-items: center;
@@ -61,28 +61,6 @@ export const ContainerSvgLoupa = styled.div`
     width: 15px;
     height: 15px;
     fill: #fff;
-  }
-`;
-
-export const ContainerLoginAndRegister = styled.div`
-  display: flex;
-  align-items: center;
-  margin-right: 10px;
-  cursor: pointer;
-
-  >span {
-    font-size: 14px;
-    font-weight: 500;
-    color: #8d8d8d;
-  }
-`;
-
-export const ContainerImgLoginEmpty = styled.div`
-  display: flex;
-  margin-right: 10px;
-
-  >img {
-    border-radius: 50px;
   }
 `;
 

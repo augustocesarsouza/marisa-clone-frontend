@@ -4,11 +4,7 @@ import SvgEyeOpen from '../../Svg/SvgEyeOpen/SvgEyeOpen';
 import SvgEyeClose from '../../Svg/SvgEyeClose/SvgEyeClose';
 import Inputmask from 'inputmask';
 
-interface LegalEntityProps {
-  whichTypePersonalWasClicked: string;
-}
-
-const LegalEntity = ({ whichTypePersonalWasClicked }: LegalEntityProps) => {
+const LegalEntity = () => {
   const inputCheckboxForEmail = useRef<HTMLInputElement>(null);
   const inputCheckboxForCellphone = useRef<HTMLInputElement>(null);
   const buttonCompleteRegistration = useRef<HTMLButtonElement>(null);
@@ -354,7 +350,6 @@ const LegalEntity = ({ whichTypePersonalWasClicked }: LegalEntityProps) => {
     }
 
     const obj = {
-      typePersonal: whichTypePersonalWasClicked,
       companyName: inputCompanyNameHere.value,
       responsible: inputResponsibleHere.value,
       cnpj: inputCnpjHere.value,

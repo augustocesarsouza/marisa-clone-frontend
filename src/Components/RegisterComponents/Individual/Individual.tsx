@@ -3,12 +3,14 @@ import SvgEyeClose from '../../Svg/SvgEyeClose/SvgEyeClose';
 import SvgEyeOpen from '../../Svg/SvgEyeOpen/SvgEyeOpen';
 import * as Styled from './styled';
 import Inputmask from 'inputmask';
+// import { ICodeSendEmailUserDTO } from '../../Interfaces/DTOs/ICodeSendEmailUserDTO';
+import { useNavigate } from 'react-router-dom';
+// import { Url } from '../../../Utils/Url';
+import userService from '../../Service/UserService/UserService';
+import { User } from '../../Interfaces/Entity/User.';
+import CryptoJS from 'crypto-js';
 
-interface IndividualProps {
-  whichTypePersonalWasClicked: string;
-}
-
-const Individual = ({ whichTypePersonalWasClicked }: IndividualProps) => {
+const Individual = () => {
   const inputCheckbox = useRef<HTMLInputElement>(null);
   const buttonCompleteRegistration = useRef<HTMLButtonElement>(null);
 
@@ -46,6 +48,9 @@ const Individual = ({ whichTypePersonalWasClicked }: IndividualProps) => {
   const buttonReceiveTokenToRegister = useRef<HTMLButtonElement>(null);
 
   const [whichGender, setWhichGender] = useState('feminine');
+  const [codeSendToEmailOrSms, setCodeSendToEmailOrSms] = useState(false);
+  const [tokenIsWrongEmail, setTokenIsWrongEmail] = useState(false);
+  const nav = useNavigate();
 
   useLayoutEffect(() => {
     const containerMasculine = ContainerCheckboxMasculine.current as HTMLDivElement;
@@ -77,13 +82,21 @@ const Individual = ({ whichTypePersonalWasClicked }: IndividualProps) => {
       { element: inputDDDTelephone.current, mask: '99', placeholder: '__' },
       { element: inputCellPhone.current, mask: '99999-9999', placeholder: '_____-____' },
       { element: inputTelephone.current, mask: '9999-9999', placeholder: '____-____' },
-      { element: inputToken.current, mask: '999999', placeholder: '' },
     ];
 
     // Aplica todas as máscaras usando a função genérica
     maskConfigs.forEach(({ element, mask, placeholder }) => {
       applyMask(element as HTMLInputElement, mask, placeholder);
     });
+
+    const token = inputToken.current as HTMLInputElement;
+
+    new Inputmask({
+      regex: '^[A-Za-z0-9]{6}$',
+      placeholder: '',
+      showMaskOnHover: false,
+      showMaskOnFocus: false,
+    }).mask(token);
   }, []);
 
   const onClickCheckboxGender = (container: HTMLDivElement | null, gender: string) => {
@@ -211,7 +224,7 @@ const Individual = ({ whichTypePersonalWasClicked }: IndividualProps) => {
     }
   };
 
-  const onClickCompleteRegistration = () => {
+  const onClickCompleteRegistration = async () => {
     // const inputCheckboxInner = inputCheckbox.current as HTMLInputElement;
 
     const inputCheckboxInner = inputCheckbox.current as HTMLInputElement;
@@ -336,30 +349,127 @@ const Individual = ({ whichTypePersonalWasClicked }: IndividualProps) => {
       return;
     }
 
-    const obj = {
-      typePersonal: whichTypePersonalWasClicked,
-      fullName: inputFullNameHere.value,
-      birthDate: inputBirthDateHere.value,
-      cpf: inputCpfHere.value,
-      gender: whichGender,
-      cellPhone: cellPhoneFull,
-      telephone: cellTelephone,
+    let gender = '';
+
+    if (whichGender === 'masculine') {
+      gender += 'm';
+    } else if (whichGender === 'feminine') {
+      gender += 'f';
+    } else if (whichGender === 'notInform') {
+      gender += 'n';
+    }
+
+    let cpf = '';
+
+    for (let i = 0; i < inputCpfHere.value.length; i++) {
+      const element = inputCpfHere.value[i];
+      if (!isNaN(Number(element))) {
+        cpf += element;
+      }
+    }
+
+    const obj: User = {
+      name: inputFullNameHere.value,
       email: inputEmailHere.value,
-      token: inputTokenHere.value,
+      birthDateString: inputBirthDateHere.value,
+      cellPhone: cellPhoneFull,
+      cpf: cpf,
+      gender: gender,
+      telephone: cellTelephone,
+      tokenForCreation: Number(inputTokenHere.value),
       password: password,
+      userImage: '',
+      id: null,
+      birthDate: null,
+      passwordHash: null,
+      salt: null,
+      token: null,
     };
 
     console.log(obj);
+
+    const resp = await userService.createUser(obj);
+    console.log(resp);
+
+    if (resp && !resp.data.tokenIsValid) {
+      setCodeSendToEmailOrSms(false);
+      setTokenIsWrongEmail(true);
+    }
+
+    if (resp && resp.data.userDTO) {
+      const secretKey = import.meta.env.VITE__APP_SECRET_KEY_USER;
+      const userDTO = resp.data.userDTO;
+
+      const encrypted = CryptoJS.AES.encrypt(JSON.stringify(userDTO), secretKey).toString();
+
+      localStorage.setItem('user', encrypted);
+
+      nav('/');
+    }
+
+    // CONTINUAR NA CRIAÇÃO E DEPOIS FAZER NAVEGAÇÃO PARA O "/"
   };
 
-  const onClickReceiveToken = () => {
+  const onClickReceiveToken = async () => {
     const emailInput = inputEmail.current as HTMLInputElement;
     const emailValue = emailInput.value;
     const emailIsValid = validateEmail(emailValue);
     if (!emailIsValid) return;
 
-    console.log('send token email');
-    // FAZER TEST
+    const userDTO: User = {
+      id: null,
+      name: null,
+      birthDate: null,
+      cpf: null,
+      gender: null,
+      cellPhone: null,
+      telephone: null,
+      passwordHash: null,
+      salt: null,
+      userImage: null,
+      email: emailValue,
+      token: null,
+      tokenForCreation: null,
+      password: null,
+      birthDateString: null,
+    };
+
+    const resp = await userService.SendCode(userDTO);
+
+    if (resp !== null && resp.data.codeSendToEmailSuccessfully) {
+      setCodeSendToEmailOrSms(true);
+      setTokenIsWrongEmail(false);
+    } else {
+      // ERROR
+    }
+
+    // const res = await fetch(`${Url}/public/user/send-code-email`, {
+    //   method: 'POST',
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //   },
+    //   body: JSON.stringify(userDTO),
+    // });
+
+    // if (res.ok) {
+    //   const json = await res.json();
+    //   const data: ICodeSendEmailUserDTO = json.data;
+
+    //   return data;
+    // }
+
+    // if (res.status === 400) {
+    //   //ERROR
+    //   return null;
+    // }
+
+    // if (res.status === 403 || res.status === 401) {
+    //   localStorage.removeItem('user');
+    //   nav('/login');
+    //   return null;
+    // }
+
+    // console.log('send token email');
   };
 
   const onChangeInputNameFull = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -720,6 +830,15 @@ const Individual = ({ whichTypePersonalWasClicked }: IndividualProps) => {
               RECEBER TOKEN DE CADASTRO
             </Styled.Button>
             <Styled.Span>O token será enviado por e-mail/SMS*</Styled.Span>
+            {codeSendToEmailOrSms && (
+              <Styled.SpanCodeSendEmailSms>
+                Token Enviado para o e-mail/SMS* terá uma duração de 10 Min
+              </Styled.SpanCodeSendEmailSms>
+            )}
+
+            {tokenIsWrongEmail && (
+              <Styled.SpanTokenWrong>Token Digitado é invalido</Styled.SpanTokenWrong>
+            )}
           </Styled.ContainerButtonReceiveToken>
 
           <Styled.ContainerLabelAndInput>

@@ -200,6 +200,18 @@ export const ContainerButtonReceiveToken = styled.div`
   }
 `;
 
+export const SpanCodeSendEmailSms = styled.span`
+  font-weight: 600;
+  color: green;
+  margin-top: 10px;
+`;
+
+export const SpanTokenWrong = styled.span`
+  font-weight: 600;
+  color: red;
+  margin-top: 10px;
+`;
+
 export const ContainerSvgEyeOpen = styled.div`
   display: flex;
 

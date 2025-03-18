@@ -1,11 +1,47 @@
-import { useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import * as Styled from './styled';
 import LoupaSvg from '../../../Svg/LoupaSvg/LoupaSvg';
 import { useNavigate } from 'react-router-dom';
+import { GetUserFromLocalStorage } from '../../../GetUserFromLocalStorage/GetUserFromLocalStorage';
+import { User } from '../../../Interfaces/Entity/User.';
+import UserLoggedOut from '../UserLoggedOut/UserLoggedOut';
+import UserLogged from '../UserLogged/UserLogged';
 
 const FirstHeaderBody = () => {
   const nav = useNavigate();
   const RefContainerMyPurchase = useRef<HTMLDivElement | null>(null);
+
+  const [user, setUser] = useState<User | null>(null);
+  const [showUserName, setShowUserName] = useState<string | null>(null);
+
+  useEffect(() => {
+    const objUser = GetUserFromLocalStorage();
+
+    // if (objUser.isNullUserLocalStorage) {
+    //   nav('/login');
+    //   return;
+    // }
+
+    // if (objUser.user === null) {
+    //   localStorage.removeItem('user');
+
+    //   nav('/login');
+    //   return;
+    // }
+    const user = objUser.user;
+
+    setUser(user);
+
+    if (user) {
+      const userName = user.name;
+      const nameArray = userName?.split(' ');
+
+      if (nameArray) {
+        const showUserName = nameArray[0];
+        setShowUserName(showUserName);
+      }
+    }
+  }, [nav]);
 
   const onMouseEnterMyPurchase = () => {
     if (RefContainerMyPurchase.current) {
@@ -19,12 +55,6 @@ const FirstHeaderBody = () => {
       const container = RefContainerMyPurchase.current;
       container.style.display = 'none';
     }
-  };
-
-  const onClickContainerLoginAndRegister = () => {
-    if (typeof window === 'undefined') return;
-    nav('/login', { replace: false });
-    window.location.reload();
   };
 
   const onClickContainerImgMarisa = () => {
@@ -49,15 +79,9 @@ const FirstHeaderBody = () => {
         </Styled.ContainerSvgLoupa>
       </Styled.ContainerInputSearch>
 
-      <Styled.ContainerLoginAndRegister onClick={onClickContainerLoginAndRegister}>
-        <Styled.ContainerImgLoginEmpty>
-          <Styled.Img
-            src="https://res.cloudinary.com/dyqsqg7pk/image/upload/q_100/v1741520954/imgs-backend-frontend-marisa/frontend/user-login_wicdjr.webp"
-            alt="img-login-register"
-          />
-        </Styled.ContainerImgLoginEmpty>
-        <Styled.Span data-testid="span-login-out">Entre ou cadastre-se</Styled.Span>
-      </Styled.ContainerLoginAndRegister>
+      {user === null && <UserLogged />}
+
+      {showUserName && <UserLoggedOut />}
 
       <Styled.ContainerMyPurchase
         onMouseEnter={onMouseEnterMyPurchase}

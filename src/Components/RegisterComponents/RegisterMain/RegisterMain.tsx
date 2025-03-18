@@ -9,7 +9,7 @@ const RegisterMain = () => {
   const ContainerCheckboxFirst = useRef<HTMLDivElement>(null);
   const ContainerCheckboxSecond = useRef<HTMLDivElement>(null);
 
-  const [whichTypePersonalWasClicked, setWhichTypePersonalWasClicked] = useState('legalEntity');
+  const [whichTypePersonalWasClicked, setWhichTypePersonalWasClicked] = useState('individual');
 
   useLayoutEffect(() => {
     const containerSecond = ContainerCheckboxSecond.current as HTMLDivElement;
@@ -78,13 +78,9 @@ const RegisterMain = () => {
             </Styled.ContainerCheckboxMain>
           </Styled.ContainerSecond>
 
-          {whichTypePersonalWasClicked === 'individual' && (
-            <Individual whichTypePersonalWasClicked={whichTypePersonalWasClicked} />
-          )}
+          {whichTypePersonalWasClicked === 'individual' && <Individual />}
 
-          {whichTypePersonalWasClicked === 'legalEntity' && (
-            <LegalEntity whichTypePersonalWasClicked={whichTypePersonalWasClicked} />
-          )}
+          {whichTypePersonalWasClicked === 'legalEntity' && <LegalEntity />}
         </Styled.ContainerRegiser>
       </Styled.ContainerRegiserMain>
 
