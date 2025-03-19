@@ -53,6 +53,13 @@ const UserLoggedOut = () => {
     nav('/my-account');
   };
 
+  const onClickExitUser = () => {
+    localStorage.removeItem('user');
+    setShowModalInfoUser(false);
+    nav('/login');
+    window.location.reload();
+  };
+
   return (
     <Styled.ContainerLoginAndRegister onClick={onClickContainerLoggedInUser}>
       <Styled.ContainerImgLoginEmpty>
@@ -75,7 +82,7 @@ const UserLoggedOut = () => {
             <Styled.Span>Meus pedidos</Styled.Span>
             <Styled.Span>Cartões Marisa</Styled.Span>
             <Styled.Span>Lista de Desejos</Styled.Span>
-            <Styled.SpanExit>Sair</Styled.SpanExit>
+            <Styled.SpanExit onClick={onClickExitUser}>Sair</Styled.SpanExit>
           </Styled.ContainerModalInfoUser>
         </Styled.ContainerModalInfoUserMain>
       )}

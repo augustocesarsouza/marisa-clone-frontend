@@ -434,7 +434,7 @@ const Individual = () => {
       birthDateString: null,
     };
 
-    const resp = await userService.SendCode(userDTO);
+    const resp = await userService.sendCode(userDTO);
 
     if (resp !== null && resp.data.codeSendToEmailSuccessfully) {
       setCodeSendToEmailOrSms(true);

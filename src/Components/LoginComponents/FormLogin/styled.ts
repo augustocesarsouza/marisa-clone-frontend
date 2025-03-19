@@ -15,7 +15,8 @@ export const Input = styled.input``;
 
 export const ContainerLoginMain = styled.div`
   display: flex;
-  justify-content: center;
+  align-items: center;
+  flex-direction: column;
   margin-top: 50px;
   margin-bottom: 50px;
 `;
@@ -29,6 +30,38 @@ export const ContainerLogin = styled.div`
     font-size: 18px;
     margin-bottom: 25px;
     font-weight: 600;
+  }
+`;
+
+export const ContainerSpanErrorX = styled.div`
+  font-weight: 600;
+  background-color: #f2dede;
+  border-color: #ebccd1;
+  color: black;
+  width: 1004px;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  line-height: 1;
+  border-radius: 3px;
+  padding: 0px 40px;
+  margin-bottom: 30px;
+`;
+
+export const SpanEmailOrPasswordInvalid = styled.span``;
+
+export const ContainerSvgX = styled.div`
+  >svg {
+    display: flex;
+    width: 13px;
+    height: 13px;
+    fill: gray;
+    cursor: pointer;
+
+    &:hover {
+      fill: #3f3f3f;
+    }
   }
 `;
 

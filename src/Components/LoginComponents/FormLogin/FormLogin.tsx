@@ -3,6 +3,9 @@ import * as Styled from './styled';
 import SvgEyeOpen from '../../Svg/SvgEyeOpen/SvgEyeOpen';
 import SvgEyeClose from '../../Svg/SvgEyeClose/SvgEyeClose';
 import { useNavigate } from 'react-router-dom';
+import userService from '../../Service/UserService/UserService';
+import SvgX from '../../Svg/SvgX/SvgX';
+import CryptoJS from 'crypto-js';
 
 const FormLogin = () => {
   const inputPassword = useRef<HTMLInputElement>(null);
@@ -19,6 +22,8 @@ const FormLogin = () => {
 
   const [errorInputEmailCpf, setErrorInputEmailCpf] = useState(false);
   const [errorPassword, setErrorPassword] = useState(false);
+
+  const [passwordIsWrong, setPasswordIsWrong] = useState(false);
 
   const nav = useNavigate();
 
@@ -42,12 +47,14 @@ const FormLogin = () => {
     const button = buttonEnter.current as HTMLButtonElement;
 
     button.style.opacity = '0.8';
+    // button.style.cursor = 'not-allowed';
   };
 
   const onMouseLeaveButtonEnter = () => {
     const button = buttonEnter.current as HTMLButtonElement;
 
     button.style.opacity = '1';
+    // button.style.cursor = 'pointer';
   };
 
   const onChangeInputEmailCpf = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -77,8 +84,10 @@ const FormLogin = () => {
 
     if (valueErrorEmailCpf && errorPassword) {
       button.style.backgroundColor = '#ec008c';
+      button.style.cursor = 'pointer';
     } else {
       button.style.backgroundColor = '#9f9e9e';
+      button.style.cursor = 'not-allowed';
     }
   };
 
@@ -112,12 +121,14 @@ const FormLogin = () => {
 
     if (valueErrorPassword && errorInputEmailCpf) {
       button.style.backgroundColor = '#ec008c';
+      button.style.cursor = 'pointer';
     } else {
       button.style.backgroundColor = '#9f9e9e';
+      button.style.cursor = 'not-allowed';
     }
   };
 
-  const onClickEnterButton = () => {
+  const onClickEnterButton = async () => {
     const inputEmailOrCpfCurrent = inputEmailOrCpf.current as HTMLInputElement;
     const inputPasswordCurrent = inputPassword.current as HTMLInputElement;
 
@@ -128,7 +139,6 @@ const FormLogin = () => {
       spanErrorFirst.style.color = 'transparent';
     } else {
       spanErrorFirst.style.color = 'red';
-
       inputEmailOrCpfCurrent.style.backgroundColor = 'rgb(197 49 49 / 20%)';
     }
 
@@ -136,7 +146,6 @@ const FormLogin = () => {
       spanErrorSecond.style.color = 'transparent';
     } else {
       spanErrorSecond.style.color = 'red';
-
       inputPasswordCurrent.style.backgroundColor = 'rgb(197 49 49 / 20%)';
     }
 
@@ -144,12 +153,27 @@ const FormLogin = () => {
       const emailCpf = inputEmailOrCpfCurrent.value;
       const password = inputPasswordCurrent.value;
 
-      const obj = {
-        emailCpf,
-        password,
-      };
+      const resp = await userService.login(emailCpf, password);
 
-      console.log(obj);
+      if (resp === null) return;
+
+      const passwordIsCorrect = resp.data.passwordIsCorrect;
+
+      if (!passwordIsCorrect) {
+        setPasswordIsWrong(true);
+      }
+      // ver se vai redirecionar quando loggin estiver certo
+      if (passwordIsCorrect) {
+        setPasswordIsWrong(false);
+        const secretKey = import.meta.env.VITE__APP_SECRET_KEY_USER;
+        const userDTO = resp.data.userDTO;
+
+        const encrypted = CryptoJS.AES.encrypt(JSON.stringify(userDTO), secretKey).toString();
+
+        localStorage.setItem('user', encrypted);
+
+        nav('/my-account', { state: { from: window.location.pathname } });
+      }
     } else {
       console.log('error');
     }
@@ -161,8 +185,22 @@ const FormLogin = () => {
     window.location.reload();
   };
 
+  const onClickExit = () => {
+    setPasswordIsWrong(false);
+  };
+
   return (
     <Styled.ContainerLoginMain>
+      {passwordIsWrong && (
+        <Styled.ContainerSpanErrorX>
+          <Styled.SpanEmailOrPasswordInvalid>
+            E-mail ou senha inválidos
+          </Styled.SpanEmailOrPasswordInvalid>
+          <Styled.ContainerSvgX onClick={onClickExit}>
+            <SvgX />
+          </Styled.ContainerSvgX>
+        </Styled.ContainerSpanErrorX>
+      )}
       <Styled.ContainerLogin>
         <Styled.H1>Faça seu Login</Styled.H1>
 

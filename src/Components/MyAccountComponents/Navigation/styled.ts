@@ -25,15 +25,28 @@ export const ContainerMyProfileAndModalNavAfterClicked = styled.div`
   flex-direction: column;
 `;
 
-export const ContainerNavAfterClicked = styled.div`
+interface ContainerNavAfterClickedProps {
+  $clickMyProfile: boolean;
+}
+
+export const ContainerNavAfterClicked = styled.div<ContainerNavAfterClickedProps>`
   display: flex;
   flex-direction: column;
-  margin-left: 7px;
-  margin-top: 7px;
-  margin-bottom: 5px;
   gap: 6px;
+  
+  max-height: ${props => (props.$clickMyProfile ? "200px" : "0px")};
+  margin: ${props => (props.$clickMyProfile ? "7px 0 5px 7px" : "0px")};
+  overflow: hidden;
+  opacity: ${props => (props.$clickMyProfile ? "1" : "0")};
+  visibility: ${props => (props.$clickMyProfile ? "visible" : "hidden")};
+  
+  transition: 
+    max-height 0.3s ease-in-out, 
+    opacity 0.2s ease-in-out, 
+    visibility 0.3s ease-in-out, 
+    margin 0.2s ease-in-out;
 
-  >span {
+  > span {
     color: rgb(112, 112, 112);
     line-height: 1;
     font-size: 16px;

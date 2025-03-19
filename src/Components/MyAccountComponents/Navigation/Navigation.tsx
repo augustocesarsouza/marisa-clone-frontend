@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import * as Styled from './styled';
 import MoreSvg from '../../Svg/MoreSvg/MoreSvg';
 import MinusSvg from '../../Svg/MinusSvg/MinusSvg';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 const Navigation = () => {
   const [clickMyProfile, setClickMyProfile] = useState(false);
@@ -15,7 +16,29 @@ const Navigation = () => {
   const RefH1RefundAndExchangeVoucher = useRef<HTMLHeadingElement | null>(null);
   const RefH1Returns = useRef<HTMLHeadingElement | null>(null);
 
+  const SpanProfileMyData = useRef<HTMLSpanElement | null>(null);
+  const SpanProfileChangeData = useRef<HTMLSpanElement | null>(null);
+  const SpanProfileChangePassword = useRef<HTMLSpanElement | null>(null);
+  const SpanProfileUpdateYourEmail = useRef<HTMLSpanElement | null>(null);
+
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const nav = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    const pathname = location.pathname;
+
+    if (pathname === '/my-account') {
+      const container = RefContainerMyProfileSvg.current as HTMLDivElement;
+      const h1Profile = container.firstChild as HTMLHeadingElement;
+      const svg = container.lastChild as SVGElement;
+
+      if (h1Profile && svg) {
+        h1Profile.style.color = '#ec008c';
+        svg.style.fill = '#ec008c';
+      }
+    }
+  }, [location.pathname, nav]);
 
   const onClickContainerMyProfile = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     if (e.target === null) return;
@@ -163,8 +186,18 @@ const Navigation = () => {
     }
   }, [informationLGPD]);
 
-  const onClickNavAfterClicked = (e: React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
+  const onClickNavAfterClicked = (
+    e: React.MouseEvent<HTMLSpanElement, MouseEvent>,
+    whichItWasClicked: string
+  ) => {
     if (e.target === null) return;
+
+    console.log(whichItWasClicked);
+    if (whichItWasClicked === 'my-data') {
+      nav('/my-account/profile');
+    } else if (whichItWasClicked === 'change-data') {
+      nav('/my-account/update-profile');
+    }
 
     allSpans?.forEach((el) => {
       el.style.color = 'rgb(112, 112, 112)';
@@ -196,16 +229,28 @@ const Navigation = () => {
           {clickMyProfile && <MinusSvg />}
         </Styled.ContainerHeaderAndMoreSvg>
 
-        {clickMyProfile && (
-          <Styled.ContainerNavAfterClicked ref={spansRef}>
-            <Styled.Span onClick={(e) => onClickNavAfterClicked(e)}>Meus dados</Styled.Span>
-            <Styled.Span onClick={(e) => onClickNavAfterClicked(e)}>Alterar dados</Styled.Span>
-            <Styled.Span onClick={(e) => onClickNavAfterClicked(e)}>Alterar Senha</Styled.Span>
-            <Styled.Span onClick={(e) => onClickNavAfterClicked(e)}>
-              Atualizar Seu E-mail
-            </Styled.Span>
-          </Styled.ContainerNavAfterClicked>
-        )}
+        <Styled.ContainerNavAfterClicked ref={spansRef} $clickMyProfile={clickMyProfile}>
+          <Styled.Span
+            onClick={(e) => onClickNavAfterClicked(e, 'my-data')}
+            ref={SpanProfileMyData}>
+            Meus dados
+          </Styled.Span>
+          <Styled.Span
+            onClick={(e) => onClickNavAfterClicked(e, 'change-data')}
+            ref={SpanProfileChangeData}>
+            Alterar dados
+          </Styled.Span>
+          <Styled.Span
+            onClick={(e) => onClickNavAfterClicked(e, '')}
+            ref={SpanProfileChangePassword}>
+            Alterar Senha
+          </Styled.Span>
+          <Styled.Span
+            onClick={(e) => onClickNavAfterClicked(e, '')}
+            ref={SpanProfileUpdateYourEmail}>
+            Atualizar Seu E-mail
+          </Styled.Span>
+        </Styled.ContainerNavAfterClicked>
       </Styled.ContainerMyProfileAndModalNavAfterClicked>
       <Styled.H1 onClick={(e) => onClickEachNavMyAccount(e)} ref={RefH1Addresses}>
         Endereços
@@ -229,14 +274,12 @@ const Navigation = () => {
           {informationLGPD && <MinusSvg />}
         </Styled.ContainerHeaderAndMoreSvg>
 
-        {informationLGPD && (
-          <Styled.ContainerNavAfterClicked ref={spansInformationsRef}>
-            <Styled.Span onClick={(e) => onClickNavAfterClicked2(e)}>Meus Dados</Styled.Span>
-            <Styled.Span onClick={(e) => onClickNavAfterClicked2(e)}>
-              Meus Consentimentos
-            </Styled.Span>
-          </Styled.ContainerNavAfterClicked>
-        )}
+        <Styled.ContainerNavAfterClicked
+          ref={spansInformationsRef}
+          $clickMyProfile={informationLGPD}>
+          <Styled.Span onClick={(e) => onClickNavAfterClicked2(e)}>Meus Dados</Styled.Span>
+          <Styled.Span onClick={(e) => onClickNavAfterClicked2(e)}>Meus Consentimentos</Styled.Span>
+        </Styled.ContainerNavAfterClicked>
       </Styled.ContainerMyProfileAndModalNavAfterClicked>
     </Styled.ContainerNavigation>
   );
