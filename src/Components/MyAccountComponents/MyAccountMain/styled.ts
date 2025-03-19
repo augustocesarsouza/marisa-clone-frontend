@@ -9,6 +9,7 @@ export const ContainerMain = styled.div``;
 export const ContainerBodyMain = styled.div`
   display: flex;
   justify-content: center;
+  margin-bottom: 40px;
 `;
 
 export const ContainerBody = styled.div`

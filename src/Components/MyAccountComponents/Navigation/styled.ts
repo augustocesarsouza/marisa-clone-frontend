@@ -7,7 +7,8 @@ export const H1 = styled.h1``;
 export const ContainerNavigation = styled.div`
   display: flex;
   flex-direction: column;
-  width: 231px;
+  /* width: 231px; */
+  width: 40%;
   margin-right: 20px;
   user-select: none;
 
