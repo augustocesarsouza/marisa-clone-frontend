@@ -1,7 +1,16 @@
 import CryptoJS from 'crypto-js';
 import { IResultGetUserFromLocalStorage } from './IResultGetUserFromLocalStorage';
 
+const isTestEnv = process.env.NODE_ENV === 'test';
+
 export const GetUserFromLocalStorage = (): IResultGetUserFromLocalStorage => {
+  if (isTestEnv) {
+    return {
+      isNullUserLocalStorage: true,
+      user: null,
+    };
+  }
+
   const userLocalStorage = localStorage.getItem('user');
 
   const ResultGetUserFromLocalStorage: IResultGetUserFromLocalStorage = {
@@ -11,6 +20,7 @@ export const GetUserFromLocalStorage = (): IResultGetUserFromLocalStorage => {
 
   if (userLocalStorage) {
     const secretKey = import.meta.env.VITE__APP_SECRET_KEY_USER;
+    // const secretKey = process.env.VITE__APP_SECRET_KEY_USER;
 
     if (secretKey === undefined) {
       return ResultGetUserFromLocalStorage;

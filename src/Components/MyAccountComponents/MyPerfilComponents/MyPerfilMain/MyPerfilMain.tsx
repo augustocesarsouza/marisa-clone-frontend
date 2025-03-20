@@ -1,16 +1,14 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import * as Styled from './styled';
-import { useNavigate } from 'react-router-dom';
-import { GetUserFromLocalStorage } from '../../../GetUserFromLocalStorage/GetUserFromLocalStorage';
+import { ContextMyAccount } from '../../Contexts/ContextMyAccount';
 
 const MyPerfilMain = () => {
-  const nav = useNavigate();
   const [showUserName, setShowUserName] = useState<string | null>(null);
+  const context = useContext(ContextMyAccount);
 
   useEffect(() => {
-    const objUser = GetUserFromLocalStorage();
-
-    const user = objUser.user;
+    if (context === null) return;
+    const user = context.user;
 
     if (user) {
       const userName = user.name;
@@ -21,7 +19,7 @@ const MyPerfilMain = () => {
         setShowUserName(showUserName);
       }
     }
-  }, [nav]);
+  }, [context]);
 
   return (
     <Styled.ContainerMainPerfil>

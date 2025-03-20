@@ -192,7 +192,6 @@ const Navigation = () => {
   ) => {
     if (e.target === null) return;
 
-    console.log(whichItWasClicked);
     if (whichItWasClicked === 'my-data') {
       nav('/my-account/profile');
     } else if (whichItWasClicked === 'change-data') {

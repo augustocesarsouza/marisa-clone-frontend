@@ -1,11 +1,11 @@
-import { useEffect, useRef, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import * as Styled from './styled';
 import LoupaSvg from '../../../Svg/LoupaSvg/LoupaSvg';
 import { useNavigate } from 'react-router-dom';
-import { GetUserFromLocalStorage } from '../../../GetUserFromLocalStorage/GetUserFromLocalStorage';
 import { User } from '../../../Interfaces/Entity/User.';
 import UserLoggedOut from '../UserLoggedOut/UserLoggedOut';
 import UserLogged from '../UserLogged/UserLogged';
+import { ContextHome } from '../Contexts/ContextHome';
 
 const FirstHeaderBody = () => {
   const nav = useNavigate();
@@ -14,21 +14,11 @@ const FirstHeaderBody = () => {
   const [user, setUser] = useState<User | null>(null);
   const [showUserName, setShowUserName] = useState<string | null>(null);
 
+  const context = useContext(ContextHome);
+
   useEffect(() => {
-    const objUser = GetUserFromLocalStorage();
-
-    // if (objUser.isNullUserLocalStorage) {
-    //   nav('/login');
-    //   return;
-    // }
-
-    // if (objUser.user === null) {
-    //   localStorage.removeItem('user');
-
-    //   nav('/login');
-    //   return;
-    // }
-    const user = objUser.user;
+    if (context === null) return;
+    const user = context.user;
 
     setUser(user);
 
@@ -41,7 +31,7 @@ const FirstHeaderBody = () => {
         setShowUserName(showUserName);
       }
     }
-  }, [nav]);
+  }, [context]);
 
   const onMouseEnterMyPurchase = () => {
     if (RefContainerMyPurchase.current) {
@@ -81,7 +71,7 @@ const FirstHeaderBody = () => {
 
       {user === null && <UserLogged />}
 
-      {showUserName && <UserLoggedOut />}
+      {showUserName && user && <UserLoggedOut user={user} />}
 
       <Styled.ContainerMyPurchase
         onMouseEnter={onMouseEnterMyPurchase}
