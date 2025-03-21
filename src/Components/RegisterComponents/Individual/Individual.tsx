@@ -3,16 +3,13 @@ import SvgEyeClose from '../../Svg/SvgEyeClose/SvgEyeClose';
 import SvgEyeOpen from '../../Svg/SvgEyeOpen/SvgEyeOpen';
 import * as Styled from './styled';
 import Inputmask from 'inputmask';
-// import { ICodeSendEmailUserDTO } from '../../Interfaces/DTOs/ICodeSendEmailUserDTO';
 import { useNavigate } from 'react-router-dom';
-// import { Url } from '../../../Utils/Url';
 import userService from '../../Service/UserService/UserService';
 import { User } from '../../Interfaces/Entity/User.';
 import CryptoJS from 'crypto-js';
 
 const Individual = () => {
   const inputCheckbox = useRef<HTMLInputElement>(null);
-  const buttonCompleteRegistration = useRef<HTMLButtonElement>(null);
 
   const ContainerCheckboxFeminine = useRef<HTMLDivElement>(null);
   const ContainerCheckboxMasculine = useRef<HTMLDivElement>(null);
@@ -386,10 +383,7 @@ const Individual = () => {
       token: null,
     };
 
-    console.log(obj);
-
     const resp = await userService.createUser(obj);
-    console.log(resp);
 
     if (resp && !resp.data.tokenIsValid) {
       setCodeSendToEmailOrSms(false);
@@ -406,8 +400,6 @@ const Individual = () => {
 
       nav('/');
     }
-
-    // CONTINUAR NA CRIAÇÃO E DEPOIS FAZER NAVEGAÇÃO PARA O "/"
   };
 
   const onClickReceiveToken = async () => {
@@ -434,7 +426,7 @@ const Individual = () => {
       birthDateString: null,
     };
 
-    const resp = await userService.SendCode(userDTO);
+    const resp = await userService.sendCode(userDTO);
 
     if (resp !== null && resp.data.codeSendToEmailSuccessfully) {
       setCodeSendToEmailOrSms(true);
@@ -648,6 +640,8 @@ const Individual = () => {
     input.style.backgroundColor = '#fff';
     span.style.display = 'none';
   };
+
+  const buttonCompleteRegistration = useRef<HTMLButtonElement>(null);
 
   const handleChange = () => {
     const inputCheckboxInner = inputCheckbox.current as HTMLInputElement;

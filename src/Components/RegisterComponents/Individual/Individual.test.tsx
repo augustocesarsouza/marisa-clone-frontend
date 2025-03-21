@@ -1,217 +1,266 @@
 import { render } from '@testing-library/react';
 import { screen } from '@testing-library/dom';
+import { MemoryRouter } from 'react-router-dom';
 import Individual from './Individual';
 
 describe('Individual', () => {
   test('should render label input span name full', () => {
-    render(<Individual whichTypePersonalWasClicked="" />);
+    render(
+      <MemoryRouter>
+        <Individual />
+      </MemoryRouter>
+    );
 
     const label = screen.getByLabelText('Nome completo*');
-    expect(label).toBeInTheDocument();
+    expect(label).not.toBeNull();
 
     const input = screen.getByPlaceholderText('Informe seu nome');
-    expect(input).toBeInTheDocument();
+    expect(input).not.toBeNull();
 
     const span = screen.getByText('Nome Completo deve ter pelo menos 3 caracteres');
-    expect(span).toBeInTheDocument();
+    expect(span).not.toBeNull();
 
     expect.assertions(3);
   });
 
   test('should render label input span birth date', () => {
-    render(<Individual whichTypePersonalWasClicked="" />);
+    render(
+      <MemoryRouter>
+        <Individual />
+      </MemoryRouter>
+    );
 
     const label = screen.getByLabelText('Data de nascimento*');
-    expect(label).toBeInTheDocument();
+    expect(label).not.toBeNull();
 
     const input = screen.getByPlaceholderText('00/00/0000');
-    expect(input).toBeInTheDocument();
+    expect(input).not.toBeNull();
 
     const span = screen.getByText('Data de nascimento inválida');
-    expect(span).toBeInTheDocument();
+    expect(span).not.toBeNull();
 
     expect.assertions(3);
   });
 
   test('should render label input span cpf', () => {
-    render(<Individual whichTypePersonalWasClicked="" />);
+    render(
+      <MemoryRouter>
+        <Individual />
+      </MemoryRouter>
+    );
 
     const label = screen.getByLabelText('CPF*');
-    expect(label).toBeInTheDocument();
+    expect(label).not.toBeNull();
 
     const input = screen.getByPlaceholderText('000.000.000-00');
-    expect(input).toBeInTheDocument();
+    expect(input).not.toBeNull();
 
     const span = screen.getByText('CPF inválido');
-    expect(span).toBeInTheDocument();
+    expect(span).not.toBeNull();
 
     expect.assertions(3);
   });
 
   test('should render gender all container checkbox and span', () => {
-    render(<Individual whichTypePersonalWasClicked="" />);
+    render(
+      <MemoryRouter>
+        <Individual />
+      </MemoryRouter>
+    );
 
     const headerGender = screen.getByTestId('header-gender');
-    expect(headerGender).toBeInTheDocument();
+    expect(headerGender).not.toBeNull();
 
     const containerCheckboxFeminine = screen.getByTestId('container-checkbox-feminine');
-    expect(containerCheckboxFeminine).toBeInTheDocument();
+    expect(containerCheckboxFeminine).not.toBeNull();
 
     const spanFeminine = screen.getByText('Feminino');
-    expect(spanFeminine).toBeInTheDocument();
+    expect(spanFeminine).not.toBeNull();
 
     const containerCheckboxMasculine = screen.getByTestId('container-checkbox-masculine');
-    expect(containerCheckboxMasculine).toBeInTheDocument();
+    expect(containerCheckboxMasculine).not.toBeNull();
 
     const spanMasculine = screen.getByText('Masculino');
-    expect(spanMasculine).toBeInTheDocument();
+    expect(spanMasculine).not.toBeNull();
 
     const containerCheckboxNotInform = screen.getByTestId('container-checkbox-not-inform');
-    expect(containerCheckboxNotInform).toBeInTheDocument();
+    expect(containerCheckboxNotInform).not.toBeNull();
 
     const spanNotInform = screen.getByText('Não informar');
-    expect(spanNotInform).toBeInTheDocument();
+    expect(spanNotInform).not.toBeNull();
 
     expect.assertions(7);
   });
 
   test('should render label input span cell phone', () => {
-    render(<Individual whichTypePersonalWasClicked="" />);
+    render(
+      <MemoryRouter>
+        <Individual />
+      </MemoryRouter>
+    );
 
     const label = screen.getAllByLabelText('DDD*')[0];
-    expect(label).toBeInTheDocument();
+    expect(label).not.toBeNull();
 
     const input = screen.getAllByPlaceholderText('( 00 )')[0];
-    expect(input).toBeInTheDocument();
+    expect(input).not.toBeNull();
 
     const spanFirst = screen.getAllByText('Erro')[0];
-    expect(spanFirst).toBeInTheDocument();
+    expect(spanFirst).not.toBeNull();
 
     const labelCellphone = screen.getByLabelText('Celular*');
-    expect(labelCellphone).toBeInTheDocument();
+    expect(labelCellphone).not.toBeNull();
 
     const inputCellphone = screen.getByPlaceholderText('00000 - 0000');
-    expect(inputCellphone).toBeInTheDocument();
+    expect(inputCellphone).not.toBeNull();
 
     const spanSecond = screen.getAllByText('Erro')[1];
-    expect(spanSecond).toBeInTheDocument();
+    expect(spanSecond).not.toBeNull();
 
     expect.assertions(6);
   });
 
   test('should render label input span telephone', () => {
-    render(<Individual whichTypePersonalWasClicked="" />);
+    render(
+      <MemoryRouter>
+        <Individual />
+      </MemoryRouter>
+    );
 
     const label = screen.getAllByLabelText('DDD*')[1];
-    expect(label).toBeInTheDocument();
+    expect(label).not.toBeNull();
 
     const input = screen.getAllByPlaceholderText('( 00 )')[1];
-    expect(input).toBeInTheDocument();
+    expect(input).not.toBeNull();
 
     const span = screen.getAllByText('Erro')[2];
-    expect(span).toBeInTheDocument();
+    expect(span).not.toBeNull();
 
     const labelTelephone = screen.getByLabelText('Telefone');
-    expect(labelTelephone).toBeInTheDocument();
+    expect(labelTelephone).not.toBeNull();
 
     const inputTelephone = screen.getByPlaceholderText('0000 - 0000');
-    expect(inputTelephone).toBeInTheDocument();
+    expect(inputTelephone).not.toBeNull();
 
     const spanSecond = screen.getAllByText('Erro')[3];
-    expect(spanSecond).toBeInTheDocument();
+    expect(spanSecond).not.toBeNull();
 
     expect.assertions(6);
   });
 
   test('should render label input span email', () => {
-    render(<Individual whichTypePersonalWasClicked="" />);
+    render(
+      <MemoryRouter>
+        <Individual />
+      </MemoryRouter>
+    );
 
     const label = screen.getByLabelText('E-mail*');
-    expect(label).toBeInTheDocument();
+    expect(label).not.toBeNull();
 
     const input = screen.getByPlaceholderText('Informe o e-mail');
-    expect(input).toBeInTheDocument();
+    expect(input).not.toBeNull();
 
     const span = screen.getByText('Email deve ter (@gmail.com)');
-    expect(span).toBeInTheDocument();
+    expect(span).not.toBeNull();
 
     expect.assertions(3);
   });
 
   test('should render button and span text token', () => {
-    render(<Individual whichTypePersonalWasClicked="" />);
+    render(
+      <MemoryRouter>
+        <Individual />
+      </MemoryRouter>
+    );
 
     const button = screen.getByRole('button', { name: 'RECEBER TOKEN DE CADASTRO' });
-    expect(button).toBeInTheDocument();
+    expect(button).not.toBeNull();
 
     const span = screen.getByText('O token será enviado por e-mail/SMS*');
-    expect(span).toBeInTheDocument();
+    expect(span).not.toBeNull();
 
     expect.assertions(2);
   });
 
   test('should render label input span token', () => {
-    render(<Individual whichTypePersonalWasClicked="" />);
+    render(
+      <MemoryRouter>
+        <Individual />
+      </MemoryRouter>
+    );
 
     const label = screen.getByLabelText('Token*');
-    expect(label).toBeInTheDocument();
+    expect(label).not.toBeNull();
 
     const input = screen.getByPlaceholderText('Informe o seu token de cadastro');
-    expect(input).toBeInTheDocument();
+    expect(input).not.toBeNull();
 
     const span = screen.getByText('precisa ser informado um token');
-    expect(span).toBeInTheDocument();
+    expect(span).not.toBeNull();
 
     expect.assertions(3);
   });
 
   test('should render label input span svg password', () => {
-    render(<Individual whichTypePersonalWasClicked="" />);
+    render(
+      <MemoryRouter>
+        <Individual />
+      </MemoryRouter>
+    );
 
     const label = screen.getByLabelText('Senha *');
-    expect(label).toBeInTheDocument();
+    expect(label).not.toBeNull();
 
     const input = screen.getByPlaceholderText('Insira a senha');
-    expect(input).toBeInTheDocument();
+    expect(input).not.toBeNull();
 
     const span = screen.getByText("erro 'senha' deve ser igual 'confirmar Senha'");
-    expect(span).toBeInTheDocument();
+    expect(span).not.toBeNull();
 
     const svgEyeOpen = screen.getAllByTestId('container-svg-eye-open')[0];
-    expect(svgEyeOpen).toBeInTheDocument();
+    expect(svgEyeOpen).not.toBeNull();
 
     const svgEyeClose = screen.getAllByTestId('container-svg-eye-close')[0];
-    expect(svgEyeClose).toBeInTheDocument();
+    expect(svgEyeClose).not.toBeNull();
 
     expect.assertions(5);
   });
 
   test('should render label input span svg confirm password', () => {
-    render(<Individual whichTypePersonalWasClicked="" />);
+    render(
+      <MemoryRouter>
+        <Individual />
+      </MemoryRouter>
+    );
 
     const label = screen.getByLabelText('Confirmar Senha *');
-    expect(label).toBeInTheDocument();
+    expect(label).not.toBeNull();
 
     const input = screen.getByPlaceholderText('Insiria a senha novamente');
-    expect(input).toBeInTheDocument();
+    expect(input).not.toBeNull();
 
     const span = screen.getByText("erro 'confirmar senha' deve ser igual 'senha'");
-    expect(span).toBeInTheDocument();
+    expect(span).not.toBeNull();
 
     const svgEyeOpen = screen.getAllByTestId('container-svg-eye-open')[1];
-    expect(svgEyeOpen).toBeInTheDocument();
+    expect(svgEyeOpen).not.toBeNull();
 
     const svgEyeClose = screen.getAllByTestId('container-svg-eye-close')[1];
-    expect(svgEyeClose).toBeInTheDocument();
+    expect(svgEyeClose).not.toBeNull();
 
     expect.assertions(5);
   });
 
   test('should render checkbox complete registration', () => {
-    render(<Individual whichTypePersonalWasClicked="" />);
+    render(
+      <MemoryRouter>
+        <Individual />
+      </MemoryRouter>
+    );
 
     const checkbox = screen.getByRole('checkbox');
-    expect(checkbox).toBeInTheDocument();
+    expect(checkbox).not.toBeNull();
 
     const span = screen.getByTestId('span-checkbox');
     expect(span.textContent?.trim()).toBe(
@@ -219,7 +268,7 @@ describe('Individual', () => {
     );
 
     const button = screen.getByRole('button', { name: 'FINALIZAR CADASTRO' });
-    expect(button).toBeInTheDocument();
+    expect(button).not.toBeNull();
 
     expect.assertions(3);
   });

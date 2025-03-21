@@ -1,13 +1,18 @@
 import { render } from '@testing-library/react';
 import { screen } from '@testing-library/dom';
 import FormLogin from './FormLogin';
+import { MemoryRouter } from 'react-router-dom';
 
 describe('FormLogin', () => {
   test('should render itens', () => {
-    render(<FormLogin />);
+    render(
+      <MemoryRouter>
+        <FormLogin />
+      </MemoryRouter>
+    );
 
     const heading = screen.getByRole('heading', { name: 'Faça seu Login' });
-    expect(heading).toBeInTheDocument();
+    expect(heading).not.toBeNull();
 
     const label = screen.getByText('E-mail ou CPF*');
     expect(label).toBeInTheDocument();

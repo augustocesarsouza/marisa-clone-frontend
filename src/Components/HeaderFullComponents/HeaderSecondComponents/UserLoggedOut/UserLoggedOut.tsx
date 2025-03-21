@@ -1,21 +1,21 @@
 import { useEffect, useRef, useState } from 'react';
 import SvgArrow from '../../../Svg/SvgArrow/SvgArrow';
 import * as Styled from './styles';
-import { GetUserFromLocalStorage } from '../../../GetUserFromLocalStorage/GetUserFromLocalStorage';
 import { useNavigate } from 'react-router-dom';
+import { User } from '../../../Interfaces/Entity/User.';
 
-const UserLoggedOut = () => {
+interface UserLoggedOutProps {
+  user: User;
+}
+
+const UserLoggedOut = ({ user }: UserLoggedOutProps) => {
   const RefContainerSvgArrow = useRef<HTMLDivElement | null>(null);
   const [, setWasClickedUserLogged] = useState(false);
-  const nav = useNavigate();
 
   const [showUserName, setShowUserName] = useState<string | null>(null);
+  const nav = useNavigate();
 
   useEffect(() => {
-    const objUser = GetUserFromLocalStorage();
-
-    const user = objUser.user;
-
     if (user) {
       const userName = user.name;
       const nameArray = userName?.split(' ');
@@ -25,7 +25,7 @@ const UserLoggedOut = () => {
         setShowUserName(showUserName);
       }
     }
-  }, [nav]);
+  }, [user]);
 
   const [showModalInfoUser, setShowModalInfoUser] = useState(false);
 
@@ -50,6 +50,14 @@ const UserLoggedOut = () => {
   const onClickMyOrders = () => {
     // navigate('/dashboard');
     setShowModalInfoUser(false);
+    nav('/my-account');
+  };
+
+  const onClickExitUser = () => {
+    localStorage.removeItem('user');
+    setShowModalInfoUser(false);
+    nav('/login');
+    window.location.reload();
   };
 
   return (
@@ -74,7 +82,7 @@ const UserLoggedOut = () => {
             <Styled.Span>Meus pedidos</Styled.Span>
             <Styled.Span>Cartões Marisa</Styled.Span>
             <Styled.Span>Lista de Desejos</Styled.Span>
-            <Styled.SpanExit>Sair</Styled.SpanExit>
+            <Styled.SpanExit onClick={onClickExitUser}>Sair</Styled.SpanExit>
           </Styled.ContainerModalInfoUser>
         </Styled.ContainerModalInfoUserMain>
       )}

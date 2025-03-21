@@ -1,16 +1,14 @@
 import '@testing-library/jest-dom';
-import Home from './Home';
+import AppContent from './AppContent';
 import { render } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 
-describe('BodyComponentsMain', () => {
-  test('should render itens', () => {
+describe('AppContent', () => {
+  it('should render AppContent', () => {
     render(
       <MemoryRouter>
-        <Home />
+        <AppContent />
       </MemoryRouter>
     );
-
-    expect.assertions(0);
   });
 });

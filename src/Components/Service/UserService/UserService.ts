@@ -1,7 +1,23 @@
-import axios, { AxiosInstance } from 'axios';
+import axios, {  AxiosInstance } from 'axios';
 import { User } from '../../Interfaces/Entity/User.';
 import { CodeSendEmailUserDTO } from '../../Interfaces/DTOs/CodeSendEmailUserDTO';
 import { CreateUserDTO } from '../../Interfaces/DTOs/CreateUserDTO';
+import { AxiosError } from "axios";
+
+export interface ReturnGetUser {
+  data: User,
+  isSucess: boolean;
+}
+
+export interface ResultReturnGeneric {
+  data: ILoginData,
+  isSucess: boolean;
+}
+
+interface ILoginData {
+  passwordIsCorrect: boolean;
+  userDTO: User
+}
 
 export interface ResultReturnCreate {
   data: CreateUserDTO,
@@ -27,6 +43,57 @@ class UserService {
     });
   }
 
+  async getByIdInfoUser(userId: string, token: string): Promise<ReturnGetUser | null> {
+    try {
+      const response = await this.http.get<ReturnGetUser>(`/user/get-by-id-info-user/${userId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          uid: userId,
+          'Content-Type': 'application/json',
+        },
+      });
+      
+      return response.data;
+    } catch(err) {
+      const error = err as AxiosError;
+
+      if(error.status === 400){
+        const dataAxios = error.response?.data;
+        const dataBack = dataAxios as ReturnGetUser;
+
+        return dataBack;
+      }
+
+      if (error.status === 403 || error.status === 401) {
+        localStorage.removeItem('user');
+        // nav('/login');
+        window.location.href = "/login";
+        return null;
+      }
+      
+      return null;
+    }
+  }
+
+  async login(emailCpf: string, password: string): Promise<ResultReturnGeneric | null> {
+    try {
+      const response = await this.http.get<ResultReturnGeneric>(`/public/user/login/${emailCpf}/${password}`);
+      
+      return response.data;
+    } catch(err) {
+      const error = err as AxiosError;
+
+      if(error.status === 400){
+        const dataAxios = error.response?.data;
+        const dataBack = dataAxios as ResultReturnGeneric;
+
+        return dataBack;
+      }
+      
+      return null;
+    }
+  }
+
   async createUser(userData: User): Promise<ResultReturnCreate | null> {
     try {
       const response = await this.http.post<ResultReturnCreate>('/public/user/create', userData);
@@ -36,7 +103,7 @@ class UserService {
     }
   }
 
-  async SendCode(userData: User): Promise<ResultReturnSendCode | null> {
+  async sendCode(userData: User): Promise<ResultReturnSendCode | null> {
     try {
       const response = await this.http.post<ResultReturnSendCode>('/public/user/send-code-email', userData);
       return response.data;

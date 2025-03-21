@@ -2,6 +2,9 @@ import '@testing-library/jest-dom';
 import 'jest-styled-components';
 // import 'cross-fetch/polyfill'; //isso foi para MSW
 
+import React from 'react';
+global.React = React;
+
 import { TextEncoder, TextDecoder as NodeTextDecoder } from 'util';
 
 if (typeof global.TextEncoder === 'undefined') {
