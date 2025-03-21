@@ -4,6 +4,11 @@ import { CodeSendEmailUserDTO } from '../../Interfaces/DTOs/CodeSendEmailUserDTO
 import { CreateUserDTO } from '../../Interfaces/DTOs/CreateUserDTO';
 import { AxiosError } from "axios";
 
+export interface ReturnGetUser {
+  data: User,
+  isSucess: boolean;
+}
+
 export interface ResultReturnGeneric {
   data: ILoginData,
   isSucess: boolean;
@@ -36,6 +41,38 @@ class UserService {
         'Content-Type': 'application/json',
       },
     });
+  }
+
+  async getByIdInfoUser(userId: string, token: string): Promise<ReturnGetUser | null> {
+    try {
+      const response = await this.http.get<ReturnGetUser>(`/user/get-by-id-info-user/${userId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          uid: userId,
+          'Content-Type': 'application/json',
+        },
+      });
+      
+      return response.data;
+    } catch(err) {
+      const error = err as AxiosError;
+
+      if(error.status === 400){
+        const dataAxios = error.response?.data;
+        const dataBack = dataAxios as ReturnGetUser;
+
+        return dataBack;
+      }
+
+      if (error.status === 403 || error.status === 401) {
+        localStorage.removeItem('user');
+        // nav('/login');
+        window.location.href = "/login";
+        return null;
+      }
+      
+      return null;
+    }
   }
 
   async login(emailCpf: string, password: string): Promise<ResultReturnGeneric | null> {

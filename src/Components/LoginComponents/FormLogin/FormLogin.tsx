@@ -181,7 +181,7 @@ const FormLogin = () => {
 
   const onClickCreateAccount = () => {
     if (typeof window === 'undefined') return;
-    nav('/register', { replace: false });
+    nav('/register');
     window.location.reload();
   };
 

@@ -23,7 +23,7 @@ const MyPerfilMain = () => {
 
   return (
     <Styled.ContainerMainPerfil>
-      <Styled.H1>Olá, {showUserName}</Styled.H1>
+      <Styled.H1 data-testid="header-hello-user">Olá, {showUserName}</Styled.H1>
 
       <Styled.ContainerSpanAndButton>
         <Styled.Span>

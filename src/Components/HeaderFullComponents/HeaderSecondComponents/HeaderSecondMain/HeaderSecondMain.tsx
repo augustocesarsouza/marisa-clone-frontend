@@ -3,15 +3,20 @@ import FirstHeaderBody from '../FirstHeaderBody/FirstHeaderBody';
 import NavigationBody from '../NavigationBody/NavigationBody';
 import * as Styled from './styled';
 import { User } from '../../../Interfaces/Entity/User.';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { GetUserFromLocalStorage } from '../../../GetUserFromLocalStorage/GetUserFromLocalStorage';
 import { ContextHome } from '../Contexts/ContextHome';
 
 const HeaderSecondMain = () => {
   const [user, setUser] = useState<User | null>(null);
   const nav = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
+    const pathname = location.pathname;
+    if (pathname === '/login' || pathname === '/register') return;
+    pathname;
+
     const objUser = GetUserFromLocalStorage();
 
     if (objUser.isNullUserLocalStorage) {
@@ -31,7 +36,7 @@ const HeaderSecondMain = () => {
     if (user) {
       setUser(user);
     }
-  }, [nav]);
+  }, [location.pathname, nav]);
 
   return (
     <ContextHome.Provider

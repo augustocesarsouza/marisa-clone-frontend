@@ -1,7 +1,7 @@
 import { render } from '@testing-library/react';
 import { screen } from '@testing-library/dom';
-import Individual from './Individual';
 import { MemoryRouter } from 'react-router-dom';
+import Individual from './Individual';
 
 describe('Individual', () => {
   test('should render label input span name full', () => {
