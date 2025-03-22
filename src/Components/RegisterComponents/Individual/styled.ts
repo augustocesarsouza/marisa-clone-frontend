@@ -109,7 +109,6 @@ export const ContainerLabelAndInput = styled.div`
       border-color: #FF69B4;
     }
   }
-  
 `;
 
 export const ContainerBirthdateAndCpf = styled.div`
