@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from 'react';
 import * as Styled from './styled';
-import { ContextMyAccount } from '../../Contexts/ContextMyAccount';
+import { ContextMyAccount } from '../Contexts/ContextMyAccount';
 
 const MyPerfilMain = () => {
   const [showUserName, setShowUserName] = useState<string | null>(null);

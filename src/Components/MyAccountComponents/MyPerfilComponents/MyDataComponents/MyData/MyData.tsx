@@ -71,8 +71,6 @@ const MyData = () => {
           cellPhoneUser[cellPhoneUser.length - 2] + cellPhoneUser[cellPhoneUser.length - 1];
         const cellPhoneString = `***********${cellPhone}`;
         setCellPhoneString(cellPhoneString);
-
-        console.log(user.cellPhone);
       }
     };
 
@@ -96,6 +94,18 @@ const MyData = () => {
     setEmailString(`${visiblePart}${hiddenPart}${domain}`);
   };
 
+  const onClickChangePassword = () => {
+    nav('/my-account/update-password');
+  };
+
+  const onClickChangeEmail = () => {
+    nav('/my-account/update-email');
+  };
+
+  const onClickChangeData = () => {
+    nav('/my-account/update-profile');
+  };
+
   return (
     <Styled.ContainerMain>
       <Styled.H1>Meu perfil</Styled.H1>
@@ -117,9 +127,9 @@ const MyData = () => {
       </Styled.H2Agree>
 
       <Styled.ContainerButtons>
-        <Styled.Button>ALTERAR SENHA</Styled.Button>
-        <Styled.Button>ATUALIZAR SEU E-MAIL</Styled.Button>
-        <Styled.Button>ALTERAR DADOS</Styled.Button>
+        <Styled.Button onClick={onClickChangePassword}>ALTERAR SENHA</Styled.Button>
+        <Styled.Button onClick={onClickChangeEmail}>ATUALIZAR SEU E-MAIL</Styled.Button>
+        <Styled.Button onClick={onClickChangeData}>ALTERAR DADOS</Styled.Button>
       </Styled.ContainerButtons>
     </Styled.ContainerMain>
   );

@@ -4,11 +4,11 @@ import FooterMain from '../../FooterMainComponents/FooterMain/FooterMain';
 import HeaderFullMain from '../../HeaderFullComponents/HeaderFullMain/HeaderFullMain';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import Navigation from '../Navigation/Navigation';
-import MyPerfilMain from '../MyPerfilComponents/MyPerfilMain/MyPerfilMain';
 import { User } from '../../Interfaces/Entity/User.';
 import { GetUserFromLocalStorage } from '../../GetUserFromLocalStorage/GetUserFromLocalStorage';
 import HeaderMyAccount from '../HeaderMyAccount/HeaderMyAccount';
 import { ContextMyAccount } from '../Contexts/ContextMyAccount';
+import MyPerfilMain from '../MyPerfilMain/MyPerfilMain';
 
 const MyAccountMain = () => {
   const nav = useNavigate();
@@ -35,8 +35,6 @@ const MyAccountMain = () => {
   }, [location.pathname, nav]);
 
   const whichWasClickedNav = (which: string) => {
-    console.log(which);
-
     setWhatShowUserClicked(which);
   };
 

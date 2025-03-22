@@ -217,6 +217,10 @@ const Navigation = ({ whichWasClickedNav }: NavigationProps) => {
       nav('/my-account/profile');
     } else if (whichItWasClicked === 'change-data') {
       nav('/my-account/update-profile');
+    } else if (whichItWasClicked === 'update-password') {
+      nav('/my-account/update-password');
+    } else if (whichItWasClicked === 'update-your-email') {
+      nav('/my-account/update-email');
     }
 
     allSpans?.forEach((el) => {
@@ -261,12 +265,12 @@ const Navigation = ({ whichWasClickedNav }: NavigationProps) => {
             Alterar dados
           </Styled.Span>
           <Styled.Span
-            onClick={(e) => onClickNavAfterClicked(e, '')}
+            onClick={(e) => onClickNavAfterClicked(e, 'update-password')}
             ref={SpanProfileChangePassword}>
             Alterar Senha
           </Styled.Span>
           <Styled.Span
-            onClick={(e) => onClickNavAfterClicked(e, '')}
+            onClick={(e) => onClickNavAfterClicked(e, 'update-your-email')}
             ref={SpanProfileUpdateYourEmail}>
             Atualizar Seu E-mail
           </Styled.Span>
