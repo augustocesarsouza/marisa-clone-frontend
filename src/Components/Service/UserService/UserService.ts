@@ -56,6 +56,8 @@ class UserService {
       return response.data;
     } catch(err) {
       const error = err as AxiosError;
+      console.log(error);
+      
 
       if(error.status === 400){
         const dataAxios = error.response?.data;

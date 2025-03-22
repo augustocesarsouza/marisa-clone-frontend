@@ -4,7 +4,11 @@ import MoreSvg from '../../Svg/MoreSvg/MoreSvg';
 import MinusSvg from '../../Svg/MinusSvg/MinusSvg';
 import { useLocation, useNavigate } from 'react-router-dom';
 
-const Navigation = () => {
+interface NavigationProps {
+  whichWasClickedNav: (which: string) => void;
+}
+
+const Navigation = ({ whichWasClickedNav }: NavigationProps) => {
   const [clickMyProfile, setClickMyProfile] = useState(false);
   const [informationLGPD, setInformationLGPD] = useState(false);
 
@@ -42,6 +46,8 @@ const Navigation = () => {
 
   const onClickContainerMyProfile = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     if (e.target === null) return;
+
+    whichWasClickedNav('my-profile');
 
     putColorBlackFourHeaderNav();
 
@@ -88,6 +94,8 @@ const Navigation = () => {
 
     putColorBlackFourHeaderNav();
 
+    whichWasClickedNav('Informações LGPD');
+
     const container = RefContainerInformationSvg.current as HTMLDivElement;
     const h1Profile = container.firstChild as HTMLHeadingElement;
 
@@ -126,8 +134,19 @@ const Navigation = () => {
     });
   };
 
-  const onClickEachNavMyAccount = (e: React.MouseEvent<HTMLHeadingElement, MouseEvent>) => {
+  const onClickEachNavMyAccount = (
+    e: React.MouseEvent<HTMLHeadingElement, MouseEvent>,
+    whichWasClicked: string
+  ) => {
     if (e.target === null) return;
+
+    if (whichWasClicked === 'addresses') {
+      whichWasClickedNav('endereços');
+    } else if (whichWasClicked === 'order-history') {
+      whichWasClickedNav('Historico de pedidos');
+    } else if (whichWasClicked === 'refund-and-exchange-voucher') {
+      whichWasClickedNav('Reembolso e vale troca');
+    }
 
     putColorBlackFourHeaderNav();
 
@@ -192,6 +211,8 @@ const Navigation = () => {
   ) => {
     if (e.target === null) return;
 
+    whichWasClickedNav('my-profile');
+
     if (whichItWasClicked === 'my-data') {
       nav('/my-account/profile');
     } else if (whichItWasClicked === 'change-data') {
@@ -251,16 +272,20 @@ const Navigation = () => {
           </Styled.Span>
         </Styled.ContainerNavAfterClicked>
       </Styled.ContainerMyProfileAndModalNavAfterClicked>
-      <Styled.H1 onClick={(e) => onClickEachNavMyAccount(e)} ref={RefH1Addresses}>
+      <Styled.H1 onClick={(e) => onClickEachNavMyAccount(e, 'addresses')} ref={RefH1Addresses}>
         Endereços
       </Styled.H1>
-      <Styled.H1 onClick={(e) => onClickEachNavMyAccount(e)} ref={RefH1OrderHistory}>
+      <Styled.H1
+        onClick={(e) => onClickEachNavMyAccount(e, 'order-history')}
+        ref={RefH1OrderHistory}>
         Historico de pedidos
       </Styled.H1>
-      <Styled.H1 onClick={(e) => onClickEachNavMyAccount(e)} ref={RefH1RefundAndExchangeVoucher}>
+      <Styled.H1
+        onClick={(e) => onClickEachNavMyAccount(e, 'refund-and-exchange-voucher')}
+        ref={RefH1RefundAndExchangeVoucher}>
         Reembolso e vale troca
       </Styled.H1>
-      <Styled.H1 onClick={(e) => onClickEachNavMyAccount(e)} ref={RefH1Returns}>
+      <Styled.H1 onClick={(e) => onClickEachNavMyAccount(e, 'returns')} ref={RefH1Returns}>
         Devoluções
       </Styled.H1>
 

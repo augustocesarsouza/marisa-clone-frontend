@@ -6,6 +6,17 @@ export const H1 = styled.h1``;
 
 export const ContainerMain = styled.div``;
 
+export const SpanNav = styled.span`
+  font-size: 11px;
+  line-height: 1;
+  padding: 25px 0px;
+  text-transform: uppercase;
+`;
+
+export const SpanNavMain = styled.span`
+  font-weight: 600;
+`;
+
 export const ContainerBodyMain = styled.div`
   display: flex;
   justify-content: center;

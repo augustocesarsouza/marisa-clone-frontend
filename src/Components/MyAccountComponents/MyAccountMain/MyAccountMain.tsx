@@ -15,6 +15,7 @@ const MyAccountMain = () => {
   const location = useLocation();
   const [isMyAccount, setIsMyAccount] = useState(true);
   const [user, setUser] = useState<User | null>(null);
+  const [whatShowUserClicked, setWhatShowUserClicked] = useState('MEU PERFIL');
 
   useEffect(() => {
     const pathname = location.pathname;
@@ -33,6 +34,12 @@ const MyAccountMain = () => {
     }
   }, [location.pathname, nav]);
 
+  const whichWasClickedNav = (which: string) => {
+    console.log(which);
+
+    setWhatShowUserClicked(which);
+  };
+
   return (
     <ContextMyAccount.Provider
       value={{
@@ -44,8 +51,14 @@ const MyAccountMain = () => {
           <Styled.ContainerBody>
             <HeaderMyAccount />
 
+            {!isMyAccount && (
+              <Styled.SpanNav>
+                Home {'>'} <Styled.SpanNavMain>{whatShowUserClicked}</Styled.SpanNavMain>
+              </Styled.SpanNav>
+            )}
+
             <Styled.ContainerMyAccountNavigation>
-              <Navigation />
+              <Navigation whichWasClickedNav={whichWasClickedNav} />
 
               {isMyAccount && <MyPerfilMain />}
               {!isMyAccount && <Outlet />}
