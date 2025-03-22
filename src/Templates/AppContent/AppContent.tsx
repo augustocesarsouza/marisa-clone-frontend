@@ -4,7 +4,7 @@ import Home from '../Home/Home';
 import LoginMain from '../../Components/LoginComponents/LoginMain/LoginMain';
 import RegisterMain from '../../Components/RegisterComponents/RegisterMain/RegisterMain';
 import MyAccountMain from '../../Components/MyAccountComponents/MyAccountMain/MyAccountMain';
-import MyData from '../../Components/MyAccountComponents/MyPerfilComponents/MyData/MyData';
+import MyData from '../../Components/MyAccountComponents/MyPerfilComponents/MyDataComponents/MyData/MyData';
 import UpdateProfile from '../../Components/MyAccountComponents/MyPerfilComponents/UpdateProfile/UpdateProfile';
 
 const AppContent = () => {
