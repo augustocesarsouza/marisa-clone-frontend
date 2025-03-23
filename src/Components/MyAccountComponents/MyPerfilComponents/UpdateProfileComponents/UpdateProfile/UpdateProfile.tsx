@@ -1,8 +1,14 @@
 import { useLayoutEffect, useRef, useState } from 'react';
 import * as Styled from './styled';
 import Inputmask from 'inputmask';
+import { User } from '../../../../Interfaces/Entity/User.';
+import { useNavigate } from 'react-router-dom';
+import { GetUserFromLocalStorage } from '../../../../GetUserFromLocalStorage/GetUserFromLocalStorage';
+import userService from '../../../../Service/UserService/UserService';
 
 const UpdateProfile = () => {
+  const [user, setUser] = useState<User | null>(null);
+
   const inputCheckbox = useRef<HTMLInputElement>(null);
 
   const ContainerCheckboxFeminine = useRef<HTMLDivElement>(null);
@@ -19,15 +25,18 @@ const UpdateProfile = () => {
 
   const SpanErrorNameComplete = useRef<HTMLSpanElement>(null);
   const SpanErrorBirthDate = useRef<HTMLSpanElement>(null);
-  const SpanErrorCpf = useRef<HTMLSpanElement>(null);
   const SpanErrorDDDCellPhone = useRef<HTMLSpanElement>(null);
   const SpanErrorCellPhone = useRef<HTMLSpanElement>(null);
   const SpanErrorDDDTelephone = useRef<HTMLSpanElement>(null);
   const SpanErrorTelephone = useRef<HTMLSpanElement>(null);
 
   const [whichGender, setWhichGender] = useState('feminine');
+  const nav = useNavigate();
 
   useLayoutEffect(() => {
+    const containerFeminine = ContainerCheckboxFeminine.current as HTMLDivElement;
+    checkboxNotClicked(containerFeminine);
+
     const containerMasculine = ContainerCheckboxMasculine.current as HTMLDivElement;
     checkboxNotClicked(containerMasculine);
 
@@ -50,20 +59,101 @@ const UpdateProfile = () => {
       mask.mask(element);
     };
 
+    const inputCpfHere = inputCpf.current as HTMLInputElement;
+    inputCpfHere.style.cursor = 'default';
+    inputCpfHere.style.pointerEvents = 'none';
+    inputCpfHere.style.color = '#929292';
+    inputCpfHere.style.backgroundColor = '#eee';
+
+    const inputBirthDateHere = inputBirthDate.current as HTMLInputElement;
+    const inputDDDCellPhoneHere = inputDDDCellPhone.current as HTMLInputElement;
+    const inputCellPhoneHere = inputCellPhone.current as HTMLInputElement;
+    const inputDDDTelephoneHere = inputDDDTelephone.current as HTMLInputElement;
+    const inputTelephoneHere = inputTelephone.current as HTMLInputElement;
+
     const maskConfigs = [
-      { element: inputBirthDate.current, mask: '99/99/9999', placeholder: '__/__/____' },
-      { element: inputCpf.current, mask: '999.999.999-99', placeholder: '___.___.___-__' },
-      { element: inputDDDCellPhone.current, mask: '99', placeholder: '__' },
-      { element: inputDDDTelephone.current, mask: '99', placeholder: '__' },
-      { element: inputCellPhone.current, mask: '99999-9999', placeholder: '_____-____' },
-      { element: inputTelephone.current, mask: '9999-9999', placeholder: '____-____' },
+      { element: inputBirthDateHere, mask: '99/99/9999', placeholder: '__/__/____' },
+      { element: inputCpfHere, mask: '999.999.999-99', placeholder: '___.___.___-__' },
+      { element: inputDDDCellPhoneHere, mask: '99', placeholder: '__' },
+      { element: inputDDDTelephoneHere, mask: '99', placeholder: '__' },
+      { element: inputCellPhoneHere, mask: '99999-9999', placeholder: '_____-____' },
+      { element: inputTelephoneHere, mask: '9999-9999', placeholder: '____-____' },
     ];
 
     // Aplica todas as máscaras usando a função genérica
     maskConfigs.forEach(({ element, mask, placeholder }) => {
       applyMask(element as HTMLInputElement, mask, placeholder);
     });
-  }, []);
+
+    const objUser = GetUserFromLocalStorage();
+
+    if (objUser.isNullUserLocalStorage) {
+      localStorage.removeItem('user');
+      nav('/login');
+      window.location.reload();
+      return;
+    }
+
+    const user = objUser.user;
+    setUser(user);
+
+    const getInfoToUpdateProfile = async (user: User) => {
+      const userId = user.id as string;
+      const token = user.token as string;
+
+      const resp = await userService.getInfoToUpdateProfile(userId, token);
+
+      if (resp && resp.isSucess) {
+        const user = resp.data as User;
+
+        const userName = user.name as string;
+
+        const inputName = inputFullName.current as HTMLInputElement;
+        inputName.value = userName;
+
+        if (user.gender === 'f') {
+          const containerBoxFeminine = ContainerCheckboxFeminine.current as HTMLDivElement;
+
+          checkboxClicked(containerBoxFeminine);
+        } else if (user.gender === 'm') {
+          const containerBoxMasculine = ContainerCheckboxMasculine.current as HTMLDivElement;
+          checkboxClicked(containerBoxMasculine);
+        } else if (user.gender === 'n') {
+          const containerBoxNotInform = ContainerCheckboxDoNotInform.current as HTMLDivElement;
+          checkboxClicked(containerBoxNotInform);
+        }
+
+        const inputCpfInner = inputCpf.current as HTMLInputElement;
+        inputCpfInner.value = user.cpf as string;
+
+        const ddCellPhoneUser = user.cellPhone as string;
+        const cellPhoneDD = ddCellPhoneUser.split(' ')[0];
+        const cellPhone = ddCellPhoneUser.split(' ')[1];
+
+        inputDDDCellPhoneHere.value = `${cellPhoneDD}`;
+        inputCellPhoneHere.value = `${cellPhone}`;
+
+        const telephoneUser = user.telephone as string;
+        const telephoneSplit = telephoneUser.split(' ');
+        const telephoneDD = telephoneSplit[0];
+        const telephone = telephoneSplit[1];
+
+        inputDDDTelephoneHere.value = `${telephoneDD}`;
+        inputTelephoneHere.value = `${telephone}`;
+
+        const birthDateUser = user.birthDate as string;
+        const birthDateSplit = birthDateUser.split('T')[0];
+        const birthDateYearMonthDay = birthDateSplit.split('-');
+        const birthDate = `${birthDateYearMonthDay[2]}/${birthDateYearMonthDay[1]}/${birthDateYearMonthDay[0]}`;
+
+        inputBirthDateHere.value = birthDate;
+      }
+    };
+
+    if (user) {
+      getInfoToUpdateProfile(user);
+    }
+  }, [nav]);
 
   const onChangeInputNameFull = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
@@ -82,7 +172,6 @@ const UpdateProfile = () => {
 
   const onChangeInputBirthDate = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
-    // ARRUMAR VALIDAÇÃO
 
     const input = e.target as HTMLInputElement;
     const inputValue = input.value;
@@ -96,27 +185,10 @@ const UpdateProfile = () => {
     }
   };
 
-  const onChangeInputCpf = (e: React.ChangeEvent<HTMLInputElement>) => {
-    e.preventDefault();
-
-    const input = e.target as HTMLInputElement;
-    const inputValue = input.value;
-
-    const cpfValidate = validateCpf(inputValue);
-
-    const span = SpanErrorCpf.current as HTMLSpanElement;
-
-    if (cpfValidate) {
-      putErrorSpanAndInput(span, input);
-    } else {
-      withoutErrorSpanAndInput(span, input);
-    }
-  };
-
-  const validateCpf = (value: string): boolean => {
-    const inputReplace = value.replace(/[-_.]/g, '');
-    const valueValidate = inputReplace.length < 11;
-    return valueValidate;
+  const validateBirthDate = (birthDate: string): boolean => {
+    const regexBirthDate = /^(0[1-9]|1[0-9]|2[0-9]|3[01])\/(0[1-9]|1[0-2])\/\d{4}$/;
+    const value = regexBirthDate.test(birthDate);
+    return value;
   };
 
   const putErrorSpanAndInput = (span: HTMLSpanElement | null, input: HTMLInputElement) => {
@@ -183,14 +255,7 @@ const UpdateProfile = () => {
 
     const input = e.target as HTMLInputElement;
     const inputValue = input.value.replace(/[-_.]/g, '');
-
-    const span = SpanErrorDDDTelephone.current as HTMLSpanElement;
-
-    if (inputValue.length < 2) {
-      putErrorSpanAndInput(span, input);
-    } else {
-      withoutErrorSpanAndInput(span, input);
-    }
+    console.log(inputValue);
   };
 
   const onChangeInputTelephone = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -198,14 +263,7 @@ const UpdateProfile = () => {
 
     const input = e.target as HTMLInputElement;
     const inputValue = input.value.replace(/[-_.]/g, '');
-
-    const span = SpanErrorTelephone.current as HTMLSpanElement;
-
-    if (inputValue.length < 8) {
-      putErrorSpanAndInput(span, input);
-    } else {
-      withoutErrorSpanAndInput(span, input);
-    }
+    console.log(inputValue);
   };
 
   const checkboxNotClicked = (container: HTMLDivElement) => {
@@ -242,8 +300,97 @@ const UpdateProfile = () => {
   };
 
   const onClickSaveUpdates = async () => {
-    console.log('opíasdfipo');
-    // quando clicar aqui ver os que são obrigatório verificar e mostra erro
+    const inputCheckboxInner = inputCheckbox.current as HTMLInputElement;
+
+    if (inputCheckboxInner === null) return;
+    if (!inputCheckboxInner.checked) return;
+
+    const cellPhoneFull = `${inputDDDCellPhone.current?.value} ${inputCellPhone.current?.value}`;
+    const cellTelephone = `${inputDDDTelephone.current?.value} ${inputTelephone.current?.value}`;
+
+    const inputFullNameHere = inputFullName.current as HTMLInputElement;
+    const inputBirthDateHere = inputBirthDate.current as HTMLInputElement;
+    const inputDDDCellPhoneHere = inputDDDCellPhone.current as HTMLInputElement;
+    const inputCellPhoneHere = inputCellPhone.current as HTMLInputElement;
+
+    const nameFullError = inputFullNameHere.value.length < 3;
+    const valueValidateBirthDate = validateBirthDate(inputBirthDateHere.value);
+    const dddCellPhoneError = inputDDDCellPhoneHere.value.replace(/[-_.]/g, '');
+    const cellPhoneError = inputCellPhoneHere.value.replace(/[-_.]/g, '');
+
+    const dddCellPhoneIsError = dddCellPhoneError.length < 2;
+    const cellPhoneIsError = cellPhoneError.length < 9;
+
+    if (nameFullError || !valueValidateBirthDate || dddCellPhoneIsError || cellPhoneIsError) {
+      if (nameFullError) {
+        const span = SpanErrorNameComplete.current as HTMLSpanElement;
+        const input = inputFullName.current as HTMLInputElement;
+
+        putErrorSpanAndInput(span, input);
+      }
+
+      if (!valueValidateBirthDate) {
+        const span = SpanErrorBirthDate.current as HTMLSpanElement;
+        const input = inputBirthDate.current as HTMLInputElement;
+
+        putErrorSpanAndInput(span, input);
+      }
+
+      if (dddCellPhoneIsError) {
+        const span1 = SpanErrorDDDCellPhone.current as HTMLSpanElement;
+        const input1 = inputDDDCellPhone.current as HTMLInputElement;
+
+        putErrorSpanAndInput(span1, input1);
+      }
+
+      if (cellPhoneIsError) {
+        const span2 = SpanErrorCellPhone.current as HTMLSpanElement;
+        const input2 = inputCellPhone.current as HTMLInputElement;
+
+        putErrorSpanAndInput(span2, input2);
+      }
+
+      return;
+    }
+
+    let gender = '';
+
+    if (whichGender === 'masculine') {
+      gender += 'm';
+    } else if (whichGender === 'feminine') {
+      gender += 'f';
+    } else if (whichGender === 'notInform') {
+      gender += 'n';
+    }
+    if (user === null) return;
+
+    const userId = user.id as string;
+
+    const obj: User = {
+      name: inputFullNameHere.value,
+      birthDateString: inputBirthDateHere.value,
+      cellPhone: cellPhoneFull,
+      cpf: null,
+      gender: gender,
+      telephone: cellTelephone,
+      userImage: '',
+      id: userId,
+      birthDate: null,
+      passwordHash: null,
+      salt: null,
+      token: null,
+      email: null,
+      tokenForCreation: null,
+      password: null,
+    };
+
+    const token = user.token as string;
+
+    const resp = await userService.updateUser(obj, token);
+
+    if (resp?.isSucess && resp.data) {
+      nav('/my-account/profile');
+    }
   };
 
   return (
@@ -266,7 +413,7 @@ const UpdateProfile = () => {
 
       <Styled.ContainerGenderAndBirthDate>
         <Styled.ContainerAllGendersMain>
-          <Styled.H1>Gênero*</Styled.H1>
+          <Styled.H1 data-testid="header-gender">Gênero*</Styled.H1>
           <Styled.ContainerAllGenders>
             <Styled.ContainerCheckboxMain
               onClick={() => onClickCheckboxGender(ContainerCheckboxFeminine.current, 'feminine')}>
@@ -322,14 +469,7 @@ const UpdateProfile = () => {
 
       <Styled.ContainerLabelAndInput>
         <Styled.Label htmlFor="cpf">CPF</Styled.Label>
-        <Styled.Input
-          type="text"
-          id="cpf"
-          placeholder="000.000.000-00"
-          ref={inputCpf}
-          onChange={onChangeInputCpf}
-        />
-        <Styled.SpanError ref={SpanErrorCpf}>CPF inválido</Styled.SpanError>
+        <Styled.Input type="text" id="cpf" placeholder="000.000.000-00" ref={inputCpf} />
       </Styled.ContainerLabelAndInput>
 
       <Styled.ContainerTelephoneAndCelphone>
@@ -360,7 +500,7 @@ const UpdateProfile = () => {
 
         <Styled.ContainerTelephone>
           <Styled.ContainerLabelAndInput>
-            <Styled.Label htmlFor="ddd-telephone">DDD*</Styled.Label>
+            <Styled.Label htmlFor="ddd-telephone">DDD</Styled.Label>
             <Styled.Input
               type="text"
               id="ddd-telephone"

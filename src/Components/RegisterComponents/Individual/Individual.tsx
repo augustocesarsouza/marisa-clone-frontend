@@ -242,6 +242,7 @@ const Individual = () => {
     const inputEmailHere = inputEmail.current as HTMLInputElement;
     const inputTokenHere = inputToken.current as HTMLInputElement;
 
+    const nameFullError = inputFullNameHere.value.length < 3;
     const valueValidateBirthDate = validateBirthDate(inputBirthDateHere.value);
     const cpfError = validateCpf(inputCpfHere.value);
     const dddCellPhoneError = inputDDDCellPhoneHere.value.replace(/[-_.]/g, '');
@@ -258,7 +259,7 @@ const Individual = () => {
     const passwordAndConfirmPassword = !(password === confirmPassword);
 
     if (
-      inputFullNameHere.value.length < 3 ||
+      nameFullError ||
       !valueValidateBirthDate ||
       cpfError ||
       dddCellPhoneIsError ||

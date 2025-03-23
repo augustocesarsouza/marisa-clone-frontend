@@ -77,6 +77,38 @@ class UserService {
     }
   }
 
+  async getInfoToUpdateProfile(userId: string, token: string): Promise<ReturnGetUser | null> {
+    try {
+      const response = await this.http.get<ReturnGetUser>(`/user/get-info-to-update-profile/${userId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          uid: userId,
+          'Content-Type': 'application/json',
+        },
+      });
+      
+      return response.data;
+    } catch(err) {
+      const error = err as AxiosError;
+      
+      if(error.status === 400){
+        const dataAxios = error.response?.data;
+        const dataBack = dataAxios as ReturnGetUser;
+
+        return dataBack;
+      }
+
+      if (error.status === 403 || error.status === 401) {
+        localStorage.removeItem('user');
+        // nav('/login');
+        window.location.href = "/login";
+        return null;
+      }
+      
+      return null;
+    }
+  }
+
   async login(emailCpf: string, password: string): Promise<ResultReturnGeneric | null> {
     try {
       const response = await this.http.get<ResultReturnGeneric>(`/public/user/login/${emailCpf}/${password}`);
@@ -101,6 +133,38 @@ class UserService {
       const response = await this.http.post<ResultReturnCreate>('/public/user/create', userData);
       return response.data;
     } catch {
+      return null;
+    }
+  }
+
+  async updateUser(userData: User, token: string): Promise<ReturnGetUser | null> {
+    try {
+      const response = await this.http.put<ReturnGetUser>('/user/update-profile', userData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          uid: userData.id,
+          'Content-Type': 'application/json',
+        }
+      });
+      
+      return response.data;
+    } catch(err) {
+      const error = err as AxiosError;
+      
+      if(error.status === 400){
+        const dataAxios = error.response?.data;
+        const dataBack = dataAxios as ReturnGetUser;
+
+        return dataBack;
+      }
+
+      if (error.status === 403 || error.status === 401) {
+        localStorage.removeItem('user');
+        // nav('/login');
+        window.location.href = "/login";
+        return null;
+      }
+      
       return null;
     }
   }
