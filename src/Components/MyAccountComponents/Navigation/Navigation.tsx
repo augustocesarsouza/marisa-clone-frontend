@@ -31,6 +31,7 @@ const Navigation = ({ whichWasClickedNav }: NavigationProps) => {
 
   useEffect(() => {
     const pathname = location.pathname;
+    console.log(pathname);
 
     if (pathname === '/my-account') {
       const container = RefContainerMyProfileSvg.current as HTMLDivElement;
@@ -40,6 +41,16 @@ const Navigation = ({ whichWasClickedNav }: NavigationProps) => {
       if (h1Profile && svg) {
         h1Profile.style.color = '#ec008c';
         svg.style.fill = '#ec008c';
+      }
+    }
+
+    if (pathname === '/my-account/profile') {
+      putAllSpansMyProfileBlack();
+
+      const span = SpanProfileMyData.current as HTMLSpanElement;
+
+      if (span) {
+        span.style.color = '#ec008c';
       }
     }
   }, [location.pathname, nav]);
@@ -240,6 +251,18 @@ const Navigation = ({ whichWasClickedNav }: NavigationProps) => {
 
     const span = e.target as HTMLSpanElement;
     span.style.color = '#ec008c';
+  };
+
+  const putAllSpansMyProfileBlack = () => {
+    const span1 = SpanProfileMyData.current as HTMLSpanElement;
+    const span2 = SpanProfileChangeData.current as HTMLSpanElement;
+    const span3 = SpanProfileChangePassword.current as HTMLSpanElement;
+    const span4 = SpanProfileUpdateYourEmail.current as HTMLSpanElement;
+
+    span1.style.color = 'rgb(112, 112, 112)';
+    span2.style.color = 'rgb(112, 112, 112)';
+    span3.style.color = 'rgb(112, 112, 112)';
+    span4.style.color = 'rgb(112, 112, 112)';
   };
 
   return (
