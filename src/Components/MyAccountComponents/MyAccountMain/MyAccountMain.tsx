@@ -23,6 +23,8 @@ const MyAccountMain = () => {
 
     if (pathname !== '/my-account') {
       setIsMyAccount(false);
+    } else {
+      setIsMyAccount(true);
     }
 
     const objUser = GetUserFromLocalStorage();
@@ -56,7 +58,7 @@ const MyAccountMain = () => {
             )}
 
             <Styled.ContainerMyAccountNavigation>
-              <Navigation whichWasClickedNav={whichWasClickedNav} />
+              <Navigation whichWasClickedNav={whichWasClickedNav} isMyAccount={isMyAccount} />
 
               {isMyAccount && <MyPerfilMain />}
               {!isMyAccount && <Outlet />}
