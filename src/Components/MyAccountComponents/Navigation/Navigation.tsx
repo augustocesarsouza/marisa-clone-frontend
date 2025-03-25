@@ -6,9 +6,10 @@ import { useLocation, useNavigate } from 'react-router-dom';
 
 interface NavigationProps {
   whichWasClickedNav: (which: string) => void;
+  isMyAccount: boolean;
 }
 
-const Navigation = ({ whichWasClickedNav }: NavigationProps) => {
+const Navigation = ({ whichWasClickedNav, isMyAccount }: NavigationProps) => {
   const [clickMyProfile, setClickMyProfile] = useState(false);
   const [informationLGPD, setInformationLGPD] = useState(false);
 
@@ -31,7 +32,6 @@ const Navigation = ({ whichWasClickedNav }: NavigationProps) => {
 
   useEffect(() => {
     const pathname = location.pathname;
-    console.log(pathname);
 
     if (pathname === '/my-account') {
       const container = RefContainerMyProfileSvg.current as HTMLDivElement;
@@ -208,13 +208,18 @@ const Navigation = ({ whichWasClickedNav }: NavigationProps) => {
   }, [clickMyProfile]);
 
   useEffect(() => {
+    if (isMyAccount) {
+      setClickMyProfile(false);
+      putAllSpansMyProfileBlack();
+    }
+
     if (informationLGPD) {
       if (spansInformationsRef.current) {
         const allSpans = spansInformationsRef.current.querySelectorAll('span');
         setSpansInformations(allSpans);
       }
     }
-  }, [informationLGPD]);
+  }, [informationLGPD, isMyAccount]);
 
   const onClickNavAfterClicked = (
     e: React.MouseEvent<HTMLSpanElement, MouseEvent>,

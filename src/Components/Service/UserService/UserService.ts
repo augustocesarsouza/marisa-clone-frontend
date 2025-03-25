@@ -3,6 +3,8 @@ import { User } from '../../Interfaces/Entity/User.';
 import { CodeSendEmailUserDTO } from '../../Interfaces/DTOs/CodeSendEmailUserDTO';
 import { CreateUserDTO } from '../../Interfaces/DTOs/CreateUserDTO';
 import { AxiosError } from "axios";
+import { ChangePasswordUser } from '../../Interfaces/DTOs/ChangePasswordUser';
+import { ChangePasswordUserReturnDTO } from '../../Interfaces/DTOs/ChangePasswordUserReturnDTO';
 
 export interface ReturnGetUser {
   data: User,
@@ -26,6 +28,11 @@ export interface ResultReturnCreate {
 
 export interface ResultReturnSendCode {
   data: CodeSendEmailUserDTO,
+  isSucess: boolean;
+}
+
+export interface ResultChangePasswordUser {
+  data: ChangePasswordUserReturnDTO,
   isSucess: boolean;
 }
 
@@ -154,6 +161,38 @@ class UserService {
       if(error.status === 400){
         const dataAxios = error.response?.data;
         const dataBack = dataAxios as ReturnGetUser;
+
+        return dataBack;
+      }
+
+      if (error.status === 403 || error.status === 401) {
+        localStorage.removeItem('user');
+        // nav('/login');
+        window.location.href = "/login";
+        return null;
+      }
+      
+      return null;
+    }
+  }
+
+  async updateChangePasswordUser(userData: ChangePasswordUser, token: string): Promise<ResultChangePasswordUser | null> {
+    try {
+      const response = await this.http.put<ResultChangePasswordUser>('/user/change-password', userData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          uid: userData.userId,
+          'Content-Type': 'application/json',
+        }
+      });
+        
+      return response.data;
+    } catch(err) {
+      const error = err as AxiosError;
+      
+      if(error.status === 400){
+        const dataAxios = error.response?.data;
+        const dataBack = dataAxios as ResultChangePasswordUser;
 
         return dataBack;
       }

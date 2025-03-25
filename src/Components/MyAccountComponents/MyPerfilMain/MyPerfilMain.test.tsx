@@ -1,8 +1,8 @@
 import { render } from '@testing-library/react';
 import { screen } from '@testing-library/dom';
 import MyPerfilMain from './MyPerfilMain';
-import { ContextMyAccount } from '../../Contexts/ContextMyAccount';
-import { User } from '../../../Interfaces/Entity/User.';
+import { ContextMyAccount } from '../Contexts/ContextMyAccount';
+import { User } from '../../Interfaces/Entity/User.';
 
 describe('MyPerfilMain', () => {
   test('should render header hello and name user', () => {
