@@ -32,7 +32,6 @@ const Navigation = ({ whichWasClickedNav, isMyAccount }: NavigationProps) => {
 
   useEffect(() => {
     const pathname = location.pathname;
-    console.log(pathname);
 
     if (pathname === '/my-account') {
       const container = RefContainerMyProfileSvg.current as HTMLDivElement;

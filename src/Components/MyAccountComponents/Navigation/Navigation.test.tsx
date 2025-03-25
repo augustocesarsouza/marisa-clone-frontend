@@ -6,10 +6,11 @@ import { MemoryRouter } from 'react-router-dom';
 describe('Navigation', () => {
   test('should render my profile ', () => {
     const fn = jest.fn();
+    const isMyAccount = false;
 
     render(
       <MemoryRouter>
-        <Navigation whichWasClickedNav={fn} />
+        <Navigation whichWasClickedNav={fn} isMyAccount={isMyAccount} />
       </MemoryRouter>
     );
 
@@ -20,9 +21,11 @@ describe('Navigation', () => {
   test('should render span my data', () => {
     const fn = jest.fn();
 
+    const isMyAccount = false;
+
     render(
       <MemoryRouter>
-        <Navigation whichWasClickedNav={fn} />
+        <Navigation whichWasClickedNav={fn} isMyAccount={isMyAccount} />
       </MemoryRouter>
     );
 
@@ -33,9 +36,11 @@ describe('Navigation', () => {
   test('should render span change data', () => {
     const fn = jest.fn();
 
+    const isMyAccount = false;
+
     render(
       <MemoryRouter>
-        <Navigation whichWasClickedNav={fn} />
+        <Navigation whichWasClickedNav={fn} isMyAccount={isMyAccount} />
       </MemoryRouter>
     );
 
@@ -46,9 +51,11 @@ describe('Navigation', () => {
   test('should render span change password', () => {
     const fn = jest.fn();
 
+    const isMyAccount = false;
+
     render(
       <MemoryRouter>
-        <Navigation whichWasClickedNav={fn} />
+        <Navigation whichWasClickedNav={fn} isMyAccount={isMyAccount} />
       </MemoryRouter>
     );
 
@@ -59,9 +66,11 @@ describe('Navigation', () => {
   test('should render span update your email', () => {
     const fn = jest.fn();
 
+    const isMyAccount = false;
+
     render(
       <MemoryRouter>
-        <Navigation whichWasClickedNav={fn} />
+        <Navigation whichWasClickedNav={fn} isMyAccount={isMyAccount} />
       </MemoryRouter>
     );
 
@@ -72,9 +81,11 @@ describe('Navigation', () => {
   test('should render header addresses', () => {
     const fn = jest.fn();
 
+    const isMyAccount = false;
+
     render(
       <MemoryRouter>
-        <Navigation whichWasClickedNav={fn} />
+        <Navigation whichWasClickedNav={fn} isMyAccount={isMyAccount} />
       </MemoryRouter>
     );
 
@@ -85,9 +96,11 @@ describe('Navigation', () => {
   test('should render header order history', () => {
     const fn = jest.fn();
 
+    const isMyAccount = false;
+
     render(
       <MemoryRouter>
-        <Navigation whichWasClickedNav={fn} />
+        <Navigation whichWasClickedNav={fn} isMyAccount={isMyAccount} />
       </MemoryRouter>
     );
 
@@ -98,9 +111,11 @@ describe('Navigation', () => {
   test('should render header refund and exchange vouncher', () => {
     const fn = jest.fn();
 
+    const isMyAccount = false;
+
     render(
       <MemoryRouter>
-        <Navigation whichWasClickedNav={fn} />
+        <Navigation whichWasClickedNav={fn} isMyAccount={isMyAccount} />
       </MemoryRouter>
     );
 
@@ -111,9 +126,11 @@ describe('Navigation', () => {
   test('should render header returns', () => {
     const fn = jest.fn();
 
+    const isMyAccount = false;
+
     render(
       <MemoryRouter>
-        <Navigation whichWasClickedNav={fn} />
+        <Navigation whichWasClickedNav={fn} isMyAccount={isMyAccount} />
       </MemoryRouter>
     );
 
@@ -124,9 +141,11 @@ describe('Navigation', () => {
   test('should render header LGPD information', () => {
     const fn = jest.fn();
 
+    const isMyAccount = false;
+
     render(
       <MemoryRouter>
-        <Navigation whichWasClickedNav={fn} />
+        <Navigation whichWasClickedNav={fn} isMyAccount={isMyAccount} />
       </MemoryRouter>
     );
 
@@ -137,9 +156,11 @@ describe('Navigation', () => {
   test('should render span my data LGPD Information', () => {
     const fn = jest.fn();
 
+    const isMyAccount = false;
+
     render(
       <MemoryRouter>
-        <Navigation whichWasClickedNav={fn} />
+        <Navigation whichWasClickedNav={fn} isMyAccount={isMyAccount} />
       </MemoryRouter>
     );
 
@@ -150,9 +171,11 @@ describe('Navigation', () => {
   test('should render span My Consents LGPD Information', () => {
     const fn = jest.fn();
 
+    const isMyAccount = false;
+
     render(
       <MemoryRouter>
-        <Navigation whichWasClickedNav={fn} />
+        <Navigation whichWasClickedNav={fn} isMyAccount={isMyAccount} />
       </MemoryRouter>
     );
 

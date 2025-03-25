@@ -22,38 +22,6 @@ export const ContainerMain = styled.div`
   }
 `;
 
-export const ContainerChangedSuccessfully = styled.div`
-  display: flex;
-  align-items: center;
-  height: 60px;
-  margin-bottom: 20px;
-  background-color: #16db1e59;
-  border-radius: 5px;
-
-  >h1 {
-    font-size: 18px;
-    font-weight: 500;
-    padding-left: 20px;
-  }
-`;
-
-export const ContainerCountdown = styled.div`
-  font-size: 18px;
-  font-weight: bold;
-  color: #c53131;
-  margin-top: 10px;
-  background: #ffe6e6;
-  padding: 5px 10px;
-  border-radius: 5px;
-  display: inline-block;
-  margin-bottom: 20px;
-`;
-
-export const ContainerNumberOfAttempts = styled.div`
-  display: flex;
-  padding: 15px 0px;
-`;
-
 export const ContainerPasswordAll = styled.div``;
 
 export const ContainerLabelAndInput = styled.div`

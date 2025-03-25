@@ -8,9 +8,13 @@ import { User } from '../../../../Interfaces/Entity/User.';
 import { ChangePasswordUser } from '../../../../Interfaces/DTOs/ChangePasswordUser';
 import userService from '../../../../Service/UserService/UserService';
 import { ChangePasswordUserReturnDTO } from '../../../../Interfaces/DTOs/ChangePasswordUserReturnDTO';
+import PasswordChangedSuccessfully from '../PasswordChangedSuccessfully/PasswordChangedSuccessfully';
+import TimeRemaining from '../TimeRemaining/TimeRemaining';
+import QuantityNumberOfAttempts from '../QuantityNumberOfAttempts/QuantityNumberOfAttempts';
 
 const UpdatePasswordMain = () => {
   const nav = useNavigate();
+
   const inputCurrentPassword = useRef<HTMLInputElement>(null);
   const inputNewPassword = useRef<HTMLInputElement>(null);
   const inputConfirmNewPassword = useRef<HTMLInputElement>(null);
@@ -37,6 +41,10 @@ const UpdatePasswordMain = () => {
   const [user, setUser] = useState<User | null>(null);
   const [changePasswordUserReturnDTO, setChangePasswordUserReturnDTO] =
     useState<ChangePasswordUserReturnDTO | null>(null);
+
+  const [isCurrentPasswordVisible, setIsCurrentPasswordVisible] = useState(false);
+  const [isNewPasswordVisible, setIsNewPasswordVisible] = useState(false);
+  const [isConfirmNewPasswordVisible, setIsConfirmNewPasswordVisible] = useState(false);
 
   useEffect(() => {
     const objUser = GetUserFromLocalStorage();
@@ -69,7 +77,7 @@ const UpdatePasswordMain = () => {
     spanErrorConfirmNewPasswordHere.style.display = 'none';
   }, []);
 
-  const onChangeInputCurrentPassword = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const onChangeInputCurrentPassword = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
 
     const input = e.target as HTMLInputElement;
@@ -105,7 +113,7 @@ const UpdatePasswordMain = () => {
     return inputValue.length > 5;
   };
 
-  const onChangeInputNewPassword = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const onChangeInputNewPassword = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
 
     const input = e.target as HTMLInputElement;
@@ -136,7 +144,7 @@ const UpdatePasswordMain = () => {
     return inputValue.length > 5;
   };
 
-  const onChangeInputConfirmNewPassword = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const onChangeInputConfirmNewPassword = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
 
     const input = e.target as HTMLInputElement;
@@ -171,48 +179,48 @@ const UpdatePasswordMain = () => {
   };
 
   const onClickSvgEyeCurrentPassword = () => {
+    setIsCurrentPasswordVisible((prev) => !prev);
+
     const input = inputCurrentPassword.current as HTMLInputElement;
     const containerSvgEyeOpen = containerSvgEyeOpenCurrentPassword.current as HTMLDivElement;
     const containerSvgEyeClose = containerSvgEyeCloseCurrentPassword.current as HTMLDivElement;
 
     if (input.type === 'text') {
-      input.type = 'password';
       containerSvgEyeOpen.style.display = 'flex';
       containerSvgEyeClose.style.display = 'none';
     } else if (input.type === 'password') {
-      input.type = 'text';
       containerSvgEyeOpen.style.display = 'none';
       containerSvgEyeClose.style.display = 'flex';
     }
   };
 
   const onClickSvgEyeNewPassword = () => {
+    setIsNewPasswordVisible((prev) => !prev);
+
     const input = inputNewPassword.current as HTMLInputElement;
     const containerSvgEyeOpen = containerSvgEyeOpenNewPassword.current as HTMLDivElement;
     const containerSvgEyeClose = containerSvgEyeCloseNewPassword.current as HTMLDivElement;
 
     if (input.type === 'text') {
-      input.type = 'password';
       containerSvgEyeOpen.style.display = 'flex';
       containerSvgEyeClose.style.display = 'none';
     } else if (input.type === 'password') {
-      input.type = 'text';
       containerSvgEyeOpen.style.display = 'none';
       containerSvgEyeClose.style.display = 'flex';
     }
   };
 
   const onClickSvgEyeConfirmNewPassword = () => {
+    setIsConfirmNewPasswordVisible((prev) => !prev);
+
     const input = inputConfirmNewPassword.current as HTMLInputElement;
     const containerSvgEyeOpen = containerSvgEyeOpenConfirmNewPassword.current as HTMLDivElement;
-    const containerSvgEyeClose = containerSvgEyeOpenConfirmNewPassword.current as HTMLDivElement;
+    const containerSvgEyeClose = containerSvgEyeCloseConfirmNewPassword.current as HTMLDivElement;
 
     if (input.type === 'text') {
-      input.type = 'password';
       containerSvgEyeOpen.style.display = 'flex';
       containerSvgEyeClose.style.display = 'none';
     } else if (input.type === 'password') {
-      input.type = 'text';
       containerSvgEyeOpen.style.display = 'none';
       containerSvgEyeClose.style.display = 'flex';
     }
@@ -328,22 +336,12 @@ const UpdatePasswordMain = () => {
     <Styled.ContainerMain>
       <Styled.H1>Alterar Senha</Styled.H1>
 
-      {passwordChangedSuccessfully && (
-        <Styled.ContainerChangedSuccessfully>
-          <Styled.H1>Senha alterada com sucesso</Styled.H1>
-        </Styled.ContainerChangedSuccessfully>
-      )}
+      <PasswordChangedSuccessfully passwordChangedSuccessfully={passwordChangedSuccessfully} />
 
-      {timeRemaining !== null && timeRemaining > 0 && (
-        <Styled.ContainerCountdown>
-          Tente novamente em {timeRemaining} segundos
-        </Styled.ContainerCountdown>
-      )}
+      <TimeRemaining timeRemaining={timeRemaining} />
 
       {changePasswordUserReturnDTO && (
-        <Styled.ContainerNumberOfAttempts>
-          {changePasswordUserReturnDTO.numberOfAttempts} de 3 tentativas para alterar senha
-        </Styled.ContainerNumberOfAttempts>
+        <QuantityNumberOfAttempts numberOfAttempts={changePasswordUserReturnDTO.numberOfAttempts} />
       )}
 
       <Styled.ContainerPasswordAll>
@@ -351,7 +349,7 @@ const UpdatePasswordMain = () => {
           <Styled.Label htmlFor="current-password">Senha Atual *</Styled.Label>
           <Styled.ContainerInputAndEye>
             <Styled.Input
-              type="password"
+              type={isCurrentPasswordVisible ? 'text' : 'password'}
               id="current-password"
               placeholder="Senha Atual"
               autoComplete="new-password"
@@ -361,13 +359,13 @@ const UpdatePasswordMain = () => {
             <Styled.ContainerSvgEyeOpen
               ref={containerSvgEyeOpenCurrentPassword}
               onClick={onClickSvgEyeCurrentPassword}
-              data-testid="container-svg-eye-open">
+              data-testid="container-current-password-svg-eye-open">
               <SvgEyeOpen></SvgEyeOpen>
             </Styled.ContainerSvgEyeOpen>
             <Styled.ContainerSvgEyeClose
               ref={containerSvgEyeCloseCurrentPassword}
               onClick={onClickSvgEyeCurrentPassword}
-              data-testid="container-svg-eye-close">
+              data-testid="container-current-password-svg-eye-close">
               <SvgEyeClose></SvgEyeClose>
             </Styled.ContainerSvgEyeClose>
           </Styled.ContainerInputAndEye>
@@ -383,22 +381,22 @@ const UpdatePasswordMain = () => {
             <Styled.Label htmlFor="new-password">Nova Senha *</Styled.Label>
             <Styled.ContainerInputAndEye>
               <Styled.Input
-                type="password"
+                type={isNewPasswordVisible ? 'text' : 'password'}
                 id="new-password"
-                placeholder="Senha Atual"
+                placeholder="Nova Senha"
                 ref={inputNewPassword}
                 onChange={onChangeInputNewPassword}
               />
               <Styled.ContainerSvgEyeOpen
                 ref={containerSvgEyeOpenNewPassword}
                 onClick={onClickSvgEyeNewPassword}
-                data-testid="container-svg-eye-open">
+                data-testid="container-new-password-svg-eye-open">
                 <SvgEyeOpen></SvgEyeOpen>
               </Styled.ContainerSvgEyeOpen>
               <Styled.ContainerSvgEyeClose
                 ref={containerSvgEyeCloseNewPassword}
                 onClick={onClickSvgEyeNewPassword}
-                data-testid="container-svg-eye-close">
+                data-testid="container-new-password-svg-eye-close">
                 <SvgEyeClose></SvgEyeClose>
               </Styled.ContainerSvgEyeClose>
             </Styled.ContainerInputAndEye>
@@ -410,22 +408,22 @@ const UpdatePasswordMain = () => {
             <Styled.Label htmlFor="confirm-new-password">Confirme a Nova Senha *</Styled.Label>
             <Styled.ContainerInputAndEye>
               <Styled.Input
-                type="password"
+                type={isConfirmNewPasswordVisible ? 'text' : 'password'}
                 id="confirm-new-password"
-                placeholder="Senha Atual"
+                placeholder="Confirme a Nova Senha"
                 ref={inputConfirmNewPassword}
                 onChange={onChangeInputConfirmNewPassword}
               />
               <Styled.ContainerSvgEyeOpen
                 ref={containerSvgEyeOpenConfirmNewPassword}
                 onClick={onClickSvgEyeConfirmNewPassword}
-                data-testid="container-svg-eye-open">
+                data-testid="container-confirm-new-password-svg-eye-open">
                 <SvgEyeOpen></SvgEyeOpen>
               </Styled.ContainerSvgEyeOpen>
               <Styled.ContainerSvgEyeClose
                 ref={containerSvgEyeCloseConfirmNewPassword}
                 onClick={onClickSvgEyeConfirmNewPassword}
-                data-testid="container-svg-eye-close">
+                data-testid="container-confirm-new-password-svg-eye-close">
                 <SvgEyeClose></SvgEyeClose>
               </Styled.ContainerSvgEyeClose>
             </Styled.ContainerInputAndEye>
