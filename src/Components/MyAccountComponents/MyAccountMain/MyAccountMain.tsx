@@ -51,11 +51,14 @@ const MyAccountMain = () => {
           <Styled.ContainerBody>
             <HeaderMyAccount />
 
-            {!isMyAccount && (
+            {/* {!isMyAccount && (
               <Styled.SpanNav>
                 Home {'>'} <Styled.SpanNavMain>{whatShowUserClicked}</Styled.SpanNavMain>
               </Styled.SpanNav>
-            )}
+            )} */}
+            <Styled.SpanNav>
+              Home {'>'} <Styled.SpanNavMain>{whatShowUserClicked}</Styled.SpanNavMain>
+            </Styled.SpanNav>
 
             <Styled.ContainerMyAccountNavigation>
               <Navigation whichWasClickedNav={whichWasClickedNav} isMyAccount={isMyAccount} />

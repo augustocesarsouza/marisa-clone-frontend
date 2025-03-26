@@ -152,7 +152,8 @@ const Navigation = ({ whichWasClickedNav, isMyAccount }: NavigationProps) => {
     if (e.target === null) return;
 
     if (whichWasClicked === 'addresses') {
-      whichWasClickedNav('endereços');
+      whichWasClickedNav('MEUS ENDEREÇOS');
+      nav('/my-account/address-book');
     } else if (whichWasClicked === 'order-history') {
       whichWasClickedNav('Historico de pedidos');
     } else if (whichWasClicked === 'refund-and-exchange-voucher') {
