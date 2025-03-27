@@ -4,7 +4,7 @@ import LegalEntity from './LegalEntity';
 
 describe('LegalEntity', () => {
   test('should render label input span company-name', () => {
-    render(<LegalEntity whichTypePersonalWasClicked="legalEntity" />);
+    render(<LegalEntity />);
 
     const label = screen.getByLabelText('Nome da empresa*');
     expect(label).toBeInTheDocument();
@@ -19,7 +19,7 @@ describe('LegalEntity', () => {
   });
 
   test('should render label input span responsável', () => {
-    render(<LegalEntity whichTypePersonalWasClicked="legalEntity" />);
+    render(<LegalEntity />);
 
     const label = screen.getByLabelText('Responsável*');
     expect(label).toBeInTheDocument();
@@ -34,7 +34,7 @@ describe('LegalEntity', () => {
   });
 
   test('should render label input span CNPJ', () => {
-    render(<LegalEntity whichTypePersonalWasClicked="legalEntity" />);
+    render(<LegalEntity />);
 
     const label = screen.getByLabelText('CNPJ*');
     expect(label).toBeInTheDocument();
@@ -49,7 +49,7 @@ describe('LegalEntity', () => {
   });
 
   test('should render label for UF', () => {
-    render(<LegalEntity whichTypePersonalWasClicked="legalEntity" />);
+    render(<LegalEntity />);
 
     const labelUF = screen.getByLabelText('UF *');
     expect(labelUF).toBeInTheDocument();
@@ -58,7 +58,7 @@ describe('LegalEntity', () => {
   });
 
   test('should render label for ICMS', () => {
-    render(<LegalEntity whichTypePersonalWasClicked="legalEntity" />);
+    render(<LegalEntity />);
 
     const labelUF = screen.getByLabelText('Situação tributária (ICMS) *');
     expect(labelUF).toBeInTheDocument();
@@ -73,7 +73,7 @@ describe('LegalEntity', () => {
   });
 
   test('should render label input span state-registration', () => {
-    render(<LegalEntity whichTypePersonalWasClicked="legalEntity" />);
+    render(<LegalEntity />);
 
     const label = screen.getByLabelText('Inscrição estadual*');
     expect(label).toBeInTheDocument();
@@ -88,7 +88,7 @@ describe('LegalEntity', () => {
   });
 
   test('should render label input span cell phone', () => {
-    render(<LegalEntity whichTypePersonalWasClicked="legalEntity" />);
+    render(<LegalEntity />);
 
     const label = screen.getAllByLabelText('DDD*')[0];
     expect(label).toBeInTheDocument();
@@ -112,7 +112,7 @@ describe('LegalEntity', () => {
   });
 
   test('should render label input span telephone', () => {
-    render(<LegalEntity whichTypePersonalWasClicked="legalEntity" />);
+    render(<LegalEntity />);
 
     const label = screen.getAllByLabelText('DDD*')[1];
     expect(label).toBeInTheDocument();
@@ -136,7 +136,7 @@ describe('LegalEntity', () => {
   });
 
   test('should render label input span email', () => {
-    render(<LegalEntity whichTypePersonalWasClicked="legalEntity" />);
+    render(<LegalEntity />);
 
     const label = screen.getByLabelText('E-mail*');
     expect(label).toBeInTheDocument();
@@ -151,7 +151,7 @@ describe('LegalEntity', () => {
   });
 
   test('should render button and span text token', () => {
-    render(<LegalEntity whichTypePersonalWasClicked="legalEntity" />);
+    render(<LegalEntity />);
 
     const button = screen.getByRole('button', { name: 'RECEBER TOKEN DE CADASTRO' });
     expect(button).toBeInTheDocument();
@@ -163,7 +163,7 @@ describe('LegalEntity', () => {
   });
 
   test('should render label input span token', () => {
-    render(<LegalEntity whichTypePersonalWasClicked="legalEntity" />);
+    render(<LegalEntity />);
 
     const label = screen.getByLabelText('Token*');
     expect(label).toBeInTheDocument();
@@ -178,7 +178,7 @@ describe('LegalEntity', () => {
   });
 
   test('should render label input span svg password', () => {
-    render(<LegalEntity whichTypePersonalWasClicked="legalEntity" />);
+    render(<LegalEntity />);
 
     const label = screen.getByLabelText('Senha *');
     expect(label).toBeInTheDocument();
@@ -199,7 +199,7 @@ describe('LegalEntity', () => {
   });
 
   test('should render label input span svg confirm password', () => {
-    render(<LegalEntity whichTypePersonalWasClicked="legalEntity" />);
+    render(<LegalEntity />);
 
     const label = screen.getByLabelText('Confirmar Senha *');
     expect(label).toBeInTheDocument();
@@ -220,7 +220,7 @@ describe('LegalEntity', () => {
   });
 
   test('should render span and header checkbox button', () => {
-    render(<LegalEntity whichTypePersonalWasClicked="legalEntity" />);
+    render(<LegalEntity />);
 
     const header = screen.getByTestId('header-offers');
     expect(header.textContent).toBe('Ofertas');
