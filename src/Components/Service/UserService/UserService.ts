@@ -1,38 +1,44 @@
-import axios, {  AxiosInstance } from 'axios';
+import axios, { AxiosInstance } from 'axios';
 import { User } from '../../Interfaces/Entity/User.';
 import { CodeSendEmailUserDTO } from '../../Interfaces/DTOs/CodeSendEmailUserDTO';
 import { CreateUserDTO } from '../../Interfaces/DTOs/CreateUserDTO';
-import { AxiosError } from "axios";
+import { AxiosError } from 'axios';
 import { ChangePasswordUser } from '../../Interfaces/DTOs/ChangePasswordUser';
 import { ChangePasswordUserReturnDTO } from '../../Interfaces/DTOs/ChangePasswordUserReturnDTO';
+import { UserTokenSentEmail } from '../../Interfaces/DTOs/UserTokenSentEmail';
 
 export interface ReturnGetUser {
-  data: User,
+  data: User;
   isSucess: boolean;
 }
 
 export interface ResultReturnGeneric {
-  data: ILoginData,
+  data: ILoginData;
   isSucess: boolean;
 }
 
 interface ILoginData {
   passwordIsCorrect: boolean;
-  userDTO: User
+  userDTO: User;
 }
 
 export interface ResultReturnCreate {
-  data: CreateUserDTO,
+  data: CreateUserDTO;
   isSucess: boolean;
 }
 
 export interface ResultReturnSendCode {
-  data: CodeSendEmailUserDTO,
+  data: CodeSendEmailUserDTO;
   isSucess: boolean;
 }
 
 export interface ResultChangePasswordUser {
-  data: ChangePasswordUserReturnDTO,
+  data: ChangePasswordUserReturnDTO;
+  isSucess: boolean;
+}
+
+export interface ResultUserTokenSentEmail {
+  data: UserTokenSentEmail;
   isSucess: boolean;
 }
 
@@ -40,7 +46,7 @@ class UserService {
   private baseUrl: string;
   private http: AxiosInstance;
 
-  constructor(){
+  constructor() {
     this.baseUrl = import.meta.env.VITE__APP_APP_BASE_URL;
     this.http = axios.create({
       baseURL: this.baseUrl,
@@ -59,14 +65,13 @@ class UserService {
           'Content-Type': 'application/json',
         },
       });
-      
+
       return response.data;
-    } catch(err) {
+    } catch (err) {
       const error = err as AxiosError;
       console.log(error);
-      
 
-      if(error.status === 400){
+      if (error.status === 400) {
         const dataAxios = error.response?.data;
         const dataBack = dataAxios as ReturnGetUser;
 
@@ -76,29 +81,32 @@ class UserService {
       if (error.status === 403 || error.status === 401) {
         localStorage.removeItem('user');
         // nav('/login');
-        window.location.href = "/login";
+        window.location.href = '/login';
         return null;
       }
-      
+
       return null;
     }
   }
 
   async getInfoToUpdateProfile(userId: string, token: string): Promise<ReturnGetUser | null> {
     try {
-      const response = await this.http.get<ReturnGetUser>(`/user/get-info-to-update-profile/${userId}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          uid: userId,
-          'Content-Type': 'application/json',
-        },
-      });
-      
+      const response = await this.http.get<ReturnGetUser>(
+        `/user/get-info-to-update-profile/${userId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            uid: userId,
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+
       return response.data;
-    } catch(err) {
+    } catch (err) {
       const error = err as AxiosError;
-      
-      if(error.status === 400){
+
+      if (error.status === 400) {
         const dataAxios = error.response?.data;
         const dataBack = dataAxios as ReturnGetUser;
 
@@ -108,29 +116,60 @@ class UserService {
       if (error.status === 403 || error.status === 401) {
         localStorage.removeItem('user');
         // nav('/login');
-        window.location.href = "/login";
+        window.location.href = '/login';
         return null;
       }
-      
+
+      return null;
+    }
+  }
+
+  async SendTokenChangePassword(email: string): Promise<ResultUserTokenSentEmail | null> {
+    try {
+      const response = await this.http.get<ResultUserTokenSentEmail>(
+        `/public/user/send-token-change-password/${email}`
+      );
+
+      return response.data;
+    } catch (err) {
+      const error = err as AxiosError;
+      console.log(error);
+
+      if (error.status === 400) {
+        const dataAxios = error.response?.data;
+        const dataBack = dataAxios as ResultUserTokenSentEmail;
+
+        return dataBack;
+      }
+
+      if (error.status === 403 || error.status === 401) {
+        localStorage.removeItem('user');
+        // nav('/login');
+        window.location.href = '/login';
+        return null;
+      }
+
       return null;
     }
   }
 
   async login(emailCpf: string, password: string): Promise<ResultReturnGeneric | null> {
     try {
-      const response = await this.http.get<ResultReturnGeneric>(`/public/user/login/${emailCpf}/${password}`);
-      
+      const response = await this.http.get<ResultReturnGeneric>(
+        `/public/user/login/${emailCpf}/${password}`
+      );
+
       return response.data;
-    } catch(err) {
+    } catch (err) {
       const error = err as AxiosError;
 
-      if(error.status === 400){
+      if (error.status === 400) {
         const dataAxios = error.response?.data;
         const dataBack = dataAxios as ResultReturnGeneric;
 
         return dataBack;
       }
-      
+
       return null;
     }
   }
@@ -151,14 +190,14 @@ class UserService {
           Authorization: `Bearer ${token}`,
           uid: userData.id,
           'Content-Type': 'application/json',
-        }
+        },
       });
-      
+
       return response.data;
-    } catch(err) {
+    } catch (err) {
       const error = err as AxiosError;
-      
-      if(error.status === 400){
+
+      if (error.status === 400) {
         const dataAxios = error.response?.data;
         const dataBack = dataAxios as ReturnGetUser;
 
@@ -168,29 +207,36 @@ class UserService {
       if (error.status === 403 || error.status === 401) {
         localStorage.removeItem('user');
         // nav('/login');
-        window.location.href = "/login";
+        window.location.href = '/login';
         return null;
       }
-      
+
       return null;
     }
   }
 
-  async updateChangePasswordUser(userData: ChangePasswordUser, token: string): Promise<ResultChangePasswordUser | null> {
+  async updateChangePasswordUser(
+    userData: ChangePasswordUser,
+    token: string
+  ): Promise<ResultChangePasswordUser | null> {
     try {
-      const response = await this.http.put<ResultChangePasswordUser>('/user/change-password', userData, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          uid: userData.userId,
-          'Content-Type': 'application/json',
+      const response = await this.http.put<ResultChangePasswordUser>(
+        '/user/change-password',
+        userData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            uid: userData.userId,
+            'Content-Type': 'application/json',
+          },
         }
-      });
-        
+      );
+
       return response.data;
-    } catch(err) {
+    } catch (err) {
       const error = err as AxiosError;
-      
-      if(error.status === 400){
+
+      if (error.status === 400) {
         const dataAxios = error.response?.data;
         const dataBack = dataAxios as ResultChangePasswordUser;
 
@@ -200,17 +246,20 @@ class UserService {
       if (error.status === 403 || error.status === 401) {
         localStorage.removeItem('user');
         // nav('/login');
-        window.location.href = "/login";
+        window.location.href = '/login';
         return null;
       }
-      
+
       return null;
     }
   }
 
   async sendCode(userData: User): Promise<ResultReturnSendCode | null> {
     try {
-      const response = await this.http.post<ResultReturnSendCode>('/public/user/send-code-email', userData);
+      const response = await this.http.post<ResultReturnSendCode>(
+        '/public/user/send-code-email',
+        userData
+      );
       return response.data;
     } catch {
       return null;

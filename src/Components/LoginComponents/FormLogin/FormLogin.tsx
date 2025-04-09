@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import userService from '../../Service/UserService/UserService';
 import SvgX from '../../Svg/SvgX/SvgX';
 import CryptoJS from 'crypto-js';
+import SvgEmail from '../../Svg/SvgEmail/SvgEmail';
 
 const FormLogin = () => {
   const inputPassword = useRef<HTMLInputElement>(null);
@@ -24,6 +25,11 @@ const FormLogin = () => {
   const [errorPassword, setErrorPassword] = useState(false);
 
   const [passwordIsWrong, setPasswordIsWrong] = useState(false);
+
+  const refButtonSend = useRef<HTMLButtonElement>(null);
+  const refInputEmail = useRef<HTMLInputElement>(null);
+  const refContainerInputEmail = useRef<HTMLDivElement>(null);
+  const refContainerChildredModal = useRef<HTMLDivElement>(null);
 
   const nav = useNavigate();
 
@@ -167,6 +173,7 @@ const FormLogin = () => {
         setPasswordIsWrong(false);
         const secretKey = import.meta.env.VITE__APP_SECRET_KEY_USER;
         const userDTO = resp.data.userDTO;
+        console.log(userDTO.token);
 
         const encrypted = CryptoJS.AES.encrypt(JSON.stringify(userDTO), secretKey).toString();
 
@@ -187,6 +194,127 @@ const FormLogin = () => {
 
   const onClickExit = () => {
     setPasswordIsWrong(false);
+  };
+
+  const [showModalForgotPassword, setShowModalForgotPassword] = useState(false);
+  const [errorEmailUser, setErrorEmailUser] = useState(false);
+
+  const onClickForgotPassword = () => {
+    document.body.style.overflow = 'hidden';
+
+    setShowModalForgotPassword(true);
+  };
+
+  const onClickModalForgotPassword = () => {
+    document.body.style.overflow = 'auto';
+
+    setShowModalForgotPassword(false);
+  };
+
+  const onChangeEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
+    e.preventDefault();
+
+    const input = e.target as HTMLInputElement;
+
+    const value = input.value;
+    const buttonSend = refButtonSend.current as HTMLButtonElement;
+    const containerInput = refContainerInputEmail.current as HTMLInputElement;
+
+    if (value.length > 0) {
+      buttonSend.style.backgroundColor = '#ec008c';
+    } else {
+      buttonSend.style.backgroundColor = '#9f9e9e';
+    }
+
+    if (value.includes('@gmail')) {
+      setErrorEmailUser(false);
+      containerInput.style.borderColor = '#bdbdbd';
+    }
+  };
+
+  const onMouseEnterButtonSend = () => {
+    const input = refInputEmail.current as HTMLInputElement;
+    const value = input.value;
+
+    if (value.length > 0) {
+      const buttonSend = refButtonSend.current as HTMLButtonElement;
+      buttonSend.style.opacity = '0.8';
+    }
+  };
+
+  const onMouseLeaveButtonSend = () => {
+    const input = refInputEmail.current as HTMLInputElement;
+    const value = input.value;
+
+    if (value.length > 0) {
+      const buttonSend = refButtonSend.current as HTMLButtonElement;
+      buttonSend.style.opacity = '1';
+    }
+  };
+
+  const [emailUser, setEmailUser] = useState('');
+
+  const [showFillEmailToSendToken, setShowFillEmailToSendToken] = useState(true);
+  const [showCircleLoading, setShowCircleLoading] = useState(false);
+  const [showThatEmailIsIncorrect, setShowThatEmailIsIncorrect] = useState(false);
+  const [showThatWasSentToken, setShowThatWasSentToken] = useState(false);
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  const onClickButtonSend = async () => {
+    const input = refInputEmail.current as HTMLInputElement;
+    const containerInput = refContainerInputEmail.current as HTMLInputElement;
+    const containerChildredModal = refContainerChildredModal.current as HTMLDivElement;
+    const value = input.value;
+
+    let canSendTokenEmail = false;
+
+    if (value.length > 0 && !value.includes('@gmail')) {
+      containerInput.style.borderColor = '#c53131';
+
+      setErrorEmailUser(true);
+      canSendTokenEmail = false;
+    }
+
+    if (value.length > 0 && value.includes('@gmail')) {
+      canSendTokenEmail = true;
+    }
+
+    if (canSendTokenEmail) {
+      setShowCircleLoading(true);
+
+      setEmailUser(value);
+      const resultSend = await userService.SendTokenChangePassword(value);
+
+      if (resultSend === null) return;
+
+      const data = resultSend.data;
+
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+
+      timeoutRef.current = setTimeout(() => {
+        if (!data.tokenSentEmail) {
+          containerChildredModal.style.height = '122px';
+
+          setShowCircleLoading(false);
+          setShowFillEmailToSendToken(false);
+
+          setShowThatEmailIsIncorrect(true);
+          containerInput.style.borderColor = '#c53131';
+          setErrorEmailUser(true);
+        }
+
+        if (data.tokenSentEmail) {
+          containerChildredModal.style.height = '140px';
+
+          setShowFillEmailToSendToken(false);
+          setShowCircleLoading(false);
+          setShowThatEmailIsIncorrect(false);
+          setShowThatWasSentToken(true);
+        }
+      }, 1000);
+    }
   };
 
   return (
@@ -242,7 +370,7 @@ const FormLogin = () => {
             </Styled.ContainerSvgEyeClose>
           </Styled.ContainerLabelInput>
           <Styled.ContainerSpanForgotYourPassword ref={ContainerSpanForgotYourPassword}>
-            <Styled.Span>Esqueceu sua senha?</Styled.Span>
+            <Styled.Span onClick={onClickForgotPassword}>Esqueceu sua senha?</Styled.Span>
           </Styled.ContainerSpanForgotYourPassword>
 
           <Styled.ButtonEnter
@@ -260,6 +388,78 @@ const FormLogin = () => {
           </Styled.ContainerSpanYetNotHaveAccount>
         </Styled.Form>
       </Styled.ContainerLogin>
+
+      {showModalForgotPassword && (
+        <Styled.ModalForgotPassword>
+          <Styled.ContainerChildredModal ref={refContainerChildredModal}>
+            <Styled.ContainerHeaderModalForgotPassword>
+              <Styled.H1>Esqueceu sua senha? Não se preocupe.</Styled.H1>
+              <Styled.ContainerSvgCloseModal onClick={onClickModalForgotPassword}>
+                <SvgX />
+              </Styled.ContainerSvgCloseModal>
+            </Styled.ContainerHeaderModalForgotPassword>
+
+            {showFillEmailToSendToken && (
+              <Styled.ContainerSpanAndInputEmail>
+                <Styled.ContainerSpansInfoForgotPassword>
+                  <Styled.Span>
+                    Informe o e-mail cadastrado que enviaremos as instruções para redefinir sua
+                    senha.
+                  </Styled.Span>
+                  <Styled.Span>
+                    Se não tiver acesso a esse email, entre em contato com nosso{' '}
+                    <Styled.SpanSac>SAC (11) 3383-7222</Styled.SpanSac> ou acesse o nosso{' '}
+                    <Styled.SpanSacHighlight>FAQ</Styled.SpanSacHighlight> para demais dúvidas.
+                  </Styled.Span>
+                </Styled.ContainerSpansInfoForgotPassword>
+                <Styled.ContainerInputUserAndButtonMain>
+                  <Styled.ContainerInputUserAndButton>
+                    <Styled.ContainerInputEmail ref={refContainerInputEmail}>
+                      <Styled.Input
+                        placeholder="Digite aqui seu e-mail"
+                        ref={refInputEmail}
+                        onChange={onChangeEmail}
+                      />
+                      <SvgEmail />
+                    </Styled.ContainerInputEmail>
+
+                    <Styled.Button
+                      ref={refButtonSend}
+                      onMouseEnter={onMouseEnterButtonSend}
+                      onMouseLeave={onMouseLeaveButtonSend}
+                      onClick={onClickButtonSend}>
+                      {!showCircleLoading && <Styled.Span>Enviar</Styled.Span>}
+                      {showCircleLoading && <Styled.SpanCircleLoading />}
+                    </Styled.Button>
+                  </Styled.ContainerInputUserAndButton>
+
+                  {errorEmailUser && (
+                    <Styled.SpanErrorEmailChangePassword>
+                      Por favor, informe um e-mail válido.
+                    </Styled.SpanErrorEmailChangePassword>
+                  )}
+                </Styled.ContainerInputUserAndButtonMain>
+              </Styled.ContainerSpanAndInputEmail>
+            )}
+
+            {showThatEmailIsIncorrect && (
+              <Styled.ContainerEmailIsIncorrect>
+                <Styled.Span>
+                  {`Endereço de E-mail "${emailUser}" não encontrado. Favor preencher novamente.`}
+                </Styled.Span>
+              </Styled.ContainerEmailIsIncorrect>
+            )}
+
+            {showThatWasSentToken && (
+              <Styled.ContainerEmailIsCorrect>
+                <Styled.Span>
+                  {`Em alguns minutos, enviaremos um e-mail para o endereço "${emailUser}" com um link para que altere sua senha.`}
+                </Styled.Span>
+              </Styled.ContainerEmailIsCorrect>
+            )}
+          </Styled.ContainerChildredModal>
+        </Styled.ModalForgotPassword>
+      )}
     </Styled.ContainerLoginMain>
   );
 };

@@ -10,6 +10,7 @@ import UpdatePasswordMain from '../../Components/MyAccountComponents/MyPerfilCom
 import UpdateEmailMain from '../../Components/MyAccountComponents/MyPerfilComponents/UpdateEmailComponents/UpdateEmailMain/UpdateEmailMain';
 import MyAddressesMain from '../../Components/MyAccountComponents/MyAddressesComponents/MyAddressesMain/MyAddressesMain';
 import AddNewAddress from '../../Components/MyAccountComponents/MyAddressesComponents/AddNewAddress/AddNewAddress';
+import ChangePassword from '../../Components/RegisterComponents/ChangePassword/ChangePassword';
 
 const AppContent = () => {
   return (
@@ -18,6 +19,7 @@ const AppContent = () => {
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<LoginMain />} />
         <Route path="/register" element={<RegisterMain />} />
+        <Route path="/change-password" element={<ChangePassword />} />
 
         <Route path="/my-account" element={<MyAccountMain />}>
           <Route index element={<Navigate to="" />}></Route>
