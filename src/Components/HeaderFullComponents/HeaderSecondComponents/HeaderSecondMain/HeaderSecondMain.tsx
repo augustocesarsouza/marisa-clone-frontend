@@ -14,8 +14,8 @@ const HeaderSecondMain = () => {
 
   useEffect(() => {
     const pathname = location.pathname;
-    if (pathname === '/login' || pathname === '/register') return;
-    pathname;
+    if (pathname === '/login' || pathname === '/register' || pathname === '/change-password')
+      return;
 
     const objUser = GetUserFromLocalStorage();
 
