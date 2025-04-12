@@ -1,6 +1,14 @@
-name: Continuos Integration
+name: Continuous Integration
 
-on: [pull_request, push]
+on:
+  push:
+    branches:
+      - main
+      - dev
+  pull_request:
+    branches:
+      - main
+      - dev
 
 jobs:
   continuos-integration:
@@ -8,12 +16,17 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-      - name: Using Node.js
+
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 22.
-      - name: run install, build and test
-        run: |
-          npm install
-          npm run build
-          npm run test
+          node-version: 22
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build project
+        run: npm run build
+
+      - name: Run tests
+        run: npm run test
