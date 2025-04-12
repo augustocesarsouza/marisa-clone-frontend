@@ -121,7 +121,8 @@ export const SpanError = styled.span`
   /* display: none; */
   font-size: 14px;
   font-weight: 500;
-  color: transparent;
+  /* color: transparent; */
+  color: red;
   margin-top: 5px;
 `;
 
@@ -173,5 +174,31 @@ export const ContainerButtons = styled.div`
     &:hover {
       opacity: 0.8;
     }
+  }
+`;
+
+export const ContainerExpiredTokenMain = styled.div`
+  position: fixed;
+  left: 0;
+  top: 0;
+  background-color: #00000042;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+`;
+
+export const ContainerExpiredTokenChildren = styled.div`
+  width: 400px;
+  height: 250px;
+  background-color: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 40px;
+
+  > h1 {
+    font-size: 16px;
   }
 `;

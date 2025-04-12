@@ -254,6 +254,40 @@ class UserService {
     }
   }
 
+  async updateChangePasswordUserToken(userData: object): Promise<ReturnGetUser | null> {
+    try {
+      const response = await this.http.put<ReturnGetUser>(
+        '/public/user/change-password-with-token',
+        userData,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+
+      return response.data;
+    } catch (err) {
+      const error = err as AxiosError;
+
+      if (error.status === 400) {
+        const dataAxios = error.response?.data;
+        const dataBack = dataAxios as ReturnGetUser;
+
+        return dataBack;
+      }
+
+      if (error.status === 403 || error.status === 401) {
+        localStorage.removeItem('user');
+        // nav('/login');
+        window.location.href = '/login';
+        return null;
+      }
+
+      return null;
+    }
+  }
+
   async sendCode(userData: User): Promise<ResultReturnSendCode | null> {
     try {
       const response = await this.http.post<ResultReturnSendCode>(
