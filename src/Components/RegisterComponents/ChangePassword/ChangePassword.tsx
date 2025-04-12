@@ -25,8 +25,6 @@ const ChangePassword = () => {
   useEffect(() => {
     let timer = null;
     let timerSetTimeoutTokenNull = null;
-    const newTest = 'sadasd';
-    console.log(newTest);
 
     if (!token) {
       timerSetTimeoutTokenNull = setInterval(() => {
