@@ -7,7 +7,7 @@ const HeaderSecond = () => {
             <a href="/" className="flex w-[70px] h-[20px]">
               <img
                 src="https://res.cloudinary.com/dyqsqg7pk/image/upload/q_100/v1741443432/imgs-backend-frontend-marisa/frontend/logo-marisa_gsegyb.svg"
-                alt="Marisa"
+                alt="svg-marisa-logo"
               />
             </a>
           </li>

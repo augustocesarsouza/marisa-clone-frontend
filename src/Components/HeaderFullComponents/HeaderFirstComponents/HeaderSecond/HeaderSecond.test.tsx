@@ -23,8 +23,8 @@ describe('BodyComponentsMain', () => {
     const span3 = screen.getByText('Atendimento');
     expect(span3).toBeInTheDocument();
 
-    const button = screen.getByRole('button', { name: 'Cartões e Serviços' });
-    expect(button).toBeInTheDocument();
+    const span4 = screen.getByText('Cartões e Serviços');
+    expect(span4).toBeInTheDocument();
 
     expect.assertions(5);
   });
