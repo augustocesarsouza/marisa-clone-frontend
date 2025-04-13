@@ -16,6 +16,8 @@ const UserLoggedOut = ({ user }: UserLoggedOutProps) => {
   const nav = useNavigate();
 
   useEffect(() => {
+    console.log();
+
     if (user) {
       const userName = user.name;
       const nameArray = userName?.split(' ');
@@ -61,32 +63,51 @@ const UserLoggedOut = ({ user }: UserLoggedOutProps) => {
   };
 
   return (
-    <Styled.ContainerLoginAndRegister onClick={onClickContainerLoggedInUser}>
-      <Styled.ContainerImgLoginEmpty>
-        <Styled.Img
+    <div
+      className="flex items-center !mr-[10px] cursor-pointer relative"
+      onClick={onClickContainerLoggedInUser}>
+      <div className="flex !mr-[15px]">
+        <img
+          className="flex w-full h-auto rounded-4xl"
           src="https://res.cloudinary.com/dyqsqg7pk/image/upload/q_100/v1741520954/imgs-backend-frontend-marisa/frontend/user-login_wicdjr.webp"
           alt="img-login-register"
         />
-      </Styled.ContainerImgLoginEmpty>
-      <Styled.Span data-testid="span-user-logged">
-        Olá, <Styled.SpanNameUser>{showUserName}</Styled.SpanNameUser>
-      </Styled.Span>
-      <Styled.ContainerSvgArrow ref={RefContainerSvgArrow}>
+      </div>
+      <span
+        className="text-2xl font-semibold text-[#8d8d8d] !mr-[5px]"
+        data-testid="span-user-logged">
+        Olá, <span className="font-semibold inline-block text-[#ec008c]">{showUserName}</span>
+      </span>
+      <div className="flex" ref={RefContainerSvgArrow}>
         <SvgArrow />
-      </Styled.ContainerSvgArrow>
+      </div>
 
       {showModalInfoUser && (
-        <Styled.ContainerModalInfoUserMain>
+        <div className="flex flex-col absolute left-[0px] top-[50px]">
           <Styled.ContainerModalInfoUser>
-            <Styled.Span onClick={onClickMyOrders}>Meus dados</Styled.Span>
-            <Styled.Span>Meus pedidos</Styled.Span>
-            <Styled.Span>Cartões Marisa</Styled.Span>
-            <Styled.Span>Lista de Desejos</Styled.Span>
-            <Styled.SpanExit onClick={onClickExitUser}>Sair</Styled.SpanExit>
+            <span
+              className="text-2xl font-semibold !px-[25px] !py-[10px] hover:text-[#ec008c]"
+              onClick={onClickMyOrders}>
+              Meus dados
+            </span>
+            <span className="text-2xl font-semibold !px-[25px] !py-[10px] hover:text-[#ec008c]">
+              Meus pedidos
+            </span>
+            <span className="text-2xl font-semibold !px-[25px] !py-[10px] hover:text-[#ec008c]">
+              Cartões Marisa
+            </span>
+            <span className="text-2xl font-semibold !px-[25px] !py-[10px] hover:text-[#ec008c]">
+              Lista de Desejos
+            </span>
+            <span
+              className="text-2xl font-semibold !px-[25px] !py-[10px] hover:text-[#ec008c] border-t border-t-[#0000001c]"
+              onClick={onClickExitUser}>
+              Sair
+            </span>
           </Styled.ContainerModalInfoUser>
-        </Styled.ContainerModalInfoUserMain>
+        </div>
       )}
-    </Styled.ContainerLoginAndRegister>
+    </div>
   );
 };
 

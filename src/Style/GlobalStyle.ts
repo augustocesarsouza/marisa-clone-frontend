@@ -22,7 +22,7 @@ export const GlobalStyle = createGlobalStyle`
 
   body {
     font-size: 1.6rem;
-    font-family: ${({theme}) => theme.font.family.default};
+    font-family: ${({ theme }) => theme.font.family.default};
     /* font-family: Montserrat; */
     height: 100%;
     margin: 0;
@@ -30,17 +30,5 @@ export const GlobalStyle = createGlobalStyle`
 
   h1, h2, h3, h4, h5, h6 {
     font-family: ${({ theme }) => theme.font.family.default};
-  }
-
-  p {
-   
-  }
-
-  ul, ol {
-
-  }
-
-  a {
-    
   }
 `;
