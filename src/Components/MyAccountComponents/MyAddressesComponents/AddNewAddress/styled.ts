@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 export const Span = styled.span``;
 
@@ -17,18 +17,18 @@ export const ContainerMain = styled.div`
   flex-direction: column;
   width: 100%;
 
-  >h1 {
+  > h1 {
     font-size: 24px;
     font-weight: 500;
     text-transform: uppercase;
     margin-bottom: 10px;
   }
 
-  >div:nth-of-type(3){
+  > div:nth-of-type(3) {
     width: 100%;
   }
 
-  >div:nth-of-type(4){
+  > div:nth-of-type(4) {
     width: 50%;
   }
 `;
@@ -42,15 +42,15 @@ export const ContainerLabelAndInput = styled.div`
   padding: 0px 10px;
   /* position: relative; */
 
-  >label {
+  > label {
     font-size: 12px;
     font-weight: 500;
     margin-bottom: 6px;
     text-transform: uppercase;
   }
 
-  >div {
-    >input {
+  > div {
+    > input {
       padding: 8px 12px;
       outline: none;
       border: 1px solid rgba(0, 0, 0, 0.27);
@@ -60,15 +60,15 @@ export const ContainerLabelAndInput = styled.div`
 
       &:focus {
         outline: none;
-        border-color: #FF69B4;
+        border-color: #ff69b4;
       }
     }
   }
 
-  >select {
+  > select {
     user-select: none;
     outline: none;
-    padding: 10px;
+    padding: 7px 12px;
     color: #676767;
     border: 1px solid #00000024;
     width: 100%;
@@ -78,7 +78,7 @@ export const ContainerLabelAndInput = styled.div`
 
     &:focus {
       outline: none;
-      border-color: #FF69B4;
+      border-color: #ff69b4;
     }
   }
 `;
@@ -88,7 +88,7 @@ export const ContainerInput = styled.div`
   position: relative;
   width: 100%;
 
-  >input {
+  > input {
     padding: 8px 12px;
     outline: none;
     border: 1px solid rgba(0, 0, 0, 0.27);
@@ -97,11 +97,11 @@ export const ContainerInput = styled.div`
     font-size: 14px;
     width: 100%;
     color: black;
-    background-color: #eee;
+    /* background-color: #eee; */
     opacity: 1;
   }
 
-  >span {
+  > span {
     font-size: 14px;
     text-transform: lowercase;
     text-decoration: underline;
@@ -116,7 +116,7 @@ export const ContainerInputCep = styled.div`
   position: relative;
   width: 100%;
 
-  >input {
+  > input {
     padding: 8px 12px;
     outline: none;
     border: 1px solid rgba(0, 0, 0, 0.27);
@@ -125,12 +125,12 @@ export const ContainerInputCep = styled.div`
     font-size: 14px;
     width: 40%;
     color: black;
-    background-color: #eee;
+    /* background-color: #eee; */
     opacity: 1;
     margin-right: 20px;
   }
 
-  >span {
+  > span {
     font-size: 14px;
     font-weight: 600;
     text-transform: lowercase;
@@ -141,14 +141,14 @@ export const ContainerInputCep = styled.div`
   }
 `;
 
-export const Select = styled.select``
+export const Select = styled.select``;
 
 export const ContainerCheckboxButtonCompleteRegistration = styled.div`
   display: flex;
   justify-content: center;
   flex-direction: column;
 
-  >span {
+  > span {
     font-size: 14px;
     font-weight: 600;
     padding-bottom: 35px;
@@ -160,7 +160,7 @@ export const ContainerButtonCancelAndSave = styled.div`
   justify-content: space-between;
   width: 100%;
 
-  >button:nth-of-type(1) {
+  > button:nth-of-type(1) {
     background-color: #fff;
     color: #fff;
     border: 1px solid black;
@@ -181,10 +181,10 @@ export const ContainerButtonCancelAndSave = styled.div`
     }
   }
 
-  >button:nth-of-type(2) {
-    background-color: black;
+  > button:nth-of-type(2) {
+    background-color: #2ddf89;
     color: #fff;
-    border: 1px solid black;
+    border: 1px solid #2ddf89;
     border-radius: 2px;
     font-weight: 600;
     padding: 10px 0px;
@@ -196,7 +196,7 @@ export const ContainerButtonCancelAndSave = styled.div`
     cursor: pointer;
 
     &:hover {
-      opacity: 0.9;
+      background-color: #26af6d;
     }
   }
 `;

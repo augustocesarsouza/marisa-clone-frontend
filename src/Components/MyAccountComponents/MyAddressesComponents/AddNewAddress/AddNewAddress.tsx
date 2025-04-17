@@ -3,6 +3,22 @@ import * as Styled from './styled';
 import { useNavigate } from 'react-router-dom';
 import Inputmask from 'inputmask';
 
+interface Cep {
+  bairro: string;
+  cep: string;
+  complemento: string;
+  ddd: string;
+  estado: string;
+  gia: string;
+  ibge: string;
+  localidade: string;
+  logradouro: string;
+  regiao: string;
+  siafi: string;
+  uf: string;
+  unidade: string;
+}
+
 const AddNewAddress = () => {
   const nav = useNavigate();
 
@@ -20,6 +36,8 @@ const AddNewAddress = () => {
   const inputCity = useRef<HTMLInputElement>(null);
   const SelectUfRef = useRef<HTMLSelectElement | null>(null);
   const inputReferencePoint = useRef<HTMLInputElement>(null);
+
+  const optionUf = useRef<HTMLOptionElement>(null);
 
   const SpanErrorAddressNickname = useRef<HTMLSpanElement>(null);
   const SpanErrorTypeAddress = useRef<HTMLSpanElement>(null);
@@ -81,10 +99,91 @@ const AddNewAddress = () => {
     verifyErrorRecipientName();
   };
 
-  const onChangeInputCep = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const [newValueUf, setNewValueUf] = useState('');
+
+  const onChangeInputCep = async (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
 
+    const cepInput = e.target;
+    const valueCep = cepInput.value.replace(/[-_]/g, '');
+
+    if (valueCep.length > 7) {
+      const resultCep: Cep | undefined = await consultaCEP(valueCep);
+
+      if (resultCep) {
+        console.log(resultCep);
+        // const inputAddressHere = inputAddress.current as HTMLInputElement;
+
+        const SpanErrorAddressHere = SpanErrorAddress.current as HTMLSpanElement;
+
+        const inputAddressHere = inputAddress.current as HTMLInputElement;
+        inputAddressHere.style.color = '#929292';
+        inputAddressHere.style.backgroundColor = '#eee';
+        inputAddressHere.readOnly = true;
+        inputAddressHere.value = resultCep.logradouro;
+
+        inputAddressHere.style.borderColor = 'rgba(0, 0, 0, 0.27)';
+        withoutErrorSpanAndInput(SpanErrorAddressHere, null);
+
+        const inputNeighborhoodHere = inputNeighborhood.current as HTMLInputElement;
+        inputNeighborhoodHere.style.color = '#929292';
+        inputNeighborhoodHere.style.backgroundColor = '#eee';
+        inputNeighborhoodHere.readOnly = true;
+        inputNeighborhoodHere.value = resultCep.bairro;
+
+        const SpanErrorNeighborhoodHere = SpanErrorNeighborhood.current as HTMLSpanElement;
+
+        inputNeighborhoodHere.style.borderColor = 'rgba(0, 0, 0, 0.27)';
+        withoutErrorSpanAndInput(SpanErrorNeighborhoodHere, null);
+
+        const inputCityHere = inputCity.current as HTMLInputElement;
+        inputCityHere.style.color = '#929292';
+        inputCityHere.style.backgroundColor = '#eee';
+        inputCityHere.readOnly = true;
+        inputCityHere.value = resultCep.localidade;
+
+        const SpanErrorCityHere = SpanErrorCity.current as HTMLSpanElement;
+
+        inputCityHere.style.borderColor = 'rgba(0, 0, 0, 0.27)';
+        withoutErrorSpanAndInput(SpanErrorCityHere, null);
+
+        const selectUfRefHere = SelectUfRef.current as HTMLSelectElement;
+        selectUfRefHere.style.color = '#929292';
+        selectUfRefHere.style.backgroundColor = '#eee';
+        selectUfRefHere.disabled = true;
+        selectUfRefHere.style.cursor = 'not-allowed';
+
+        const SpanErrorUfHere = SpanErrorUf.current as HTMLSpanElement;
+
+        selectUfRefHere.style.borderColor = 'rgba(0, 0, 0, 0.27)';
+        withoutErrorSpanAndInput(SpanErrorUfHere, null);
+
+        setNewValueUf(resultCep.estado);
+      }
+    }
+
     verifyErrorCep();
+  };
+
+  const consultaCEP = async (cep: string) => {
+    if (cep === null || cep === undefined) return;
+
+    cep = cep.replace(/\D/g, '');
+
+    if (cep !== '') {
+      const validacep = /^[0-9]{8}$/;
+
+      if (validacep.test(cep)) {
+        const res = await fetch(`https://viacep.com.br/ws/${cep}/json`);
+        const json = await res.json();
+
+        return json;
+      } else {
+        return undefined;
+      }
+    } else {
+      return undefined;
+    }
   };
 
   const onChangeInputAddress = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -184,14 +283,16 @@ const AddNewAddress = () => {
 
   const withoutErrorSpanAndInput = (
     span: HTMLSpanElement | null,
-    input: HTMLInputElement | HTMLSelectElement
+    input: HTMLInputElement | HTMLSelectElement | null
   ) => {
     if (span) {
       span.style.display = 'none';
     }
 
-    input.style.backgroundColor = '#fff';
-    input.style.border = '1px solid rgba(0, 0, 0, 0.27)';
+    if (input) {
+      input.style.backgroundColor = '#fff';
+      input.style.border = '1px solid rgba(0, 0, 0, 0.27)';
+    }
   };
 
   const onClickCancel = () => {
@@ -199,26 +300,66 @@ const AddNewAddress = () => {
   };
 
   const onClickSave = () => {
-    verifyErrorAddressNickname();
+    const errorNickName = verifyErrorAddressNickname();
 
-    verifyErrorSelectTypeAddress();
+    const errorTypeAddress = verifyErrorSelectTypeAddress();
 
-    verifyErrorRecipientName();
+    const errorRecipientName = verifyErrorRecipientName();
 
-    verifyErrorCep();
+    const errorCep = verifyErrorCep();
 
-    verifyErrorAddress();
+    const errorAddress = verifyErrorAddress();
 
-    verifyErrorNumberHome();
+    const errorNumberHome = verifyErrorNumberHome();
 
-    verifyErrorNeighborhood();
+    const errorNeighborhood = verifyErrorNeighborhood();
 
-    verifyErrorCity();
+    const errorCity = verifyErrorCity();
 
-    verifyErrorUf();
+    const errorUf = verifyErrorUf();
+
+    if (
+      !errorNickName ||
+      !errorTypeAddress ||
+      !errorRecipientName ||
+      !errorCep ||
+      !errorAddress ||
+      !errorNumberHome ||
+      !errorNeighborhood ||
+      !errorCity ||
+      !errorUf
+    ) {
+      // ERROR
+    }
+
+    if (
+      errorNickName &&
+      errorTypeAddress &&
+      errorRecipientName &&
+      errorCep &&
+      errorAddress &&
+      errorNumberHome &&
+      errorNeighborhood &&
+      errorCity &&
+      errorUf
+    ) {
+      const inputAddressNicknameHere = inputAddressNickname.current as HTMLInputElement;
+      const SelectTypeAddressRefHere = SelectTypeAddressRef.current as HTMLSelectElement;
+      const inputRecipientNameHere = inputRecipientName.current as HTMLSelectElement;
+      const inputCepHere = inputCep.current as HTMLSelectElement;
+      const inputAddressHere = inputAddress.current as HTMLSelectElement;
+      const inputNumberHomeHere = inputNumberHome.current as HTMLSelectElement;
+      const inputComplementHere = inputComplement.current as HTMLSelectElement;
+      const inputNeighborhoodHere = inputNeighborhood.current as HTMLSelectElement;
+      const inputCityHere = inputCity.current as HTMLSelectElement;
+      const SelectUfRefHere = SelectUfRef.current as HTMLSelectElement;
+      const inputReferencePointHere = inputReferencePoint.current as HTMLSelectElement;
+
+      // pegar os dados aqui e mandar db
+    }
   };
 
-  const verifyErrorAddressNickname = () => {
+  const verifyErrorAddressNickname = (): boolean => {
     const inputAddressNicknameHere = inputAddressNickname.current as HTMLInputElement;
     const valueInputAddressNickname = inputAddressNicknameHere.value;
 
@@ -230,9 +371,11 @@ const AddNewAddress = () => {
     } else {
       withoutErrorSpanAndInput(spanErrorAddressNicknameHere, inputAddressNicknameHere);
     }
+
+    return addressNicknameIsValid;
   };
 
-  const verifyErrorSelectTypeAddress = () => {
+  const verifyErrorSelectTypeAddress = (): boolean => {
     const selectTypeAddress = SelectTypeAddressRef.current as HTMLSelectElement;
     const valueTypeAddress = selectTypeAddress.value;
 
@@ -244,9 +387,11 @@ const AddNewAddress = () => {
     } else {
       withoutErrorSpanAndInput(spanErrorTypeAddressHere, selectTypeAddress);
     }
+
+    return errorTypeAddress;
   };
 
-  const verifyErrorRecipientName = () => {
+  const verifyErrorRecipientName = (): boolean => {
     const inputRecipientNameHere = inputRecipientName.current as HTMLInputElement;
     const valueRecipientName = inputRecipientNameHere.value;
 
@@ -258,9 +403,11 @@ const AddNewAddress = () => {
     } else {
       withoutErrorSpanAndInput(spanErrorRecipientNameHere, inputRecipientNameHere);
     }
+
+    return addressRecipientName;
   };
 
-  const verifyErrorCep = () => {
+  const verifyErrorCep = (): boolean => {
     const inputCepHere = inputCep.current as HTMLInputElement;
     const valueCepHere = inputCepHere.value.replace(/[-_]/g, '');
 
@@ -272,9 +419,11 @@ const AddNewAddress = () => {
     } else {
       withoutErrorSpanAndInput(SpanErrorCepHere, inputCepHere);
     }
+
+    return cepIsValid;
   };
 
-  const verifyErrorAddress = () => {
+  const verifyErrorAddress = (): boolean => {
     const inputAddressHere = inputAddress.current as HTMLInputElement;
     const valueInputAddress = inputAddressHere.value;
 
@@ -284,11 +433,15 @@ const AddNewAddress = () => {
     if (!addressIsValid) {
       putErrorSpanAndInput(spanErrorAddressHere, inputAddressHere);
     } else {
-      withoutErrorSpanAndInput(spanErrorAddressHere, inputAddressHere);
+      spanErrorAddressHere.style.display = 'none';
+      inputAddressHere.style.backgroundColor = '#eee';
+      inputAddressHere.style.border = '1px solid rgba(0, 0, 0, 0.27)';
     }
+
+    return addressIsValid;
   };
 
-  const verifyErrorNumberHome = () => {
+  const verifyErrorNumberHome = (): boolean => {
     const inputNumberHomeHere = inputNumberHome.current as HTMLInputElement;
     const valueInputNumberHome = inputNumberHomeHere.value;
 
@@ -300,9 +453,11 @@ const AddNewAddress = () => {
     } else {
       withoutErrorSpanAndInput(spanErrorNumberHomeHere, inputNumberHomeHere);
     }
+
+    return NumberHomeIsValid;
   };
 
-  const verifyErrorNeighborhood = () => {
+  const verifyErrorNeighborhood = (): boolean => {
     const inputNeighborhoodHere = inputNeighborhood.current as HTMLInputElement;
     const valueInputNeighborhood = inputNeighborhoodHere.value;
 
@@ -312,11 +467,15 @@ const AddNewAddress = () => {
     if (!NeighborhoodIsValid) {
       putErrorSpanAndInput(spanErrorNeighborhoodHere, inputNeighborhoodHere);
     } else {
-      withoutErrorSpanAndInput(spanErrorNeighborhoodHere, inputNeighborhoodHere);
+      spanErrorNeighborhoodHere.style.display = 'none';
+      inputNeighborhoodHere.style.backgroundColor = '#eee';
+      inputNeighborhoodHere.style.border = '1px solid rgba(0, 0, 0, 0.27)';
     }
+
+    return NeighborhoodIsValid;
   };
 
-  const verifyErrorCity = () => {
+  const verifyErrorCity = (): boolean => {
     const inputCityHere = inputCity.current as HTMLInputElement;
     const valueInputCity = inputCityHere.value;
 
@@ -326,11 +485,15 @@ const AddNewAddress = () => {
     if (!CityIsValid) {
       putErrorSpanAndInput(spanErrorCityHere, inputCityHere);
     } else {
-      withoutErrorSpanAndInput(spanErrorCityHere, inputCityHere);
+      spanErrorCityHere.style.display = 'none';
+      inputCityHere.style.backgroundColor = '#eee';
+      inputCityHere.style.border = '1px solid rgba(0, 0, 0, 0.27)';
     }
+
+    return CityIsValid;
   };
 
-  const verifyErrorUf = () => {
+  const verifyErrorUf = (): boolean => {
     const selectRef = SelectUfRef.current as HTMLSelectElement;
     const valueInputUf = selectRef.value;
 
@@ -340,8 +503,12 @@ const AddNewAddress = () => {
     if (!ufIsValid) {
       putErrorSpanAndInput(spanErrorUfHere, selectRef);
     } else {
-      withoutErrorSpanAndInput(spanErrorUfHere, selectRef);
+      spanErrorUfHere.style.display = 'none';
+      selectRef.style.backgroundColor = '#eee';
+      selectRef.style.border = '1px solid rgba(0, 0, 0, 0.27)';
     }
+
+    return ufIsValid;
   };
 
   const onClickSendCep = () => {
@@ -353,7 +520,9 @@ const AddNewAddress = () => {
       <Styled.H1>Adicionar Novo Endereço</Styled.H1>
 
       <Styled.ContainerLabelAndInput>
-        <Styled.Label htmlFor="address-nickname">Apelido do Endereço*</Styled.Label>
+        <Styled.Label htmlFor="address-nickname">
+          Apelido do Endereço<span className="text-[red] text-2xl">*</span>
+        </Styled.Label>
         <Styled.ContainerInput>
           <Styled.Input
             id="address-nickname"
@@ -368,7 +537,9 @@ const AddNewAddress = () => {
       </Styled.ContainerLabelAndInput>
 
       <Styled.ContainerLabelAndInput>
-        <Styled.Label htmlFor="type-of-address">Tipo de Endereço*</Styled.Label>
+        <Styled.Label htmlFor="type-of-address">
+          Tipo de Endereço<span className="text-[red] text-2xl">*</span>
+        </Styled.Label>
         <Styled.Select
           id="type-of-address"
           ref={SelectTypeAddressRef}
@@ -389,7 +560,9 @@ const AddNewAddress = () => {
       </Styled.ContainerLabelAndInput>
 
       <Styled.ContainerLabelAndInput>
-        <Styled.Label htmlFor="recipient-name">nome do destinatário*</Styled.Label>
+        <Styled.Label htmlFor="recipient-name">
+          nome do destinatário<span className="text-[red] text-2xl">*</span>
+        </Styled.Label>
         <Styled.ContainerInput>
           <Styled.Input
             id="recipient-name"
@@ -404,16 +577,29 @@ const AddNewAddress = () => {
       </Styled.ContainerLabelAndInput>
 
       <Styled.ContainerLabelAndInput>
-        <Styled.Label htmlFor="cep">cep*</Styled.Label>
+        <Styled.Label htmlFor="cep">
+          cep<span className="text-[red] text-2xl">*</span>
+        </Styled.Label>
         <Styled.ContainerInputCep>
-          <Styled.Input id="cep" placeholder="cep" ref={inputCep} onChange={onChangeInputCep} />
+          <Styled.Input
+            id="cep"
+            placeholder="cep"
+            ref={inputCep}
+            onChange={onChangeInputCep}
+            className="bg-[#eee]"
+          />
           <Styled.Span onClick={onClickSendCep}>Não sei o meu CEP</Styled.Span>
         </Styled.ContainerInputCep>
         <Styled.SpanError ref={SpanErrorCep}>CEP inválido</Styled.SpanError>
       </Styled.ContainerLabelAndInput>
 
       <Styled.ContainerLabelAndInput>
-        <Styled.Label htmlFor="address">endereço*</Styled.Label>
+        <div className="flex items-center">
+          <label className="text-xl font-medium uppercase" htmlFor="complement">
+            endereço
+          </label>
+          <span className="text-[red] text-2xl">*</span>
+        </div>
         <Styled.ContainerInput>
           <Styled.Input
             id="address"
@@ -427,7 +613,12 @@ const AddNewAddress = () => {
 
       <Styled.ContainerNumberComplementNeighborhood>
         <Styled.ContainerLabelAndInput>
-          <Styled.Label htmlFor="number-home">número*</Styled.Label>
+          <div className="flex items-center">
+            <label className="text-xl font-medium uppercase" htmlFor="number-home">
+              número
+            </label>
+            <span className="text-[red] text-2xl">*</span>
+          </div>
           <Styled.ContainerInput>
             <Styled.Input
               id="number-home"
@@ -440,7 +631,13 @@ const AddNewAddress = () => {
         </Styled.ContainerLabelAndInput>
 
         <Styled.ContainerLabelAndInput>
-          <Styled.Label htmlFor="complement">complemento</Styled.Label>
+          <div className="flex items-center">
+            <label className="text-xl font-medium uppercase" htmlFor="complement">
+              complemento
+            </label>
+            <span className="text-[#ffffff00] text-2xl">*</span>
+          </div>
+
           <Styled.ContainerInput>
             <Styled.Input
               id="complement"
@@ -453,7 +650,12 @@ const AddNewAddress = () => {
         </Styled.ContainerLabelAndInput>
 
         <Styled.ContainerLabelAndInput>
-          <Styled.Label htmlFor="neighborhood">bairro*</Styled.Label>
+          <div className="flex items-center">
+            <label className="text-xl font-medium uppercase" htmlFor="number-home">
+              bairro
+            </label>
+            <span className="text-[red] text-2xl">*</span>
+          </div>
           <Styled.ContainerInput>
             <Styled.Input
               id="neighborhood"
@@ -470,7 +672,12 @@ const AddNewAddress = () => {
 
       <Styled.ContainerCityAndUf>
         <Styled.ContainerLabelAndInput>
-          <Styled.Label htmlFor="city">cidade*</Styled.Label>
+          <div className="flex items-center">
+            <label className="text-xl font-medium uppercase" htmlFor="number-home">
+              cidade
+            </label>
+            <span className="text-[red] text-2xl">*</span>
+          </div>
           <Styled.ContainerInput>
             <Styled.Input
               id="city"
@@ -483,16 +690,32 @@ const AddNewAddress = () => {
         </Styled.ContainerLabelAndInput>
 
         <Styled.ContainerLabelAndInput>
-          <Styled.Label htmlFor="uf">UF*</Styled.Label>
+          <div className="flex items-center">
+            <label className="text-xl font-medium uppercase" htmlFor="number-home">
+              uf
+            </label>
+            <span className="text-[red] text-2xl">*</span>
+          </div>
           <Styled.Select id="uf" ref={SelectUfRef}>
-            <Styled.Option data-testid="option-uf">UF</Styled.Option>
+            {newValueUf.length <= 0 && (
+              <Styled.Option data-testid="option-uf" ref={optionUf}>
+                UF
+              </Styled.Option>
+            )}
+            {newValueUf.length > 0 && (
+              <Styled.Option data-testid="option-uf" ref={optionUf}>
+                {newValueUf}
+              </Styled.Option>
+            )}
           </Styled.Select>
           <Styled.SpanError ref={SpanErrorUf}>Informe UF</Styled.SpanError>
         </Styled.ContainerLabelAndInput>
       </Styled.ContainerCityAndUf>
 
       <Styled.ContainerLabelAndInput>
-        <Styled.Label htmlFor="reference-point">ponto de referência</Styled.Label>
+        <label className="text-xl font-medium uppercase" htmlFor="reference-point">
+          ponto de referência
+        </label>
         <Styled.ContainerInput>
           <Styled.Input
             id="reference-point"
@@ -504,7 +727,9 @@ const AddNewAddress = () => {
       </Styled.ContainerLabelAndInput>
 
       <Styled.ContainerCheckboxButtonCompleteRegistration>
-        <Styled.Span>* Campos marcados são obrigatórios</Styled.Span>
+        <Styled.Span>
+          <span className="text-[red] text-2xl">*</span> Campos marcados são obrigatórios
+        </Styled.Span>
 
         <Styled.ContainerButtonCancelAndSave>
           <Styled.Button ref={buttonCancelRef} onClick={onClickCancel}>

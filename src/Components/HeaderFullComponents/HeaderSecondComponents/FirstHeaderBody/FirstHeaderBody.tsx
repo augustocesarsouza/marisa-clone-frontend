@@ -18,7 +18,6 @@ const FirstHeaderBody = () => {
   useEffect(() => {
     if (context === null) return;
     const user = context.user;
-    console.log('');
 
     setUser(user);
 

@@ -16,8 +16,6 @@ const UserLoggedOut = ({ user }: UserLoggedOutProps) => {
   const nav = useNavigate();
 
   useEffect(() => {
-    console.log();
-
     if (user) {
       const userName = user.name;
       const nameArray = userName?.split(' ');
