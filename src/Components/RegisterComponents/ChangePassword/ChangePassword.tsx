@@ -7,12 +7,7 @@ import SvgEyeOpen from '../../Svg/SvgEyeOpen/SvgEyeOpen';
 import SvgEyeClose from '../../Svg/SvgEyeClose/SvgEyeClose';
 import FooterMain from '../../FooterMainComponents/FooterMain/FooterMain';
 import userService from '../../Service/UserService/UserService';
-
-interface PayloadToken {
-  Email: string;
-  userID: string;
-  exp: number;
-}
+import { PayloadToken } from '../../Interfaces/Others/PayloadToken';
 
 const ChangePassword = () => {
   const [searchParams] = useSearchParams();
