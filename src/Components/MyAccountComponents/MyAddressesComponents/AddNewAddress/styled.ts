@@ -222,6 +222,7 @@ export const ContainerExitSvg = styled.div`
   display: flex;
   width: 20px;
   height: 20px;
+  cursor: pointer;
 `;
 
 export const InputCelphone = styled.input`
@@ -235,6 +236,18 @@ export const InputCelphone = styled.input`
   border: none;
   border-bottom: 1px solid #00000057;
   font-size: 27px;
+`;
+
+export const ContainerCountdown = styled.div`
+  font-size: 12px;
+  font-weight: bold;
+  color: #c53131;
+  margin-top: 10px;
+  background: #ffe6e6;
+  padding: 5px 10px;
+  border-radius: 5px;
+  display: inline-block;
+  margin-bottom: 20px;
 `;
 
 export const ContainerDidNotReceiveTheCodeAndButtonNext = styled.div`

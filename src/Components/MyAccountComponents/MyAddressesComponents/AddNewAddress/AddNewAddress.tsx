@@ -1,13 +1,13 @@
-import { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import * as Styled from './styled';
 import { useNavigate } from 'react-router-dom';
-import Inputmask from 'inputmask';
 import { GetUserFromLocalStorage } from '../../../GetUserFromLocalStorage/GetUserFromLocalStorage';
 import { User } from '../../../Interfaces/Entity/User.';
 import { TokenExpiration } from '../../../TokenValidation/TokenExpiration';
 import { Address } from '../../../Interfaces/Entity/Address';
 import SvgX from '../../../Svg/SvgX/SvgX';
 import addressService, {
+  AddressConfirmCodeEmail,
   ReturnErroCatch,
   ReturnGetAddress,
   ReturnSendCodeEmail,
@@ -15,6 +15,7 @@ import addressService, {
   SendCodeEmailTwo,
 } from '../../../Service/AddressService/AddressService';
 import { UserConfirmCodeEmailDTO } from '../../../Interfaces/DTOs/UserConfirmCodeEmailDTO';
+import TimeRemainingAddress from '../TimeRemainingAddress/TimeRemainingAddress';
 
 interface Cep {
   bairro: string;
@@ -70,6 +71,7 @@ const AddNewAddress = () => {
 
   const [codeSendEmail, setCodeSendEmail] = useState(false);
   const [objAddress, setObjAddress] = useState<Address | null>(null);
+  const [codeEmailWrong, setCodeEmailWrong] = useState(false);
 
   const [selectedType, setSelectedType] = useState('Tipo de Endereço');
 
@@ -106,37 +108,6 @@ const AddNewAddress = () => {
     }
   }, [nav]);
 
-  useLayoutEffect(() => {
-    const applyMask = (
-      element: HTMLInputElement | null,
-      maskPattern: string,
-      placeholder: string
-    ) => {
-      if (!element) return;
-      const mask = new Inputmask({
-        mask: maskPattern,
-        placeholder,
-        insertMode: true,
-        showMaskOnHover: false,
-        showMaskOnFocus: false,
-      });
-      mask.mask(element);
-    };
-
-    const inputCepHere = inputCep.current as HTMLInputElement;
-    const inputNumberHomeHere = inputNumberHome.current as HTMLInputElement;
-
-    const maskConfigs = [
-      { element: inputCepHere, mask: '99999-999', placeholder: '_____-___' },
-      { element: inputNumberHomeHere, mask: '999999', placeholder: '' },
-    ];
-
-    // Aplica todas as máscaras usando a função genérica
-    maskConfigs.forEach(({ element, mask, placeholder }) => {
-      applyMask(element as HTMLInputElement, mask, placeholder);
-    });
-  }, []);
-
   const onChangeInputAddressNickname = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
 
@@ -155,16 +126,30 @@ const AddNewAddress = () => {
 
   const [newValueUf, setNewValueUf] = useState('');
   const [errorCpf, setErrorCpf] = useState(true);
+  const [cepValue, setCepValue] = useState('');
 
   const onChangeInputCep = async (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
 
     const cepInput = e.target;
-    const valueCep = cepInput.value.replace(/[-_]/g, '');
 
-    // verifyErrorCep();
+    let value = cepInput.value;
 
-    const cepIsValid = validateCep(valueCep);
+    value = value.replace(/\D/g, '');
+
+    if (value.length > 8) {
+      value = value.slice(0, 8);
+    }
+
+    if (value.length > 5) {
+      value = `${value.substring(0, 5)}-${value.substring(5)}`;
+    }
+
+    setCepValue(value);
+
+    const valueCep = value.replace(/[-_]/g, '');
+
+    const cepIsValid = validateCep(value);
 
     if (!cepIsValid) {
       const inputCepHere = inputCep.current as HTMLInputElement;
@@ -193,8 +178,6 @@ const AddNewAddress = () => {
         setErrorCpf(false);
 
         withoutErrorSpanAndInput(SpanErrorCepHere, inputCepHere);
-
-        // const inputAddressHere = inputAddress.current as HTMLInputElement;
 
         if (cep) {
           const SpanErrorAddressHere = SpanErrorAddress.current as HTMLSpanElement;
@@ -276,10 +259,25 @@ const AddNewAddress = () => {
     verifyErrorAddress();
   };
 
+  const [valueNumberHome, setValueNumberHome] = useState('');
+
   const onChangeInputNumberHome = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
 
-    verifyErrorNumberHome();
+    const inputNumberHomeHere = e.target as HTMLInputElement;
+    let value = inputNumberHomeHere.value;
+
+    value = value.replace(/\D/g, '');
+
+    if (value.length > 6) {
+      value = value.slice(0, 6);
+    }
+
+    setValueNumberHome(value);
+
+    if (value !== '') {
+      verifyErrorNumberHome();
+    }
   };
 
   const onChangeInputComplement = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -303,31 +301,45 @@ const AddNewAddress = () => {
   };
 
   const validateAddressNickname = (value: string): boolean => {
+    if (!value) return false;
+
     const valueValid = value.length > 0;
     return valueValid;
   };
 
   const validateTypeAddress = (value: string): boolean => {
+    if (!value) return false;
+
     const valueValid = value !== 'Tipo de Endereço';
     return valueValid;
   };
 
   const validateRecipientName = (value: string): boolean => {
+    if (!value) return false;
+
     const valueValid = value.length > 0;
     return valueValid;
   };
 
   const validateCep = (value: string): boolean => {
+    if (!value) return false;
+
     const valueValid = value.length > 7;
     return valueValid;
   };
 
   const validateAddress = (value: string): boolean => {
+    if (!value) return false;
+
     const valueValid = value.length > 0;
     return valueValid;
   };
 
   const validateNumberHome = (value: string): boolean => {
+    if (!value) return false;
+
+    value = value.replace(/\D/g, '');
+
     if (value.length <= 0) {
       value = 'a';
     }
@@ -552,6 +564,7 @@ const AddNewAddress = () => {
 
   const verifyErrorAddress = (): boolean => {
     const inputAddressHere = inputAddress.current as HTMLInputElement;
+
     const valueInputAddress = inputAddressHere.value;
 
     const addressIsValid = validateAddress(valueInputAddress);
@@ -652,6 +665,8 @@ const AddNewAddress = () => {
   const [alreadyTypePassword, setAlreadyTypePassword] = useState(false);
 
   const onChangeInputCreateAccount = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
+    if (!e.target.value) return;
+
     if (Number.isNaN(Number(e.target.value))) return;
 
     if (index === 0) setValueInputPhoneOne(String(e.target.value));
@@ -677,6 +692,8 @@ const AddNewAddress = () => {
 
   const onKeyDownCreateAccount = (e: React.KeyboardEvent<HTMLInputElement>, index: number) => {
     const input = e.target as HTMLInputElement;
+
+    if (!input.value) return;
 
     if (e.code === 'Backspace' && index > 0) {
       if (input.value.length === 1) {
@@ -705,8 +722,10 @@ const AddNewAddress = () => {
   };
 
   useEffect(() => {
-    setAllInputs(document.querySelectorAll('.input-cel-phone') as NodeListOf<HTMLInputElement>);
-  }, []);
+    if (codeSendEmail) {
+      setAllInputs(document.querySelectorAll('.input-cel-phone') as NodeListOf<HTMLInputElement>);
+    }
+  }, [codeSendEmail]);
 
   const onClickInputCreateAccount = () => {
     for (let i = 0; i < allInputs.length; i++) {
@@ -776,7 +795,26 @@ const AddNewAddress = () => {
     alreadyTypePassword,
   ]);
 
+  const [quantityOfAttempts, setQuantityOfAttempts] = useState(0);
+  const [timeRemaining, setTimeRemaining] = useState<string | null>(null);
+  const [canClickWaitingTimeIsOver, setCanClickWaitingTimeIsOver] = useState(true);
+
+  const [showTimeRemaining, setShowTimeRemaining] = useState(false);
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+
   const onClickConfirmChange = async () => {
+    if (!canClickWaitingTimeIsOver) return;
+
+    setCanClickWaitingTimeIsOver(false);
+
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
+
+    timeoutRef.current = setTimeout(() => {
+      setCanClickWaitingTimeIsOver(true); // Libera cliques depois de 500ms
+    }, 1000);
+
     if (
       Number(valueInputPhoneOne) >= 0 &&
       Number(valueInputPhoneTwo) >= 0 &&
@@ -801,10 +839,11 @@ const AddNewAddress = () => {
 
       if (codeSend.isSucess) {
         const resp = codeSend as ReturnSendCodeEmail;
-        const data = resp.data;
+        const data = resp.data as AddressConfirmCodeEmail;
 
-        const correctCode = data.correctCode;
-        console.log(data);
+        const correctCode = data.codeIsCorrect;
+        const numberOfAttempts = data.numberOfAttempts;
+        const timeRemaining = data.timeRemaining as string;
 
         if (correctCode && objAddress) {
           const token = user.token as string;
@@ -812,18 +851,33 @@ const AddNewAddress = () => {
 
           if (resp.isSucess) {
             const respSucessfully = resp as ReturnGetAddress;
-            const data = respSucessfully.data;
-            console.log(data);
+            const data = respSucessfully.data as Address;
 
             if (data) {
-              // tudo feito aqui redirecionar usuario exibindo o address
+              nav('/my-account/address-book');
             }
           } else {
             const respError = resp as ReturnErroCatch;
             console.log(respError);
           }
         } else {
-          // error code email tem que tratar aqui
+          setCodeEmailWrong(true);
+
+          if (timeRemaining) {
+            const time = timeRemaining;
+            const timeParts = time.toString().split(':');
+            const seconds = parseInt(timeParts[1]) * 60 + parseInt(timeParts[2].split('.')[0]);
+
+            if (seconds >= 1) {
+              setShowTimeRemaining(true);
+            }
+
+            // setTimeRemaining(seconds);
+          }
+
+          setTimeRemaining(timeRemaining);
+
+          setQuantityOfAttempts(numberOfAttempts);
         }
       }
     }
@@ -833,6 +887,49 @@ const AddNewAddress = () => {
 
   const onClickExitModal = () => {
     setCodeSendEmail(false);
+  };
+
+  // const [timeRollang, setTimeRollang] = useState(0);
+
+  const endTimeRemaining = (time: number) => {
+    const buttonRegister = refButtonConfirmChange.current;
+    if (buttonRegister === null) return;
+
+    const handleMouseEnter = () => buttonRegisterMouseEnter(refButtonConfirmChange.current!);
+    const handleMouseLeave = () => buttonRegisterMouseLeave(refButtonConfirmChange.current!);
+
+    if (time <= 0) {
+      setShowTimeRemaining(false);
+      setQuantityOfAttempts(0);
+      setCodeEmailWrong(false);
+
+      putValueEmptyAllInputCode();
+
+      buttonRegister.style.opacity = '1';
+      buttonRegister.style.cursor = 'pointer';
+
+      buttonRegister.addEventListener('mouseenter', handleMouseEnter);
+      buttonRegister.addEventListener('mouseleave', handleMouseLeave);
+    } else {
+      buttonRegister.style.opacity = '.7';
+      buttonRegister.style.cursor = 'not-allowed';
+
+      buttonRegister.removeEventListener('mouseenter', handleMouseEnter);
+      buttonRegister.removeEventListener('mouseleave', handleMouseLeave);
+    }
+  };
+
+  const putValueEmptyAllInputCode = () => {
+    allInputs.forEach((el) => {
+      el.value = '';
+    });
+
+    setValueInputPhoneOne('-1');
+    setValueInputPhoneTwo('-1');
+    setValueInputPhoneThree('-1');
+    setValueInputPhoneFour('-1');
+    setValueInputPhoneFive('-1');
+    setValueInputPhoneSix('-1');
   };
 
   return (
@@ -906,6 +1003,7 @@ const AddNewAddress = () => {
               id="cep"
               placeholder="cep"
               ref={inputCep}
+              value={cepValue}
               onChange={onChangeInputCep}
               className="bg-[#eee]"
             />
@@ -943,8 +1041,10 @@ const AddNewAddress = () => {
             <Styled.ContainerInput>
               <Styled.Input
                 id="number-home"
+                type="text"
                 placeholder="número"
                 ref={inputNumberHome}
+                value={valueNumberHome}
                 onChange={onChangeInputNumberHome}
               />
             </Styled.ContainerInput>
@@ -1064,7 +1164,7 @@ const AddNewAddress = () => {
       </Styled.ContainerMain>
       {codeSendEmail && (
         <div className="fixed left-[0px] top-[0px] w-full h-full bg-[#0000006e] flex justify-center !pt-15">
-          <div className="flex flex-col items-end w-[320px] h-[373px] bg-[white] border border-black !p-2">
+          <div className="flex flex-col items-end w-[320px] max-h-[400px] bg-[white] border border-black !p-2">
             <Styled.ContainerExitSvg onClick={onClickExitModal}>
               <SvgX />
             </Styled.ContainerExitSvg>
@@ -1144,6 +1244,25 @@ const AddNewAddress = () => {
                   />
                 </div>
               </div>
+
+              <div className="flex flex-col items-center">
+                <span className="font-semibold">
+                  tentativas restantes: {quantityOfAttempts} de 4
+                </span>
+              </div>
+
+              {codeEmailWrong && (
+                <div>
+                  <span className="font-semibold text-[red]">Codigo Errado</span>
+                </div>
+              )}
+
+              {showTimeRemaining && (
+                <TimeRemainingAddress
+                  timeRemaining={timeRemaining}
+                  endTimeRemaining={endTimeRemaining}
+                />
+              )}
 
               <Styled.ContainerDidNotReceiveTheCodeAndButtonNext>
                 <Styled.ContainerDidNotReceiveTheCode>

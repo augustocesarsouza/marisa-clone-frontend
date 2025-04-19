@@ -8,14 +8,20 @@ export interface ReturnGetAddress {
   isSucess: boolean;
 }
 
-export interface ReturnSendCodeEmail {
-  data: SendCodeEmail;
+export interface ReturnGetAddressList {
+  data: Address[];
   isSucess: boolean;
 }
 
-export interface SendCodeEmail {
-  correctCode: boolean;
-  email: string;
+export interface ReturnSendCodeEmail {
+  data: AddressConfirmCodeEmail;
+  isSucess: boolean;
+}
+
+export interface AddressConfirmCodeEmail {
+  codeIsCorrect: boolean;
+  numberOfAttempts: number;
+  timeRemaining: string;
 }
 
 export interface ReturnSendCodeEmailTwo {
@@ -46,6 +52,34 @@ class AddressService {
         'Content-Type': 'application/json',
       },
     });
+  }
+
+  async getAllAddressUser(user: User): Promise<ReturnGetAddressList | ReturnErroCatch> {
+    try {
+      const response = await this.http.get<ReturnGetAddressList>(
+        `/address/get-all-addresses-by-user-id/${user.id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${user.token}`,
+            uid: user.id,
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+      return response.data;
+    } catch (error: unknown) {
+      const dataReturn: ReturnErroCatch = {
+        isSucess: false,
+        message: '',
+      };
+
+      if (error instanceof AxiosError) {
+        const data: ReturnErroCatch = error.response?.data;
+        return data;
+      }
+
+      return dataReturn;
+    }
   }
 
   async createUser(
