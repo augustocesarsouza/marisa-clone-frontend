@@ -69,7 +69,7 @@ const AddNewAddress = () => {
   const SpanErrorCity = useRef<HTMLSpanElement>(null);
   const SpanErrorUf = useRef<HTMLSpanElement>(null);
 
-  const [codeSendEmail, setCodeSendEmail] = useState(true);
+  const [codeSendEmail, setCodeSendEmail] = useState(false);
   const [objAddress, setObjAddress] = useState<Address | null>(null);
   const [codeEmailWrong, setCodeEmailWrong] = useState(false);
 
