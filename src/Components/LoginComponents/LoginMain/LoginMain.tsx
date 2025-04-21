@@ -14,7 +14,6 @@ const LoginMain = () => {
 
   useEffect(() => {
     const state = location.state;
-    console.log(state);
 
     if (state) {
       if (state.changePassword) {
