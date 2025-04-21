@@ -69,7 +69,7 @@ const AddNewAddress = () => {
   const SpanErrorCity = useRef<HTMLSpanElement>(null);
   const SpanErrorUf = useRef<HTMLSpanElement>(null);
 
-  const [codeSendEmail, setCodeSendEmail] = useState(false);
+  const [codeSendEmail, setCodeSendEmail] = useState(true);
   const [objAddress, setObjAddress] = useState<Address | null>(null);
   const [codeEmailWrong, setCodeEmailWrong] = useState(false);
 
@@ -693,9 +693,7 @@ const AddNewAddress = () => {
   const onKeyDownCreateAccount = (e: React.KeyboardEvent<HTMLInputElement>, index: number) => {
     const input = e.target as HTMLInputElement;
 
-    if (!input.value) return;
-
-    if (e.code === 'Backspace' && index > 0) {
+    if (e.code === 'Backspace') {
       if (input.value.length === 1) {
         // allInputs[index].value = '';
 
@@ -711,10 +709,14 @@ const AddNewAddress = () => {
 
         if (index === 5) setValueInputPhoneSix('-1');
 
-        allInputs[index - 1].focus();
+        if (index > 0) {
+          allInputs[index - 1].focus(); // Só foca no anterior se tiver
+        }
       } else {
-        allInputs[index - 1].focus();
-        allInputs[index - 1].value = '';
+        if (allInputs[index - 1]) {
+          allInputs[index - 1].focus();
+          allInputs[index - 1].value = '';
+        }
       }
 
       e.preventDefault();
@@ -930,6 +932,37 @@ const AddNewAddress = () => {
     setValueInputPhoneFour('-1');
     setValueInputPhoneFive('-1');
     setValueInputPhoneSix('-1');
+  };
+
+  const [codePastInvalid, setCodePastInvalid] = useState(false);
+  const intervalRefCodePast = useRef<NodeJS.Timeout | null>(null);
+
+  const onPasteHandler = (e: React.ClipboardEvent<HTMLInputElement>) => {
+    const valueCode = e.clipboardData.getData('Text');
+
+    if (intervalRefCodePast.current) {
+      clearTimeout(intervalRefCodePast.current);
+    }
+
+    if (/^\d{6}$/.test(valueCode)) {
+      const arrayNumbers = valueCode.split('');
+
+      setValueInputPhoneOne(arrayNumbers[0]);
+      setValueInputPhoneTwo(arrayNumbers[1]);
+      setValueInputPhoneThree(arrayNumbers[2]);
+      setValueInputPhoneFour(arrayNumbers[3]);
+      setValueInputPhoneFive(arrayNumbers[4]);
+      setValueInputPhoneSix(arrayNumbers[5]);
+
+      setCodePastInvalid(false);
+    } else {
+      setCodePastInvalid(true);
+
+      intervalRefCodePast.current = setInterval(() => {
+        setCodePastInvalid(false);
+      }, 10000);
+      e.preventDefault();
+    }
   };
 
   return (
@@ -1186,6 +1219,7 @@ const AddNewAddress = () => {
                     onClick={() => onClickInputCreateAccount()}
                     onChange={(e) => onChangeInputCreateAccount(e, 0)}
                     onKeyDown={(e) => onKeyDownCreateAccount(e, 0)}
+                    onPaste={onPasteHandler} // Captura a ação de colar
                   />
                   <Styled.InputCelphone
                     className="input-cel-phone"
@@ -1197,6 +1231,7 @@ const AddNewAddress = () => {
                     onClick={() => onClickInputCreateAccount()}
                     onChange={(e) => onChangeInputCreateAccount(e, 1)}
                     onKeyDown={(e) => onKeyDownCreateAccount(e, 1)}
+                    onPaste={onPasteHandler}
                   />
                   <Styled.InputCelphone
                     className="input-cel-phone"
@@ -1208,6 +1243,7 @@ const AddNewAddress = () => {
                     onClick={() => onClickInputCreateAccount()}
                     onChange={(e) => onChangeInputCreateAccount(e, 2)}
                     onKeyDown={(e) => onKeyDownCreateAccount(e, 2)}
+                    onPaste={onPasteHandler}
                   />
                   <Styled.InputCelphone
                     className="input-cel-phone"
@@ -1219,6 +1255,7 @@ const AddNewAddress = () => {
                     onClick={() => onClickInputCreateAccount()}
                     onChange={(e) => onChangeInputCreateAccount(e, 3)}
                     onKeyDown={(e) => onKeyDownCreateAccount(e, 3)}
+                    onPaste={onPasteHandler}
                   />
                   <Styled.InputCelphone
                     className="input-cel-phone"
@@ -1230,6 +1267,7 @@ const AddNewAddress = () => {
                     onClick={() => onClickInputCreateAccount()}
                     onChange={(e) => onChangeInputCreateAccount(e, 4)}
                     onKeyDown={(e) => onKeyDownCreateAccount(e, 4)}
+                    onPaste={onPasteHandler}
                   />
                   <Styled.InputCelphone
                     className="input-cel-phone"
@@ -1241,6 +1279,7 @@ const AddNewAddress = () => {
                     onClick={() => onClickInputCreateAccount()}
                     onChange={(e) => onChangeInputCreateAccount(e, 5)}
                     onKeyDown={(e) => onKeyDownCreateAccount(e, 5)}
+                    onPaste={onPasteHandler}
                   />
                 </div>
               </div>
@@ -1250,6 +1289,14 @@ const AddNewAddress = () => {
                   tentativas restantes: {quantityOfAttempts} de 4
                 </span>
               </div>
+
+              {codePastInvalid && (
+                <div className="flex">
+                  <span className="text-center leading-[1] font-semibold text-[red]">
+                    codigo fornecido invalido deve ter apenas numero e deve ter apenas 6 numeros
+                  </span>
+                </div>
+              )}
 
               {codeEmailWrong && (
                 <div>
