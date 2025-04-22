@@ -6,6 +6,7 @@ import { User } from '../../../Interfaces/Entity/User.';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { GetUserFromLocalStorage } from '../../../GetUserFromLocalStorage/GetUserFromLocalStorage';
 import { ContextHome } from '../Contexts/ContextHome';
+import { TokenExpiration } from '../../../TokenValidation/TokenExpiration';
 
 const HeaderSecondMain = () => {
   const [user, setUser] = useState<User | null>(null);
@@ -32,6 +33,16 @@ const HeaderSecondMain = () => {
     }
 
     const user = objUser.user;
+    const token = user.token;
+
+    if (token) {
+      const valueExpiration = TokenExpiration(token);
+
+      if (valueExpiration) {
+        localStorage.removeItem('user');
+        nav('/login');
+      }
+    }
 
     if (user) {
       setUser(user);

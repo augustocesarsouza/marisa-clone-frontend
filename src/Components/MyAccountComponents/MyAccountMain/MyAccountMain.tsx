@@ -9,6 +9,7 @@ import { GetUserFromLocalStorage } from '../../GetUserFromLocalStorage/GetUserFr
 import HeaderMyAccount from '../HeaderMyAccount/HeaderMyAccount';
 import { ContextMyAccount } from '../Contexts/ContextMyAccount';
 import MyPerfilMain from '../MyPerfilMain/MyPerfilMain';
+import { TokenExpiration } from '../../TokenValidation/TokenExpiration';
 
 const MyAccountMain = () => {
   const nav = useNavigate();
@@ -29,7 +30,29 @@ const MyAccountMain = () => {
 
     const objUser = GetUserFromLocalStorage();
 
+    if (objUser.isNullUserLocalStorage) {
+      nav('/login');
+      return;
+    }
+
+    if (objUser.user === null) {
+      localStorage.removeItem('user');
+
+      nav('/login');
+      return;
+    }
+
     const user = objUser.user;
+    const token = user.token;
+
+    if (token) {
+      const valueExpiration = TokenExpiration(token);
+
+      if (valueExpiration) {
+        localStorage.removeItem('user');
+        nav('/login');
+      }
+    }
 
     if (user) {
       setUser(user);
