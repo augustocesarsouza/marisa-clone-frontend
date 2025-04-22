@@ -1,10 +1,23 @@
 import { Address } from '../../../../Interfaces/Entity/Address';
+import { User } from '../../../../Interfaces/Entity/User.';
+import addressService, {
+  ReturnGetAddress,
+} from '../../../../Service/AddressService/AddressService';
+import * as Styled from './styled';
 
 interface ModalAddressProps {
   address: Address;
+  changeArrayAddresses: (address: Address) => void;
+  changeArrayAddressesMain: (itemDeleted: Address, newAddressMain: Address) => void;
+  user: User | null;
 }
 
-const ModalAddress = ({ address }: ModalAddressProps) => {
+const ModalAddress = ({
+  address,
+  changeArrayAddressesMain,
+  changeArrayAddresses,
+  user,
+}: ModalAddressProps) => {
   const formatName = (name: string | null): string => {
     if (name) {
       const nameAlright = `Destinatário:${name}`;
@@ -81,38 +94,76 @@ const ModalAddress = ({ address }: ModalAddressProps) => {
       Tocantins: 'TO',
     };
 
-    // Procura o estado no mapa
     const sigla = statesMap[el.state];
 
     return `${el.city} - ${sigla} - ${el.zipCode?.replace('-', '')}`;
   };
 
+  const onClickRemoveAddress = async (el: Address) => {
+    if (!user || !el.id) return;
+
+    const addressDelete = await addressService.deleteAddress(el.id, user);
+
+    if (addressDelete.isSucess) {
+      const dataReturn = addressDelete as ReturnGetAddress;
+      const data = dataReturn.data;
+
+      if (data.mainAddress) {
+        changeArrayAddressesMain(el, data);
+      } else {
+        changeArrayAddresses(data);
+      }
+    } else {
+      const error = addressDelete as ReturnGetAddress;
+      console.error(error);
+    }
+  };
+
   return (
-    <div className="flex flex-col border border-[#979797] w-[244px] h-[185px] !p-[14px]">
-      <span className="text-2xl font-medium !mb-[10px]">Endereço Principal</span>
+    <Styled.ContainerMain $changeValueJustifyContent={address.mainAddress ?? false}>
+      {address.mainAddress && address.mainAddress && (
+        <span className="text-2xl font-medium !mb-[10px]">Endereço Principal</span>
+      )}
 
-      <div className="flex items-center leading-6 !mb-[10px]">
-        <span className="text-2xl font-semibold !mr-[10px]">RESIDENCIAL</span>
-        <button className="text-xl font-semibold text-[#ec008c] border-b border-[#ec008c] leading-6 cursor-pointer">
-          editar
-        </button>
+      <div className="flex flex-col">
+        <div className="!mb-[10px] leading-6 flex flex-col gap-0 items-start">
+          <div className="flex items-center leading-6">
+            <span className="text-2xl font-semibold !mr-[10px]">RESIDENCIAL</span>
+            <button className="text-xl font-semibold text-[#ec008c] border-b border-[#ec008c] leading-6 cursor-pointer">
+              editar
+            </button>
+          </div>
+          <button
+            className="text-xl font-semibold text-[#ec008c] border-b border-[#ec008c] leading-6 cursor-pointer"
+            onClick={() => onClickRemoveAddress(address)}>
+            remover
+          </button>
+        </div>
+
+        <div className="flex flex-col gap-[2px]">
+          <span className="break-words text-black text-[13px] font-medium leading-6">
+            {formatName(address.recipientName)}
+          </span>
+          <span className="break-words text-black text-[13px] font-medium leading-6">
+            Celular: {formatCellPhone(address.userDTO?.cellPhone)}
+          </span>
+          <span className="break-words text-black text-[13px] font-medium leading-6">
+            {formatAddress(address)}
+          </span>
+          <span className="break-words text-black text-[13px] font-medium leading-6">
+            {formatLocation(address)}
+          </span>
+        </div>
       </div>
 
-      <div className="flex flex-col gap-[2px]">
-        <span className="break-words text-black text-[13px] font-medium leading-6">
-          {formatName(address.recipientName)}
-        </span>
-        <span className="break-words text-black text-[13px] font-medium leading-6">
-          Celular: {formatCellPhone(address.userDTO?.cellPhone)}
-        </span>
-        <span className="break-words text-black text-[13px] font-medium leading-6">
-          {formatAddress(address)}
-        </span>
-        <span className="break-words text-black text-[13px] font-medium leading-6">
-          {formatLocation(address)}
-        </span>
-      </div>
-    </div>
+      {!address.mainAddress && (
+        <div className="flex leading-7 border border-[#000000]">
+          <button className="text-[#000000] text-2xl font-medium">
+            Definir como endereço principal
+          </button>
+        </div>
+      )}
+    </Styled.ContainerMain>
   );
 };
 

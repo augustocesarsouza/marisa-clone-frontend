@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Address } from '../../../../Interfaces/Entity/Address';
 import { User } from '../../../../Interfaces/Entity/User.';
 import { GetUserFromLocalStorage } from '../../../../GetUserFromLocalStorage/GetUserFromLocalStorage';
@@ -13,6 +13,27 @@ import ModalAddress from '../ModalAddress/ModalAddress';
 const AddressDisplayedMain = () => {
   const nav = useNavigate();
   const [listAddresses, setListAddresses] = useState<Address[]>([]);
+  const [user, setUser] = useState<User | null>(null);
+
+  const getAllAddress = useCallback(
+    async (user: User) => {
+      const res = await addressService.getAllAddressUser(user);
+
+      if (res.isSucess) {
+        const data = res as ReturnGetAddressList;
+        const listAddresses = data.data;
+
+        setListAddresses(listAddresses);
+      } else {
+        const error = res as ReturnErroCatch;
+        console.error(error);
+
+        localStorage.removeItem('user');
+        nav('/login');
+      }
+    },
+    [nav]
+  );
 
   useEffect(() => {
     const objUser = GetUserFromLocalStorage();
@@ -42,26 +63,33 @@ const AddressDisplayedMain = () => {
     }
 
     if (user) {
+      setUser(user);
       getAllAddress(user);
     }
-  }, [nav]);
+  }, [getAllAddress, nav]);
 
-  const getAllAddress = async (user: User) => {
-    const res = await addressService.getAllAddressUser(user);
+  const changeArrayAddresses = (newAddress: Address) => {
+    setListAddresses((prev) => {
+      const newList = [...prev];
 
-    if (res.isSucess) {
-      const data = res as ReturnGetAddressList;
-      const listAddresses = data.data;
-      console.log(listAddresses);
+      const filterArray = newList.filter((el) => el.id !== newAddress.id);
+      return filterArray;
+    });
+  };
 
-      setListAddresses(listAddresses);
-    } else {
-      const error = res as ReturnErroCatch;
-      console.error(error);
+  const changeArrayAddressesMain = (itemDeleted: Address, newAddressMain: Address) => {
+    setListAddresses((prev) => {
+      const newList = prev
+        .filter((el) => el.id !== itemDeleted.id)
+        .map((el) => {
+          if (el.id === newAddressMain.id) {
+            return { ...el, mainAddress: true };
+          }
+          return el;
+        });
 
-      localStorage.removeItem('user');
-      nav('/login');
-    }
+      return newList;
+    });
   };
 
   return (
@@ -71,7 +99,15 @@ const AddressDisplayedMain = () => {
       )}
 
       {listAddresses.length > 0 &&
-        listAddresses.map((el) => <ModalAddress address={el} key={el.id} />)}
+        listAddresses.map((el) => (
+          <ModalAddress
+            address={el}
+            key={el.id}
+            changeArrayAddresses={changeArrayAddresses}
+            changeArrayAddressesMain={changeArrayAddressesMain}
+            user={user}
+          />
+        ))}
     </div>
   );
 };

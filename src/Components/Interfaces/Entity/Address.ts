@@ -13,6 +13,7 @@ export interface Address {
   city: string | null;
   state: string | null;
   referencePoint: string | null;
+  mainAddress: boolean | null;
   userId: string | null;
   userDTO: User | null;
 }
