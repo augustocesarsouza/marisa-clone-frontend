@@ -106,6 +106,7 @@ const AddressDisplayedMain = () => {
             changeArrayAddresses={changeArrayAddresses}
             changeArrayAddressesMain={changeArrayAddressesMain}
             user={user}
+            quantityAddresses={listAddresses.length}
           />
         ))}
     </div>

@@ -1,15 +1,18 @@
+import { useNavigate } from 'react-router-dom';
 import { Address } from '../../../../Interfaces/Entity/Address';
 import { User } from '../../../../Interfaces/Entity/User.';
 import addressService, {
   ReturnGetAddress,
 } from '../../../../Service/AddressService/AddressService';
 import * as Styled from './styled';
+import { FunctionGetUfState } from '../../../../Util/FunctionGetUfState/FunctionGetUfState';
 
 interface ModalAddressProps {
   address: Address;
   changeArrayAddresses: (address: Address) => void;
   changeArrayAddressesMain: (itemDeleted: Address, newAddressMain: Address) => void;
   user: User | null;
+  quantityAddresses: number;
 }
 
 const ModalAddress = ({
@@ -17,7 +20,10 @@ const ModalAddress = ({
   changeArrayAddressesMain,
   changeArrayAddresses,
   user,
+  quantityAddresses,
 }: ModalAddressProps) => {
+  const nav = useNavigate();
+
   const formatName = (name: string | null): string => {
     if (name) {
       const nameAlright = `Destinatário:${name}`;
@@ -64,37 +70,8 @@ const ModalAddress = ({
 
     if (!el.state || !el.city) return '';
 
-    const statesMap: { [key: string]: string } = {
-      Acre: 'AC',
-      Alagoas: 'AL',
-      Amapá: 'AP',
-      Amazonas: 'AM',
-      Bahia: 'BA',
-      Ceará: 'CE',
-      'Distrito Federal': 'DF',
-      'Espírito Santo': 'ES',
-      Goiás: 'GO',
-      Maranhão: 'MA',
-      'Mato Grosso': 'MT',
-      'Mato Grosso do Sul': 'MS',
-      'Minas Gerais': 'MG',
-      Pará: 'PA',
-      Paraíba: 'PB',
-      Paraná: 'PR',
-      Pernambuco: 'PE',
-      Piauí: 'PI',
-      'Rio de Janeiro': 'RJ',
-      'Rio Grande do Norte': 'RN',
-      'Rio Grande do Sul': 'RS',
-      Rondônia: 'RO',
-      Roraima: 'RR',
-      'Santa Catarina': 'SC',
-      'São Paulo': 'SP',
-      Sergipe: 'SE',
-      Tocantins: 'TO',
-    };
-
-    const sigla = statesMap[el.state];
+    // const sigla = statesMap[el.state];
+    const sigla = FunctionGetUfState(el.state);
 
     return `${el.city} - ${sigla} - ${el.zipCode?.replace('-', '')}`;
   };
@@ -119,25 +96,38 @@ const ModalAddress = ({
     }
   };
 
+  // useEffect(() => {
+  //   console.log(address);
+  //   console.log(user);
+  // }, [address, user]);
+
+  const onclickEditAddress = () => {
+    nav('/my-account/edit-address', { state: { address } });
+  };
+
   return (
     <Styled.ContainerMain $changeValueJustifyContent={address.mainAddress ?? false}>
-      {address.mainAddress && address.mainAddress && (
+      {address.mainAddress && (
         <span className="text-2xl font-medium !mb-[10px]">Endereço Principal</span>
       )}
 
       <div className="flex flex-col">
         <div className="!mb-[10px] leading-6 flex flex-col gap-0 items-start">
           <div className="flex items-center leading-6">
-            <span className="text-2xl font-semibold !mr-[10px]">RESIDENCIAL</span>
-            <button className="text-xl font-semibold text-[#ec008c] border-b border-[#ec008c] leading-6 cursor-pointer">
+            <span className="text-2xl font-semibold !mr-[10px]">{address.addressType}</span>
+            <button
+              className="text-xl font-semibold text-[#ec008c] border-b border-[#ec008c] leading-6 cursor-pointer"
+              onClick={onclickEditAddress}>
               editar
             </button>
           </div>
-          <button
-            className="text-xl font-semibold text-[#ec008c] border-b border-[#ec008c] leading-6 cursor-pointer"
-            onClick={() => onClickRemoveAddress(address)}>
-            remover
-          </button>
+          {quantityAddresses > 1 && (
+            <button
+              className="text-xl font-semibold text-[#ec008c] border-b border-[#ec008c] leading-6 cursor-pointer"
+              onClick={() => onClickRemoveAddress(address)}>
+              remover
+            </button>
+          )}
         </div>
 
         <div className="flex flex-col gap-[2px]">

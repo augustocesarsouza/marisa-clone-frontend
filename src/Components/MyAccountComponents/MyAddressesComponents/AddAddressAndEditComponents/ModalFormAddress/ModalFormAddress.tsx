@@ -1,11 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
-import * as Styled from './styled';
 import { useNavigate } from 'react-router-dom';
-import { GetUserFromLocalStorage } from '../../../GetUserFromLocalStorage/GetUserFromLocalStorage';
-import { User } from '../../../Interfaces/Entity/User.';
-import { TokenExpiration } from '../../../TokenValidation/TokenExpiration';
-import { Address } from '../../../Interfaces/Entity/Address';
-import SvgX from '../../../Svg/SvgX/SvgX';
+import { User } from '../../../../Interfaces/Entity/User.';
+import { Address } from '../../../../Interfaces/Entity/Address';
+import { GetUserFromLocalStorage } from '../../../../GetUserFromLocalStorage/GetUserFromLocalStorage';
+import { TokenExpiration } from '../../../../TokenValidation/TokenExpiration';
 import addressService, {
   AddressConfirmCodeEmail,
   ReturnErroCatch,
@@ -13,9 +11,11 @@ import addressService, {
   ReturnSendCodeEmail,
   ReturnSendCodeEmailTwo,
   SendCodeEmailTwo,
-} from '../../../Service/AddressService/AddressService';
-import { UserConfirmCodeEmailDTO } from '../../../Interfaces/DTOs/UserConfirmCodeEmailDTO';
-import TimeRemainingAddress from '../TimeRemainingAddress/TimeRemainingAddress';
+} from '../../../../Service/AddressService/AddressService';
+import { UserConfirmCodeEmailDTO } from '../../../../Interfaces/DTOs/UserConfirmCodeEmailDTO';
+import * as Styled from './styled';
+import SvgX from '../../../../Svg/SvgX/SvgX';
+import TimeRemainingAddress from '../../TimeRemainingAddress/TimeRemainingAddress';
 
 interface Cep {
   bairro: string;
@@ -37,7 +37,11 @@ interface ObjErrorCep {
   erro: string;
 }
 
-const AddNewAddress = () => {
+interface ModalFormAddressProps {
+  addressUser: Address | null;
+}
+
+const ModalFormAddress = ({ addressUser }: ModalFormAddressProps) => {
   const nav = useNavigate();
   const [user, setUser] = useState<User | null>(null);
 
@@ -74,6 +78,9 @@ const AddNewAddress = () => {
   const [codeEmailWrong, setCodeEmailWrong] = useState(false);
 
   const [selectedType, setSelectedType] = useState('Tipo de Endereço');
+  const [newValueUf, setNewValueUf] = useState('');
+  const [cepValue, setCepValue] = useState('');
+  const [valueNumberHome, setValueNumberHome] = useState('');
 
   useEffect(() => {
     const objUser = GetUserFromLocalStorage();
@@ -108,6 +115,58 @@ const AddNewAddress = () => {
     }
   }, [nav]);
 
+  useEffect(() => {
+    console.log(addressUser);
+
+    if (addressUser) {
+      const inputAddressNicknameHere = inputAddressNickname.current as HTMLInputElement;
+      inputAddressNicknameHere.value = addressUser.addressNickname ?? '';
+
+      const selectTypeAddressHere = SelectTypeAddressRef.current as HTMLSelectElement;
+      selectTypeAddressHere.value = addressUser.addressType ?? '';
+      setSelectedType(addressUser.addressType ?? '');
+
+      const inputRecipientNameHere = inputRecipientName.current as HTMLInputElement;
+      inputRecipientNameHere.value = addressUser.recipientName ?? '';
+
+      setCepValue(addressUser.zipCode ?? '');
+
+      const inputAddressHere = inputAddress.current as HTMLInputElement;
+      inputAddressHere.style.color = '#929292';
+      inputAddressHere.style.backgroundColor = '#eee';
+      inputAddressHere.readOnly = true;
+      inputAddressHere.value = addressUser.street ?? '';
+
+      const number = addressUser.number ? addressUser.number.toString() : '';
+      const inputNumberHomeHere = inputNumberHome.current as HTMLInputElement;
+      inputNumberHomeHere.value = number;
+      setValueNumberHome(number);
+
+      const inputComplementHere = inputComplement.current as HTMLInputElement;
+      inputComplementHere.value = addressUser.complement ?? '';
+
+      const inputNeighborhoodHere = inputNeighborhood.current as HTMLInputElement;
+      inputNeighborhoodHere.value = addressUser.neighborhood ?? '';
+
+      const inputCityHere = inputCity.current as HTMLInputElement;
+      inputCityHere.value = addressUser.city ?? '';
+
+      inputCityHere.style.color = '#929292';
+      inputCityHere.style.backgroundColor = '#eee';
+      inputCityHere.readOnly = true;
+
+      // console.log(addressUser.state);
+      // const sigla = FunctionGetUfState(addressUser.state ?? '');
+      setNewValueUf(addressUser.state ?? '');
+
+      const selectUfRefHere = SelectUfRef.current as HTMLSelectElement;
+      selectUfRefHere.style.color = '#929292';
+      selectUfRefHere.style.backgroundColor = '#eee';
+      selectUfRefHere.disabled = true;
+      selectUfRefHere.style.cursor = 'not-allowed';
+    }
+  }, [addressUser]);
+
   const onChangeInputAddressNickname = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
 
@@ -124,9 +183,7 @@ const AddNewAddress = () => {
     verifyErrorRecipientName();
   };
 
-  const [newValueUf, setNewValueUf] = useState('');
-  const [errorCpf, setErrorCpf] = useState(true);
-  const [cepValue, setCepValue] = useState('');
+  const [errorCpf, setErrorCpf] = useState(false);
 
   const onChangeInputCep = async (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
@@ -156,10 +213,12 @@ const AddNewAddress = () => {
       const SpanErrorCepHere = SpanErrorCep.current as HTMLSpanElement;
 
       putErrorSpanAndInput(SpanErrorCepHere, inputCepHere);
+      return;
     }
 
     if (valueCep.length > 7) {
       const resultCep: Cep | ObjErrorCep = await consultaCEP(valueCep);
+      console.log(resultCep);
 
       if ('erro' in resultCep && resultCep.erro === 'true') {
         const inputCepHere = inputCep.current as HTMLInputElement;
@@ -258,8 +317,6 @@ const AddNewAddress = () => {
 
     verifyErrorAddress();
   };
-
-  const [valueNumberHome, setValueNumberHome] = useState('');
 
   const onChangeInputNumberHome = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
@@ -396,6 +453,7 @@ const AddNewAddress = () => {
   };
 
   const onClickSave = async () => {
+    // fazer test aqui no front e depois deploy
     const errorNickName = verifyErrorAddressNickname();
 
     const errorTypeAddress = verifyErrorSelectTypeAddress();
@@ -413,13 +471,6 @@ const AddNewAddress = () => {
     const errorCity = verifyErrorCity();
 
     const errorUf = verifyErrorUf();
-
-    if (errorCpf) {
-      const inputCepHere = inputCep.current as HTMLInputElement;
-      const SpanErrorCepHere = SpanErrorCep.current as HTMLSpanElement;
-
-      putErrorSpanAndInput(SpanErrorCepHere, inputCepHere);
-    }
 
     if (
       !errorNickName ||
@@ -474,6 +525,7 @@ const AddNewAddress = () => {
         state: SelectUfRefHere.value,
         referencePoint: inputReferencePointHere.value,
         userId: user.id,
+        mainAddress: false,
         id: null,
         userDTO: null,
       };
@@ -553,7 +605,7 @@ const AddNewAddress = () => {
     const cepIsValid = validateCep(valueCepHere);
     const SpanErrorCepHere = SpanErrorCep.current as HTMLSpanElement;
 
-    if (!cepIsValid) {
+    if (!cepIsValid || errorCpf) {
       putErrorSpanAndInput(SpanErrorCepHere, inputCepHere);
     } else {
       withoutErrorSpanAndInput(SpanErrorCepHere, inputCepHere);
@@ -844,26 +896,48 @@ const AddNewAddress = () => {
         const data = resp.data as AddressConfirmCodeEmail;
 
         const correctCode = data.codeIsCorrect;
-        const numberOfAttempts = data.numberOfAttempts;
-        const timeRemaining = data.timeRemaining as string;
 
-        if (correctCode && objAddress) {
-          const token = user.token as string;
-          const resp = await addressService.createUser(objAddress, token);
+        if (correctCode) {
+          if (objAddress && !addressUser) {
+            const token = user.token as string;
+            const resp = await addressService.createUser(objAddress, token);
 
-          if (resp.isSucess) {
-            const respSucessfully = resp as ReturnGetAddress;
-            const data = respSucessfully.data as Address;
+            if (resp.isSucess) {
+              const respSucessfully = resp as ReturnGetAddress;
+              const data = respSucessfully.data as Address;
 
-            if (data) {
-              nav('/my-account/address-book');
+              if (data) {
+                nav('/my-account/address-book');
+              }
+            } else {
+              const respError = resp as ReturnErroCatch;
+              console.log(respError);
             }
-          } else {
-            const respError = resp as ReturnErroCatch;
-            console.log(respError);
+          }
+
+          if (objAddress && addressUser) {
+            objAddress.id = addressUser.id;
+            objAddress.mainAddress = addressUser.mainAddress;
+
+            const token = user.token as string;
+            const resp = await addressService.updateUserAddress(objAddress, token);
+
+            if (resp.isSucess) {
+              const respSucessfully = resp as ReturnGetAddress;
+              const data = respSucessfully.data as Address;
+
+              if (data) {
+                nav('/my-account/address-book');
+              }
+            } else {
+              const respError = resp as ReturnErroCatch;
+              console.log(respError);
+            }
           }
         } else {
           setCodeEmailWrong(true);
+          const numberOfAttempts = data.numberOfAttempts;
+          const timeRemaining = data.timeRemaining as string;
 
           if (timeRemaining) {
             const time = timeRemaining;
@@ -966,235 +1040,231 @@ const AddNewAddress = () => {
   };
 
   return (
-    <>
-      <Styled.ContainerMain>
-        <Styled.H1>Adicionar Novo Endereço</Styled.H1>
+    <div className="flex flex-col">
+      <Styled.ContainerLabelAndInput $indexContainer={0}>
+        <Styled.Label htmlFor="address-nickname">
+          Apelido do Endereço<span className="text-[red] text-2xl">*</span>
+        </Styled.Label>
+        <Styled.ContainerInput>
+          <Styled.Input
+            id="address-nickname"
+            placeholder="apelido do endereço. Ex.: casa da mãe"
+            ref={inputAddressNickname}
+            onChange={onChangeInputAddressNickname}
+          />
+        </Styled.ContainerInput>
+        <Styled.SpanError ref={SpanErrorAddressNickname}>
+          Informe Apelido do Endereço
+        </Styled.SpanError>
+      </Styled.ContainerLabelAndInput>
 
-        <Styled.ContainerLabelAndInput>
-          <Styled.Label htmlFor="address-nickname">
-            Apelido do Endereço<span className="text-[red] text-2xl">*</span>
-          </Styled.Label>
-          <Styled.ContainerInput>
-            <Styled.Input
-              id="address-nickname"
-              placeholder="apelido do endereço. Ex.: casa da mãe"
-              ref={inputAddressNickname}
-              onChange={onChangeInputAddressNickname}
-            />
-          </Styled.ContainerInput>
-          <Styled.SpanError ref={SpanErrorAddressNickname}>
-            Informe Apelido do Endereço
-          </Styled.SpanError>
-        </Styled.ContainerLabelAndInput>
+      <Styled.ContainerLabelAndInput $indexContainer={1}>
+        <Styled.Label htmlFor="type-of-address">
+          Tipo de Endereço<span className="text-[red] text-2xl">*</span>
+        </Styled.Label>
+        <Styled.Select
+          id="type-of-address"
+          ref={SelectTypeAddressRef}
+          onClick={() => handleClickSelectTypeAddressRef()}
+          onChange={(e) => setSelectedType(e.target.value)}
+          value={selectedType}>
+          <Styled.Option data-testid="option-type-address" disabled>
+            Tipo de Endereço
+          </Styled.Option>
+          <Styled.Option data-testid="option-type-address-residential" value="RESIDENCIAL">
+            Residencial
+          </Styled.Option>
+          <Styled.Option data-testid="option-type-address-commercial" value="COMERCIAL">
+            Comercial
+          </Styled.Option>
+        </Styled.Select>
+        <Styled.SpanError ref={SpanErrorTypeAddress}>Informe Tipo de Endereço</Styled.SpanError>
+      </Styled.ContainerLabelAndInput>
 
-        <Styled.ContainerLabelAndInput>
-          <Styled.Label htmlFor="type-of-address">
-            Tipo de Endereço<span className="text-[red] text-2xl">*</span>
-          </Styled.Label>
-          <Styled.Select
-            id="type-of-address"
-            ref={SelectTypeAddressRef}
-            onClick={() => handleClickSelectTypeAddressRef()}
-            onChange={(e) => setSelectedType(e.target.value)}
-            value={selectedType}>
-            <Styled.Option data-testid="option-type-address" disabled>
-              Tipo de Endereço
-            </Styled.Option>
-            <Styled.Option data-testid="option-type-address-residential" value="RESIDENCIAL">
-              Residencial
-            </Styled.Option>
-            <Styled.Option data-testid="option-type-address-commercial" value="COMERCIAL">
-              Comercial
-            </Styled.Option>
-          </Styled.Select>
-          <Styled.SpanError ref={SpanErrorTypeAddress}>Informe Tipo de Endereço</Styled.SpanError>
-        </Styled.ContainerLabelAndInput>
+      <Styled.ContainerLabelAndInput $indexContainer={3}>
+        <Styled.Label htmlFor="recipient-name">
+          nome do destinatário<span className="text-[red] text-2xl">*</span>
+        </Styled.Label>
+        <Styled.ContainerInput>
+          <Styled.Input
+            id="recipient-name"
+            placeholder="nome do destinatário"
+            ref={inputRecipientName}
+            onChange={onChangeInputRecipientName}
+          />
+        </Styled.ContainerInput>
+        <Styled.SpanError ref={SpanErrorRecipientName}>
+          Informe nome do destinatário
+        </Styled.SpanError>
+      </Styled.ContainerLabelAndInput>
 
-        <Styled.ContainerLabelAndInput>
-          <Styled.Label htmlFor="recipient-name">
-            nome do destinatário<span className="text-[red] text-2xl">*</span>
-          </Styled.Label>
-          <Styled.ContainerInput>
-            <Styled.Input
-              id="recipient-name"
-              placeholder="nome do destinatário"
-              ref={inputRecipientName}
-              onChange={onChangeInputRecipientName}
-            />
-          </Styled.ContainerInput>
-          <Styled.SpanError ref={SpanErrorRecipientName}>
-            Informe nome do destinatário
-          </Styled.SpanError>
-        </Styled.ContainerLabelAndInput>
+      <Styled.ContainerLabelAndInput $indexContainer={4}>
+        <Styled.Label htmlFor="cep">
+          cep<span className="text-[red] text-2xl">*</span>
+        </Styled.Label>
+        <Styled.ContainerInputCep>
+          <Styled.Input
+            id="cep"
+            placeholder="cep"
+            ref={inputCep}
+            value={cepValue}
+            onChange={onChangeInputCep}
+          />
+          <Styled.Span onClick={onClickSendCep}>Não sei o meu CEP</Styled.Span>
+        </Styled.ContainerInputCep>
+        <Styled.SpanError ref={SpanErrorCep}>CEP inválido</Styled.SpanError>
+      </Styled.ContainerLabelAndInput>
 
-        <Styled.ContainerLabelAndInput>
-          <Styled.Label htmlFor="cep">
-            cep<span className="text-[red] text-2xl">*</span>
-          </Styled.Label>
-          <Styled.ContainerInputCep>
-            <Styled.Input
-              id="cep"
-              placeholder="cep"
-              ref={inputCep}
-              value={cepValue}
-              onChange={onChangeInputCep}
-              className="bg-[#eee]"
-            />
-            <Styled.Span onClick={onClickSendCep}>Não sei o meu CEP</Styled.Span>
-          </Styled.ContainerInputCep>
-          <Styled.SpanError ref={SpanErrorCep}>CEP inválido</Styled.SpanError>
-        </Styled.ContainerLabelAndInput>
+      <Styled.ContainerLabelAndInput $indexContainer={5}>
+        <div className="flex items-center">
+          <label className="text-xl font-medium uppercase" htmlFor="complement">
+            endereço
+          </label>
+          <span className="text-[red] text-2xl">*</span>
+        </div>
+        <Styled.ContainerInput>
+          <Styled.Input
+            id="address"
+            placeholder="endereço"
+            ref={inputAddress}
+            onChange={onChangeInputAddress}
+          />
+        </Styled.ContainerInput>
+        <Styled.SpanError ref={SpanErrorAddress}>Informe endereço</Styled.SpanError>
+      </Styled.ContainerLabelAndInput>
 
-        <Styled.ContainerLabelAndInput>
+      <Styled.ContainerNumberComplementNeighborhood>
+        <Styled.ContainerLabelAndInput $indexContainer={6}>
           <div className="flex items-center">
-            <label className="text-xl font-medium uppercase" htmlFor="complement">
-              endereço
+            <label className="text-xl font-medium uppercase" htmlFor="number-home">
+              número
             </label>
             <span className="text-[red] text-2xl">*</span>
           </div>
           <Styled.ContainerInput>
             <Styled.Input
-              id="address"
-              placeholder="endereço"
-              ref={inputAddress}
-              onChange={onChangeInputAddress}
+              id="number-home"
+              type="text"
+              placeholder="número"
+              ref={inputNumberHome}
+              value={valueNumberHome}
+              onChange={onChangeInputNumberHome}
             />
           </Styled.ContainerInput>
-          <Styled.SpanError ref={SpanErrorAddress}>Informe endereço</Styled.SpanError>
+          <Styled.SpanError ref={SpanErrorNumberHome}>Informe número</Styled.SpanError>
         </Styled.ContainerLabelAndInput>
 
-        <Styled.ContainerNumberComplementNeighborhood>
-          <Styled.ContainerLabelAndInput>
-            <div className="flex items-center">
-              <label className="text-xl font-medium uppercase" htmlFor="number-home">
-                número
-              </label>
-              <span className="text-[red] text-2xl">*</span>
-            </div>
-            <Styled.ContainerInput>
-              <Styled.Input
-                id="number-home"
-                type="text"
-                placeholder="número"
-                ref={inputNumberHome}
-                value={valueNumberHome}
-                onChange={onChangeInputNumberHome}
-              />
-            </Styled.ContainerInput>
-            <Styled.SpanError ref={SpanErrorNumberHome}>Informe número</Styled.SpanError>
-          </Styled.ContainerLabelAndInput>
+        <Styled.ContainerLabelAndInput $indexContainer={7}>
+          <div className="flex items-center">
+            <label className="text-xl font-medium uppercase" htmlFor="complement">
+              complemento
+            </label>
+            <span className="text-[#ffffff00] text-2xl">*</span>
+          </div>
 
-          <Styled.ContainerLabelAndInput>
-            <div className="flex items-center">
-              <label className="text-xl font-medium uppercase" htmlFor="complement">
-                complemento
-              </label>
-              <span className="text-[#ffffff00] text-2xl">*</span>
-            </div>
-
-            <Styled.ContainerInput>
-              <Styled.Input
-                id="complement"
-                placeholder="complemento"
-                ref={inputComplement}
-                onChange={onChangeInputComplement}
-              />
-            </Styled.ContainerInput>
-            <Styled.SpanError ref={SpanErrorComplement}>Informe número</Styled.SpanError>
-          </Styled.ContainerLabelAndInput>
-
-          <Styled.ContainerLabelAndInput>
-            <div className="flex items-center">
-              <label className="text-xl font-medium uppercase" htmlFor="number-home">
-                bairro
-              </label>
-              <span className="text-[red] text-2xl">*</span>
-            </div>
-            <Styled.ContainerInput>
-              <Styled.Input
-                id="neighborhood"
-                placeholder="bairro"
-                ref={inputNeighborhood}
-                onChange={onChangeInputNeighborhood}
-              />
-            </Styled.ContainerInput>
-            <Styled.SpanError ref={SpanErrorNeighborhood}>
-              O bairro deve ter no mínimo 3 caracteres
-            </Styled.SpanError>
-          </Styled.ContainerLabelAndInput>
-        </Styled.ContainerNumberComplementNeighborhood>
-
-        <Styled.ContainerCityAndUf>
-          <Styled.ContainerLabelAndInput>
-            <div className="flex items-center">
-              <label className="text-xl font-medium uppercase" htmlFor="number-home">
-                cidade
-              </label>
-              <span className="text-[red] text-2xl">*</span>
-            </div>
-            <Styled.ContainerInput>
-              <Styled.Input
-                id="city"
-                placeholder="cidade"
-                ref={inputCity}
-                onChange={onChangeInputCity}
-              />
-            </Styled.ContainerInput>
-            <Styled.SpanError ref={SpanErrorCity}>Informe cidade</Styled.SpanError>
-          </Styled.ContainerLabelAndInput>
-
-          <Styled.ContainerLabelAndInput>
-            <div className="flex items-center">
-              <label className="text-xl font-medium uppercase" htmlFor="number-home">
-                uf
-              </label>
-              <span className="text-[red] text-2xl">*</span>
-            </div>
-            <Styled.Select id="uf" ref={SelectUfRef}>
-              {newValueUf.length <= 0 && (
-                <Styled.Option data-testid="option-uf" ref={optionUf}>
-                  UF
-                </Styled.Option>
-              )}
-              {newValueUf.length > 0 && (
-                <Styled.Option data-testid="option-uf" ref={optionUf}>
-                  {newValueUf}
-                </Styled.Option>
-              )}
-            </Styled.Select>
-            <Styled.SpanError ref={SpanErrorUf}>Informe UF</Styled.SpanError>
-          </Styled.ContainerLabelAndInput>
-        </Styled.ContainerCityAndUf>
-
-        <Styled.ContainerLabelAndInput>
-          <label className="text-xl font-medium uppercase" htmlFor="reference-point">
-            ponto de referência
-          </label>
           <Styled.ContainerInput>
             <Styled.Input
-              id="reference-point"
-              placeholder="ponto de referência"
-              ref={inputReferencePoint}
-              onChange={onChangeInputReferencePoint}
+              id="complement"
+              placeholder="complemento"
+              ref={inputComplement}
+              onChange={onChangeInputComplement}
             />
           </Styled.ContainerInput>
+          <Styled.SpanError ref={SpanErrorComplement}>Informe número</Styled.SpanError>
         </Styled.ContainerLabelAndInput>
 
-        <Styled.ContainerCheckboxButtonCompleteRegistration>
-          <Styled.Span>
-            <span className="text-[red] text-2xl">*</span> Campos marcados são obrigatórios
-          </Styled.Span>
+        <Styled.ContainerLabelAndInput $indexContainer={8}>
+          <div className="flex items-center">
+            <label className="text-xl font-medium uppercase" htmlFor="number-home">
+              bairro
+            </label>
+            <span className="text-[red] text-2xl">*</span>
+          </div>
+          <Styled.ContainerInput>
+            <Styled.Input
+              id="neighborhood"
+              placeholder="bairro"
+              ref={inputNeighborhood}
+              onChange={onChangeInputNeighborhood}
+            />
+          </Styled.ContainerInput>
+          <Styled.SpanError ref={SpanErrorNeighborhood}>
+            O bairro deve ter no mínimo 3 caracteres
+          </Styled.SpanError>
+        </Styled.ContainerLabelAndInput>
+      </Styled.ContainerNumberComplementNeighborhood>
 
-          <Styled.ContainerButtonCancelAndSave>
-            <Styled.Button ref={buttonCancelRef} onClick={onClickCancel}>
-              Cancelar
-            </Styled.Button>
-            <Styled.Button ref={buttonSaveRef} onClick={onClickSave}>
-              Salvar
-            </Styled.Button>
-          </Styled.ContainerButtonCancelAndSave>
-        </Styled.ContainerCheckboxButtonCompleteRegistration>
-      </Styled.ContainerMain>
+      <Styled.ContainerCityAndUf>
+        <Styled.ContainerLabelAndInput $indexContainer={9}>
+          <div className="flex items-center">
+            <label className="text-xl font-medium uppercase" htmlFor="number-home">
+              cidade
+            </label>
+            <span className="text-[red] text-2xl">*</span>
+          </div>
+          <Styled.ContainerInput>
+            <Styled.Input
+              id="city"
+              placeholder="cidade"
+              ref={inputCity}
+              onChange={onChangeInputCity}
+            />
+          </Styled.ContainerInput>
+          <Styled.SpanError ref={SpanErrorCity}>Informe cidade</Styled.SpanError>
+        </Styled.ContainerLabelAndInput>
+
+        <Styled.ContainerLabelAndInput $indexContainer={10}>
+          <div className="flex items-center">
+            <label className="text-xl font-medium uppercase" htmlFor="number-home">
+              uf
+            </label>
+            <span className="text-[red] text-2xl">*</span>
+          </div>
+          <Styled.Select id="uf" ref={SelectUfRef}>
+            {newValueUf && newValueUf.length <= 0 && (
+              <Styled.Option data-testid="option-uf" ref={optionUf}>
+                UF
+              </Styled.Option>
+            )}
+            {newValueUf && newValueUf.length > 0 && (
+              <Styled.Option data-testid="option-uf" ref={optionUf}>
+                {newValueUf}
+              </Styled.Option>
+            )}
+          </Styled.Select>
+          <Styled.SpanError ref={SpanErrorUf}>Informe UF</Styled.SpanError>
+        </Styled.ContainerLabelAndInput>
+      </Styled.ContainerCityAndUf>
+
+      <Styled.ContainerLabelAndInput $indexContainer={11}>
+        <label className="text-xl font-medium uppercase" htmlFor="reference-point">
+          ponto de referência
+        </label>
+        <Styled.ContainerInput>
+          <Styled.Input
+            id="reference-point"
+            placeholder="ponto de referência"
+            ref={inputReferencePoint}
+            onChange={onChangeInputReferencePoint}
+          />
+        </Styled.ContainerInput>
+      </Styled.ContainerLabelAndInput>
+
+      <Styled.ContainerCheckboxButtonCompleteRegistration>
+        <Styled.Span>
+          <span className="text-[red] text-2xl">*</span> Campos marcados são obrigatórios
+        </Styled.Span>
+
+        <Styled.ContainerButtonCancelAndSave>
+          <Styled.Button ref={buttonCancelRef} onClick={onClickCancel}>
+            Cancelar
+          </Styled.Button>
+          <Styled.Button ref={buttonSaveRef} onClick={onClickSave}>
+            Salvar
+          </Styled.Button>
+        </Styled.ContainerButtonCancelAndSave>
+      </Styled.ContainerCheckboxButtonCompleteRegistration>
+
       {codeSendEmail && (
         <div className="fixed left-[0px] top-[0px] w-full h-full bg-[#0000006e] flex justify-center !pt-15">
           <div className="flex flex-col items-end w-[320px] max-h-[400px] bg-[white] border border-black !p-2">
@@ -1331,8 +1401,8 @@ const AddNewAddress = () => {
           </div>
         </div>
       )}
-    </>
+    </div>
   );
 };
 
-export default AddNewAddress;
+export default ModalFormAddress;

@@ -168,12 +168,11 @@ const FormLogin = () => {
       if (!passwordIsCorrect) {
         setPasswordIsWrong(true);
       }
-      // ver se vai redirecionar quando loggin estiver certo
+
       if (passwordIsCorrect) {
         setPasswordIsWrong(false);
         const secretKey = import.meta.env.VITE__APP_SECRET_KEY_USER;
         const userDTO = resp.data.userDTO;
-        console.log(userDTO.token);
 
         const encrypted = CryptoJS.AES.encrypt(JSON.stringify(userDTO), secretKey).toString();
 
@@ -346,10 +345,10 @@ const FormLogin = () => {
             <Styled.SpanError ref={spanErrorEmailCpf}>Informe E-mail ou CPF</Styled.SpanError>
           </Styled.ContainerLabelInput>
           <Styled.ContainerLabelInput>
-            <Styled.Label htmlFor="input-email-or-cpf">Senha *</Styled.Label>
+            <Styled.Label htmlFor="input-password">Senha *</Styled.Label>
             <Styled.Input
               type="password"
-              id="input-email-or-cpf"
+              id="input-password"
               placeholder="Informe senha"
               ref={inputPassword}
               onChange={onChangeInputPassword}

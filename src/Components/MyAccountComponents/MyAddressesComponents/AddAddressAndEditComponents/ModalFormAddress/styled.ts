@@ -1,5 +1,7 @@
 import styled from 'styled-components';
 
+export const Container = styled.div``;
+
 export const Span = styled.span``;
 
 export const H1 = styled.h1``;
@@ -12,35 +14,18 @@ export const Option = styled.option``;
 
 export const Button = styled.button``;
 
-export const ContainerMain = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 100%;
+interface ContainerLabelAndInputProps {
+  $indexContainer: number;
+}
 
-  > h1 {
-    font-size: 24px;
-    font-weight: 500;
-    text-transform: uppercase;
-    margin-bottom: 10px;
-  }
-
-  > div:nth-of-type(3) {
-    width: 100%;
-  }
-
-  > div:nth-of-type(4) {
-    width: 50%;
-  }
-`;
-
-export const ContainerLabelAndInput = styled.div`
+export const ContainerLabelAndInput = styled.div<ContainerLabelAndInputProps>`
   display: flex;
   flex-direction: column;
   line-height: 1;
   margin-bottom: 10px;
   width: 50%;
+  width: ${(props) => props.$indexContainer === 3 && '100%'};
   padding: 0px 10px;
-  /* position: relative; */
 
   > label {
     font-size: 12px;

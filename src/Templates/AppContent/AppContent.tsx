@@ -9,7 +9,7 @@ import UpdateProfile from '../../Components/MyAccountComponents/MyPerfilComponen
 import UpdatePasswordMain from '../../Components/MyAccountComponents/MyPerfilComponents/UpdatePasswordComponents/UpdatePasswordMain/UpdatePasswordMain';
 import UpdateEmailMain from '../../Components/MyAccountComponents/MyPerfilComponents/UpdateEmailComponents/UpdateEmailMain/UpdateEmailMain';
 import MyAddressesMain from '../../Components/MyAccountComponents/MyAddressesComponents/MyAddressesMain/MyAddressesMain';
-import AddNewAddress from '../../Components/MyAccountComponents/MyAddressesComponents/AddNewAddress/AddNewAddress';
+import AddNewAddress from '../../Components/MyAccountComponents/MyAddressesComponents/AddAddressAndEditComponents/AddNewAddress/AddNewAddress';
 import ChangePassword from '../../Components/RegisterComponents/ChangePassword/ChangePassword';
 
 const AppContent = () => {
@@ -29,6 +29,7 @@ const AppContent = () => {
           <Route path="update-email" element={<UpdateEmailMain />} />
           <Route path="address-book" element={<MyAddressesMain />} />
           <Route path="add-address" element={<AddNewAddress />} />
+          <Route path="edit-address" element={<AddNewAddress />} />
 
           {/* <Route path="voucher-wallet" element={<MyCupons />} /> */}
           {/* <Route path="coin" element={<MyCoinsShopee />} /> */}
