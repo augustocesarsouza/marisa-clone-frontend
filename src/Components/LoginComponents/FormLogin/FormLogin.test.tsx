@@ -23,7 +23,7 @@ describe('FormLogin', () => {
 
     const labelPassword = screen.getByText('Senha *');
     expect(labelPassword).toBeInTheDocument();
-    expect(labelPassword).toHaveAttribute('for', 'input-email-or-cpf');
+    expect(labelPassword).toHaveAttribute('for', 'input-password');
 
     const inputPassword = screen.getByPlaceholderText(/Informe senha/);
     expect(inputPassword).toBeInTheDocument();

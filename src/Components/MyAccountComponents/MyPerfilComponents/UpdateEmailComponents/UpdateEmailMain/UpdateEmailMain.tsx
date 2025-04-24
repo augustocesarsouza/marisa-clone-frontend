@@ -3,6 +3,7 @@ import * as Styled from './styled';
 import { useNavigate } from 'react-router-dom';
 import { GetUserFromLocalStorage } from '../../../../GetUserFromLocalStorage/GetUserFromLocalStorage';
 import ModalQuestionMark from '../ModalQuestionMark/ModalQuestionMark';
+import { TokenExpiration } from '../../../../TokenValidation/TokenExpiration';
 
 const UpdateEmailMain = () => {
   const nav = useNavigate();
@@ -20,7 +21,25 @@ const UpdateEmailMain = () => {
       return;
     }
 
+    if (objUser.user === null) {
+      localStorage.removeItem('user');
+
+      nav('/login');
+      return;
+    }
+
     const user = objUser.user;
+    const token = user.token;
+
+    if (token) {
+      const valueExpiration = TokenExpiration(token);
+
+      if (valueExpiration) {
+        localStorage.removeItem('user');
+        nav('/login');
+      }
+    }
+
     if (user && user.email) {
       const emailHere = user.email;
       const email = maskEmail(emailHere);

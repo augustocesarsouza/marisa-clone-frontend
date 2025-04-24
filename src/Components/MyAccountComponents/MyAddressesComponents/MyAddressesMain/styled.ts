@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 export const Span = styled.span``;
 
@@ -9,16 +9,11 @@ export const ContainerMain = styled.div`
   flex-direction: column;
   width: 100%;
 
-  >h1 {
+  > h1 {
     font-size: 24px;
     font-weight: 600;
     text-transform: uppercase;
     margin-bottom: 10px;
-  }
-
-  >span {
-    font-size: 16px;
-    font-weight: 600;
   }
 `;
 
@@ -37,7 +32,7 @@ export const ButtonAddNewAddress = styled.button`
   font-size: 14px;
   cursor: pointer;
   margin-bottom: 10px;
-  
+
   &:hover {
     opacity: 0.9;
   }

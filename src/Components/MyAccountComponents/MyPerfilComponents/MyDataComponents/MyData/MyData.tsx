@@ -5,6 +5,7 @@ import { User } from '../../../../Interfaces/Entity/User.';
 import { useNavigate } from 'react-router-dom';
 import userService from '../../../../Service/UserService/UserService';
 import InfoAboutUser from '../InfoAboutUser/InfoAboutUser';
+import { TokenExpiration } from '../../../../TokenValidation/TokenExpiration';
 
 const MyData = () => {
   const [userName, setUserName] = useState('');
@@ -26,7 +27,24 @@ const MyData = () => {
       return;
     }
 
+    if (objUser.user === null) {
+      localStorage.removeItem('user');
+
+      nav('/login');
+      return;
+    }
+
     const user = objUser.user;
+    const token = user.token;
+
+    if (token) {
+      const valueExpiration = TokenExpiration(token);
+
+      if (valueExpiration) {
+        localStorage.removeItem('user');
+        nav('/login');
+      }
+    }
 
     const getInfoUser = async (user: User) => {
       const userId = user.id as string;

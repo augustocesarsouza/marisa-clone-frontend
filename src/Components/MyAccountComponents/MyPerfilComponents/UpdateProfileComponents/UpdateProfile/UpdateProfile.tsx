@@ -5,6 +5,7 @@ import { User } from '../../../../Interfaces/Entity/User.';
 import { useNavigate } from 'react-router-dom';
 import { GetUserFromLocalStorage } from '../../../../GetUserFromLocalStorage/GetUserFromLocalStorage';
 import userService from '../../../../Service/UserService/UserService';
+import { TokenExpiration } from '../../../../TokenValidation/TokenExpiration';
 
 const UpdateProfile = () => {
   const [user, setUser] = useState<User | null>(null);
@@ -94,7 +95,25 @@ const UpdateProfile = () => {
       return;
     }
 
+    if (objUser.user === null) {
+      localStorage.removeItem('user');
+
+      nav('/login');
+      return;
+    }
+
     const user = objUser.user;
+    const token = user.token;
+
+    if (token) {
+      const valueExpiration = TokenExpiration(token);
+
+      if (valueExpiration) {
+        localStorage.removeItem('user');
+        nav('/login');
+      }
+    }
+
     setUser(user);
 
     const getInfoToUpdateProfile = async (user: User) => {

@@ -173,6 +173,59 @@ class AddressService {
       return dataReturn;
     }
   }
+
+  async updateUserAddress(
+    addressData: Address,
+    token: string
+  ): Promise<ReturnGetAddress | ReturnErroCatch> {
+    try {
+      const response = await this.http.put<ReturnGetAddress>('/address/update', addressData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          uid: addressData.userId,
+          'Content-Type': 'application/json',
+        },
+      });
+      return response.data;
+    } catch (error: unknown) {
+      const dataReturn: ReturnErroCatch = {
+        isSucess: false,
+        message: '',
+      };
+
+      if (error instanceof AxiosError) {
+        const data: ReturnErroCatch = error.response?.data;
+        return data;
+      }
+
+      return dataReturn;
+    }
+  }
+
+  async deleteAddress(addressId: string, user: User): Promise<ReturnGetAddress | ReturnErroCatch> {
+    try {
+      const response = await this.http.delete<ReturnGetAddress>(`/address/delete/${addressId}`, {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+          uid: user.id,
+          'Content-Type': 'application/json',
+        },
+      });
+      return response.data;
+    } catch (error: unknown) {
+      const dataReturn: ReturnErroCatch = {
+        isSucess: false,
+        message: '',
+      };
+
+      if (error instanceof AxiosError) {
+        const data: ReturnErroCatch = error.response?.data;
+        return data;
+      }
+
+      return dataReturn;
+    }
+  }
 }
 
 const addressService = new AddressService();

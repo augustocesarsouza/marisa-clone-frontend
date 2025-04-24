@@ -11,6 +11,7 @@ import { ChangePasswordUserReturnDTO } from '../../../../Interfaces/DTOs/ChangeP
 import PasswordChangedSuccessfully from '../PasswordChangedSuccessfully/PasswordChangedSuccessfully';
 import TimeRemaining from '../TimeRemaining/TimeRemaining';
 import QuantityNumberOfAttempts from '../QuantityNumberOfAttempts/QuantityNumberOfAttempts';
+import { TokenExpiration } from '../../../../TokenValidation/TokenExpiration';
 
 const UpdatePasswordMain = () => {
   const nav = useNavigate();
@@ -56,7 +57,25 @@ const UpdatePasswordMain = () => {
       return;
     }
 
+    if (objUser.user === null) {
+      localStorage.removeItem('user');
+
+      nav('/login');
+      return;
+    }
+
     const user = objUser.user;
+    const token = user.token;
+
+    if (token) {
+      const valueExpiration = TokenExpiration(token);
+
+      if (valueExpiration) {
+        localStorage.removeItem('user');
+        nav('/login');
+      }
+    }
+
     setUser(user);
   }, [nav]);
 
