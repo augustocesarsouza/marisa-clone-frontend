@@ -96,11 +96,6 @@ const ModalAddress = ({
     }
   };
 
-  // useEffect(() => {
-  //   console.log(address);
-  //   console.log(user);
-  // }, [address, user]);
-
   const onclickEditAddress = () => {
     nav('/my-account/edit-address', { state: { address } });
   };
@@ -131,16 +126,16 @@ const ModalAddress = ({
         </div>
 
         <div className="flex flex-col gap-[2px]">
-          <span className="break-words text-black text-[13px] font-medium leading-6">
+          <span className="span-recipent-name break-words text-black text-[13px] font-medium leading-6">
             {formatName(address.recipientName)}
           </span>
-          <span className="break-words text-black text-[13px] font-medium leading-6">
-            Celular: {formatCellPhone(address.userDTO?.cellPhone)}
+          <span className="span-cell-phone break-words text-black text-[13px] font-medium leading-6">
+            {formatCellPhone(address.userDTO?.cellPhone)}
           </span>
-          <span className="break-words text-black text-[13px] font-medium leading-6">
+          <span className="span-address-home-user break-words text-black text-[13px] font-medium leading-6">
             {formatAddress(address)}
           </span>
-          <span className="break-words text-black text-[13px] font-medium leading-6">
+          <span className="span-address-uf break-words text-black text-[13px] font-medium leading-6">
             {formatLocation(address)}
           </span>
         </div>
@@ -148,7 +143,7 @@ const ModalAddress = ({
 
       {!address.mainAddress && (
         <div className="flex leading-7 border border-[#000000]">
-          <button className="text-[#000000] text-2xl font-medium">
+          <button className="button-set-as-primary-address text-[#000000] text-2xl font-medium">
             Definir como endereço principal
           </button>
         </div>

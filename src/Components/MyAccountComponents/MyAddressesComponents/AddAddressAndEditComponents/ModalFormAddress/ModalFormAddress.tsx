@@ -454,6 +454,7 @@ const ModalFormAddress = ({ addressUser }: ModalFormAddressProps) => {
 
   const onClickSave = async () => {
     // fazer test aqui no front e depois deploy
+    // tem que fazer deploy porque no front nao está mostrando o address para edit e nem para deletar
     const errorNickName = verifyErrorAddressNickname();
 
     const errorTypeAddress = verifyErrorSelectTypeAddress();
