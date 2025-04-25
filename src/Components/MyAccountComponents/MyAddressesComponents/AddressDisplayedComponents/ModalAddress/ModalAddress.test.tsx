@@ -46,6 +46,7 @@ describe('ModalAddress', () => {
   test('should render span address main', () => {
     const fn = jest.fn();
     const fn2 = jest.fn();
+    const fn3 = jest.fn();
 
     render(
       <MemoryRouter>
@@ -55,6 +56,7 @@ describe('ModalAddress', () => {
           changeArrayAddressesMain={fn2}
           user={userDTO}
           quantityAddresses={2}
+          changeAddressMain={fn3}
         />
       </MemoryRouter>
     );
@@ -68,6 +70,7 @@ describe('ModalAddress', () => {
   test('should render span address type', () => {
     const fn = jest.fn();
     const fn2 = jest.fn();
+    const fn3 = jest.fn();
 
     render(
       <MemoryRouter>
@@ -77,6 +80,7 @@ describe('ModalAddress', () => {
           changeArrayAddressesMain={fn2}
           user={userDTO}
           quantityAddresses={2}
+          changeAddressMain={fn3}
         />
       </MemoryRouter>
     );
@@ -90,6 +94,7 @@ describe('ModalAddress', () => {
   test('should render button edit address', () => {
     const fn = jest.fn();
     const fn2 = jest.fn();
+    const fn3 = jest.fn();
 
     render(
       <MemoryRouter>
@@ -99,6 +104,7 @@ describe('ModalAddress', () => {
           changeArrayAddressesMain={fn2}
           user={userDTO}
           quantityAddresses={2}
+          changeAddressMain={fn3}
         />
       </MemoryRouter>
     );
@@ -112,6 +118,7 @@ describe('ModalAddress', () => {
   test('should render button delete address', () => {
     const fn = jest.fn();
     const fn2 = jest.fn();
+    const fn3 = jest.fn();
 
     render(
       <MemoryRouter>
@@ -121,6 +128,7 @@ describe('ModalAddress', () => {
           changeArrayAddressesMain={fn2}
           user={userDTO}
           quantityAddresses={2}
+          changeAddressMain={fn3}
         />
       </MemoryRouter>
     );
@@ -134,6 +142,7 @@ describe('ModalAddress', () => {
   test('should render span recipent name', () => {
     const fn = jest.fn();
     const fn2 = jest.fn();
+    const fn3 = jest.fn();
 
     const { container } = render(
       <MemoryRouter>
@@ -143,6 +152,7 @@ describe('ModalAddress', () => {
           changeArrayAddressesMain={fn2}
           user={userDTO}
           quantityAddresses={2}
+          changeAddressMain={fn3}
         />
       </MemoryRouter>
     );
@@ -157,6 +167,7 @@ describe('ModalAddress', () => {
   test('should render span cell phone', () => {
     const fn = jest.fn();
     const fn2 = jest.fn();
+    const fn3 = jest.fn();
 
     const { container } = render(
       <MemoryRouter>
@@ -166,6 +177,7 @@ describe('ModalAddress', () => {
           changeArrayAddressesMain={fn2}
           user={userDTO}
           quantityAddresses={2}
+          changeAddressMain={fn3}
         />
       </MemoryRouter>
     );
@@ -180,6 +192,7 @@ describe('ModalAddress', () => {
   test('should render span address home user', () => {
     const fn = jest.fn();
     const fn2 = jest.fn();
+    const fn3 = jest.fn();
 
     const { container } = render(
       <MemoryRouter>
@@ -189,6 +202,7 @@ describe('ModalAddress', () => {
           changeArrayAddressesMain={fn2}
           user={userDTO}
           quantityAddresses={2}
+          changeAddressMain={fn3}
         />
       </MemoryRouter>
     );
@@ -203,6 +217,7 @@ describe('ModalAddress', () => {
   test('should render span uf address', () => {
     const fn = jest.fn();
     const fn2 = jest.fn();
+    const fn3 = jest.fn();
 
     const { container } = render(
       <MemoryRouter>
@@ -212,6 +227,7 @@ describe('ModalAddress', () => {
           changeArrayAddressesMain={fn2}
           user={userDTO}
           quantityAddresses={2}
+          changeAddressMain={fn3}
         />
       </MemoryRouter>
     );
@@ -226,10 +242,11 @@ describe('ModalAddress', () => {
   test('should render button set as primary address', () => {
     const fn = jest.fn();
     const fn2 = jest.fn();
+    const fn3 = jest.fn();
 
     address.mainAddress = false;
 
-    const { container } = render(
+    render(
       <MemoryRouter>
         <ModalAddress
           address={address}
@@ -237,11 +254,12 @@ describe('ModalAddress', () => {
           changeArrayAddressesMain={fn2}
           user={userDTO}
           quantityAddresses={2}
+          changeAddressMain={fn3}
         />
       </MemoryRouter>
     );
 
-    const button = container.querySelector('.button-set-as-primary-address');
+    const button = screen.getByRole('button', { name: /Definir como endereço principal/i });
     expect(button).toBeInTheDocument();
     expect(button?.textContent).toBe('Definir como endereço principal');
 

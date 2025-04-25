@@ -1,5 +1,5 @@
 import * as Styled from './styled';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import FooterMain from '../../FooterMainComponents/FooterMain/FooterMain';
 import HeaderFullMain from '../../HeaderFullComponents/HeaderFullMain/HeaderFullMain';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
@@ -10,6 +10,9 @@ import HeaderMyAccount from '../HeaderMyAccount/HeaderMyAccount';
 import { ContextMyAccount } from '../Contexts/ContextMyAccount';
 import MyPerfilMain from '../MyPerfilMain/MyPerfilMain';
 import { TokenExpiration } from '../../TokenValidation/TokenExpiration';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../MyAddressesComponents/AddressDisplayedComponents/ChangeAddressMainRedux/storeAddressMain';
+import { changeValue } from '../MyAddressesComponents/AddressDisplayedComponents/ChangeAddressMainRedux/AddressMainSlice';
 
 const MyAccountMain = () => {
   const nav = useNavigate();
@@ -63,6 +66,22 @@ const MyAccountMain = () => {
     setWhatShowUserClicked(which);
   };
 
+  const addressMain = useSelector((state: RootState) => state.addressMain);
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (addressMain.changeAddressMain) {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+
+      timeoutRef.current = setTimeout(() => {
+        dispatch(changeValue(false));
+      }, 10000);
+    }
+  }, [addressMain, dispatch]);
+
   return (
     <ContextMyAccount.Provider
       value={{
@@ -72,6 +91,13 @@ const MyAccountMain = () => {
         <HeaderFullMain></HeaderFullMain>
         <Styled.ContainerBodyMain>
           <Styled.ContainerBody>
+            {addressMain.changeAddressMain && (
+              <div className="!pt-8 !pb-8 leading-6 !pr-10 !pl-10 !mt-5 !mb-5 bg-[#d9edf7] border-1 border-[#bce8f1]">
+                <h1 className="text-[#31708f] font-semibold">
+                  Seu endereço principal foi atualizado.
+                </h1>
+              </div>
+            )}
             <HeaderMyAccount />
 
             {/* {!isMyAccount && (

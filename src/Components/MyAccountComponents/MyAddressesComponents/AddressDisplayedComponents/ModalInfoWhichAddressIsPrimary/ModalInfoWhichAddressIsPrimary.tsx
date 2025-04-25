@@ -8,6 +8,8 @@ import addressService, {
 import SvgX from '../../../../Svg/SvgX/SvgX';
 import * as Styled from './srtyled';
 import { FunctionGetUfState } from '../../../../Util/FunctionGetUfState/FunctionGetUfState';
+import { useDispatch } from 'react-redux';
+import { changeValue } from '../ChangeAddressMainRedux/AddressMainSlice';
 
 interface ModalInfoWhichAddressIsPrimaryProps {
   address: Address;
@@ -23,6 +25,7 @@ const ModalInfoWhichAddressIsPrimary = ({
   changeShowModalSetAddressAsPrimary,
 }: ModalInfoWhichAddressIsPrimaryProps) => {
   const nav = useNavigate();
+  const dispatch = useDispatch();
 
   const onClickModalSetAddressAsPrimary = () => {
     changeShowModalSetAddressAsPrimary(false);
@@ -58,6 +61,7 @@ const ModalInfoWhichAddressIsPrimary = ({
 
       changeShowModalSetAddressAsPrimary(false);
       document.body.style.overflow = 'auto';
+      dispatch(changeValue(true));
 
       changeAddressMain(addressData);
     } else {
@@ -116,7 +120,9 @@ const ModalInfoWhichAddressIsPrimary = ({
       <div className="bg-[white] min-w-[600px] min-h-[348px] w-fit h-fit !mt-[25px] flex flex-col">
         <div className="flex items-center justify-between !p-8 border-b-1 border-[#00000038]">
           <h1 className="text-2xl font-semibold">Definir Endereço Como Principal</h1>
-          <Styled.ContainerSvgX onClick={onClickModalSetAddressAsPrimary}>
+          <Styled.ContainerSvgX
+            onClick={onClickModalSetAddressAsPrimary}
+            className="container-svg-x">
             <SvgX />
           </Styled.ContainerSvgX>
         </div>
@@ -124,13 +130,19 @@ const ModalInfoWhichAddressIsPrimary = ({
         <div className="flex flex-col !p-10 gap-10">
           <div className="flex flex-col gap-2">
             <h1 className="text-2xl font-medium">Você deseja alterar seu endereço principal?</h1>
-            <span className="text-3xl font-medium">{address.addressType}</span>
-            <span className="text-3xl font-medium">Destinatário:{address.recipientName}</span>
-            <span className="text-3xl font-medium">
+            <span className="text-3xl font-medium span-address-type">{address.addressType}</span>
+            <span className="text-3xl font-medium span-recipient-name">
+              Destinatário:{address.recipientName}
+            </span>
+            <span className="text-3xl font-medium span-cell-phone">
               {formatCellPhone(address.userDTO?.cellPhone)}
             </span>
-            <span className="text-3xl font-medium">{formatAddress(address)}</span>
-            <span className="text-3xl font-medium">{formatLocation(address)}</span>
+            <span className="text-3xl font-medium span-address-description">
+              {formatAddress(address)}
+            </span>
+            <span className="text-3xl font-medium span-address-location">
+              {formatLocation(address)}
+            </span>
           </div>
 
           <div className="flex gap-10 justify-between">
