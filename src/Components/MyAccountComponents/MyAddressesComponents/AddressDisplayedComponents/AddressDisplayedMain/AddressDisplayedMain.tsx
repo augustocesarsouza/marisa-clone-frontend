@@ -23,7 +23,17 @@ const AddressDisplayedMain = () => {
         const data = res as ReturnGetAddressList;
         const listAddresses = data.data;
 
-        setListAddresses(listAddresses);
+        const newArray: Address[] = [];
+
+        listAddresses.forEach((el) => {
+          if (el.mainAddress === true) {
+            newArray.unshift(el);
+          } else {
+            newArray.push(el);
+          }
+        });
+
+        setListAddresses(newArray);
       } else {
         const error = res as ReturnErroCatch;
         console.error(error);
@@ -92,6 +102,26 @@ const AddressDisplayedMain = () => {
     });
   };
 
+  const changeAddressMain = (address: Address) => {
+    setListAddresses((prev) => {
+      const newList = prev
+        .map((el) => {
+          if (el.mainAddress === true) {
+            return { ...el, mainAddress: false };
+          }
+
+          if (el.id === address.id) {
+            return { ...el, mainAddress: true };
+          }
+
+          return el;
+        })
+        .sort((a, b) => (b.mainAddress ? 1 : 0) - (a.mainAddress ? 1 : 0));
+
+      return newList;
+    });
+  };
+
   return (
     <div className="flex gap-1">
       {listAddresses.length < 1 && (
@@ -107,6 +137,7 @@ const AddressDisplayedMain = () => {
             changeArrayAddressesMain={changeArrayAddressesMain}
             user={user}
             quantityAddresses={listAddresses.length}
+            changeAddressMain={changeAddressMain}
           />
         ))}
     </div>

@@ -6,6 +6,8 @@ import addressService, {
 } from '../../../../Service/AddressService/AddressService';
 import * as Styled from './styled';
 import { FunctionGetUfState } from '../../../../Util/FunctionGetUfState/FunctionGetUfState';
+import { useState } from 'react';
+import ModalInfoWhichAddressIsPrimary from '../ModalInfoWhichAddressIsPrimary/ModalInfoWhichAddressIsPrimary';
 
 interface ModalAddressProps {
   address: Address;
@@ -13,6 +15,7 @@ interface ModalAddressProps {
   changeArrayAddressesMain: (itemDeleted: Address, newAddressMain: Address) => void;
   user: User | null;
   quantityAddresses: number;
+  changeAddressMain: (address: Address) => void;
 }
 
 const ModalAddress = ({
@@ -21,6 +24,7 @@ const ModalAddress = ({
   changeArrayAddresses,
   user,
   quantityAddresses,
+  changeAddressMain,
 }: ModalAddressProps) => {
   const nav = useNavigate();
 
@@ -100,6 +104,17 @@ const ModalAddress = ({
     nav('/my-account/edit-address', { state: { address } });
   };
 
+  const [showModalSetAddressAsPrimary, setShowModalSetAddressAsPrimary] = useState(false);
+
+  const onClickSetAsPrimaryAddress = () => {
+    setShowModalSetAddressAsPrimary(true);
+    document.body.style.overflow = 'hidden';
+  };
+
+  const changeShowModalSetAddressAsPrimary = (value: boolean) => {
+    setShowModalSetAddressAsPrimary(value);
+  };
+
   return (
     <Styled.ContainerMain $changeValueJustifyContent={address.mainAddress ?? false}>
       {address.mainAddress && (
@@ -143,10 +158,21 @@ const ModalAddress = ({
 
       {!address.mainAddress && (
         <div className="flex leading-7 border border-[#000000]">
-          <button className="button-set-as-primary-address text-[#000000] text-2xl font-medium">
+          <button
+            className="button-set-as-primary-address text-[#000000] text-2xl font-medium cursor-pointer"
+            onClick={onClickSetAsPrimaryAddress}>
             Definir como endereço principal
           </button>
         </div>
+      )}
+
+      {showModalSetAddressAsPrimary && (
+        <ModalInfoWhichAddressIsPrimary
+          address={address}
+          user={user}
+          changeAddressMain={changeAddressMain}
+          changeShowModalSetAddressAsPrimary={changeShowModalSetAddressAsPrimary}
+        />
       )}
     </Styled.ContainerMain>
   );
