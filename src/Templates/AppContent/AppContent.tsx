@@ -11,6 +11,7 @@ import UpdateEmailMain from '../../Components/MyAccountComponents/MyPerfilCompon
 import MyAddressesMain from '../../Components/MyAccountComponents/MyAddressesComponents/MyAddressesMain/MyAddressesMain';
 import AddNewAddress from '../../Components/MyAccountComponents/MyAddressesComponents/AddAddressAndEditComponents/AddNewAddress/AddNewAddress';
 import ChangePassword from '../../Components/RegisterComponents/ChangePassword/ChangePassword';
+import MyOrders from '../../Components/MyAccountComponents/MyOrdersComponents/MyOrders/MyOrders';
 
 const AppContent = () => {
   return (
@@ -28,6 +29,7 @@ const AppContent = () => {
           <Route path="update-password" element={<UpdatePasswordMain />} />
           <Route path="update-email" element={<UpdateEmailMain />} />
           <Route path="address-book" element={<MyAddressesMain />} />
+          <Route path="orders" element={<MyOrders />} />
           <Route path="add-address" element={<AddNewAddress />} />
           <Route path="edit-address" element={<AddNewAddress />} />
 
