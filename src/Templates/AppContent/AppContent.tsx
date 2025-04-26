@@ -12,6 +12,7 @@ import MyAddressesMain from '../../Components/MyAccountComponents/MyAddressesCom
 import AddNewAddress from '../../Components/MyAccountComponents/MyAddressesComponents/AddAddressAndEditComponents/AddNewAddress/AddNewAddress';
 import ChangePassword from '../../Components/RegisterComponents/ChangePassword/ChangePassword';
 import MyOrders from '../../Components/MyAccountComponents/MyOrdersComponents/MyOrders/MyOrders';
+import VoucherExchangeMain from '../../Components/MyAccountComponents/VoucherExchangeComponents/VoucherExchangeMain/VoucherExchangeMain';
 
 const AppContent = () => {
   return (
@@ -30,6 +31,7 @@ const AppContent = () => {
           <Route path="update-email" element={<UpdateEmailMain />} />
           <Route path="address-book" element={<MyAddressesMain />} />
           <Route path="orders" element={<MyOrders />} />
+          <Route path="voucher-exchange" element={<VoucherExchangeMain />} />
           <Route path="add-address" element={<AddNewAddress />} />
           <Route path="edit-address" element={<AddNewAddress />} />
 

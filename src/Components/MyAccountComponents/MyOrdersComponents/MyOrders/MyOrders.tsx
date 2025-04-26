@@ -1,6 +1,41 @@
 // import * as Styled from './styled';
 
+import { useEffect } from 'react';
+import { GetUserFromLocalStorage } from '../../../GetUserFromLocalStorage/GetUserFromLocalStorage';
+import { useNavigate } from 'react-router-dom';
+import { TokenExpiration } from '../../../TokenValidation/TokenExpiration';
+
 const MyOrders = () => {
+  const nav = useNavigate();
+
+  useEffect(() => {
+    const objUser = GetUserFromLocalStorage();
+
+    if (objUser.isNullUserLocalStorage) {
+      nav('/login');
+      return;
+    }
+
+    if (objUser.user === null) {
+      localStorage.removeItem('user');
+
+      nav('/login');
+      return;
+    }
+
+    const user = objUser.user;
+    const token = user.token;
+
+    if (token) {
+      const valueExpiration = TokenExpiration(token);
+
+      if (valueExpiration) {
+        localStorage.removeItem('user');
+        nav('/login');
+      }
+    }
+  }, [nav]);
+
   return (
     <div className="w-full flex flex-col items-center">
       <h1 className="font-semibold text-4xl !mt-[20px] !mb-[10px]">
