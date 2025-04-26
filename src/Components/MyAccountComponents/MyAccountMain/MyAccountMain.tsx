@@ -23,7 +23,6 @@ const MyAccountMain = () => {
 
   useEffect(() => {
     const pathname = location.pathname;
-    // TENTAR FAZER OS TEST todos os que tem isso "test.tsx"
 
     if (pathname !== '/my-account') {
       setIsMyAccount(false);

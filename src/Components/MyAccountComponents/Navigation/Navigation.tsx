@@ -159,6 +159,7 @@ const Navigation = ({ whichWasClickedNav, isMyAccount }: NavigationProps) => {
       nav('/my-account/orders');
     } else if (whichWasClicked === 'refund-and-exchange-voucher') {
       whichWasClickedNav('Reembolso e vale troca');
+      nav('/my-account/voucher-exchange');
     }
 
     putColorBlackFourHeaderNav();
