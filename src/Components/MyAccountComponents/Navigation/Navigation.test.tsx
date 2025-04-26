@@ -16,6 +16,7 @@ describe('Navigation', () => {
 
     const header = screen.getByRole('heading', { name: /Meu perfil/i });
     expect(header).toBeInTheDocument();
+    expect.assertions(1);
   });
 
   test('should render span my data', () => {
@@ -31,6 +32,7 @@ describe('Navigation', () => {
 
     const span = screen.getByText('Meus dados');
     expect(span).toBeInTheDocument();
+    expect.assertions(1);
   });
 
   test('should render span change data', () => {
@@ -46,6 +48,7 @@ describe('Navigation', () => {
 
     const span = screen.getByText('Alterar dados');
     expect(span).toBeInTheDocument();
+    expect.assertions(1);
   });
 
   test('should render span change password', () => {
@@ -61,6 +64,7 @@ describe('Navigation', () => {
 
     const span = screen.getByText('Alterar Senha');
     expect(span).toBeInTheDocument();
+    expect.assertions(1);
   });
 
   test('should render span update your email', () => {
@@ -76,6 +80,7 @@ describe('Navigation', () => {
 
     const span = screen.getByText('Atualizar Seu E-mail');
     expect(span).toBeInTheDocument();
+    expect.assertions(1);
   });
 
   test('should render header addresses', () => {
@@ -91,6 +96,7 @@ describe('Navigation', () => {
 
     const header = screen.getByRole('heading', { name: /Endereços/i });
     expect(header).toBeInTheDocument();
+    expect.assertions(1);
   });
 
   test('should render header order history', () => {
@@ -106,6 +112,7 @@ describe('Navigation', () => {
 
     const header = screen.getByRole('heading', { name: /Historico de pedidos/i });
     expect(header).toBeInTheDocument();
+    expect.assertions(1);
   });
 
   test('should render header refund and exchange vouncher', () => {
@@ -121,6 +128,7 @@ describe('Navigation', () => {
 
     const header = screen.getByRole('heading', { name: /Reembolso e vale troca/i });
     expect(header).toBeInTheDocument();
+    expect.assertions(1);
   });
 
   test('should render header returns', () => {
@@ -136,6 +144,7 @@ describe('Navigation', () => {
 
     const header = screen.getByRole('heading', { name: /Devoluções/i });
     expect(header).toBeInTheDocument();
+    expect.assertions(1);
   });
 
   test('should render header LGPD information', () => {
@@ -151,6 +160,7 @@ describe('Navigation', () => {
 
     const header = screen.getByRole('heading', { name: /Informações LGPD/i });
     expect(header).toBeInTheDocument();
+    expect.assertions(1);
   });
 
   test('should render span my data LGPD Information', () => {
@@ -166,6 +176,7 @@ describe('Navigation', () => {
 
     const span = screen.getByText('Meus Dados');
     expect(span).toBeInTheDocument();
+    expect.assertions(1);
   });
 
   test('should render span My Consents LGPD Information', () => {
@@ -181,5 +192,6 @@ describe('Navigation', () => {
 
     const span = screen.getByText('Meus Consentimentos');
     expect(span).toBeInTheDocument();
+    expect.assertions(1);
   });
 });
