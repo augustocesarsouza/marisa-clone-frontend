@@ -250,7 +250,10 @@ const Navigation = ({ whichWasClickedNav, isMyAccount }: NavigationProps) => {
     span.style.color = '#ec008c';
   };
 
-  const onClickNavAfterClicked2 = (e: React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
+  const onClickNavAfterClicked2 = (
+    e: React.MouseEvent<HTMLSpanElement, MouseEvent>,
+    value: string
+  ) => {
     if (e.target === null) return;
 
     allSpspansInformationsns?.forEach((el) => {
@@ -259,6 +262,10 @@ const Navigation = ({ whichWasClickedNav, isMyAccount }: NavigationProps) => {
 
     const span = e.target as HTMLSpanElement;
     span.style.color = '#ec008c';
+
+    if (value === 'my-date-lgpd') {
+      nav('/my-account/lgpd');
+    }
   };
 
   const putAllSpansMyProfileBlack = () => {
@@ -336,8 +343,12 @@ const Navigation = ({ whichWasClickedNav, isMyAccount }: NavigationProps) => {
         <Styled.ContainerNavAfterClicked
           ref={spansInformationsRef}
           $clickMyProfile={informationLGPD}>
-          <Styled.Span onClick={(e) => onClickNavAfterClicked2(e)}>Meus Dados</Styled.Span>
-          <Styled.Span onClick={(e) => onClickNavAfterClicked2(e)}>Meus Consentimentos</Styled.Span>
+          <Styled.Span onClick={(e) => onClickNavAfterClicked2(e, 'my-date-lgpd')}>
+            Meus Dados
+          </Styled.Span>
+          <Styled.Span onClick={(e) => onClickNavAfterClicked2(e, 'my-consents-lgpd')}>
+            Meus Consentimentos
+          </Styled.Span>
         </Styled.ContainerNavAfterClicked>
       </Styled.ContainerMyProfileAndModalNavAfterClicked>
     </Styled.ContainerNavigation>

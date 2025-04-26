@@ -13,6 +13,7 @@ import AddNewAddress from '../../Components/MyAccountComponents/MyAddressesCompo
 import ChangePassword from '../../Components/RegisterComponents/ChangePassword/ChangePassword';
 import MyOrders from '../../Components/MyAccountComponents/MyOrdersComponents/MyOrders/MyOrders';
 import VoucherExchangeMain from '../../Components/MyAccountComponents/VoucherExchangeComponents/VoucherExchangeMain/VoucherExchangeMain';
+import MyDateLgpd from '../../Components/MyAccountComponents/MyDateLgpdComponents/MyDateLgpdMain/MyDateLgpd';
 
 const AppContent = () => {
   return (
@@ -32,6 +33,7 @@ const AppContent = () => {
           <Route path="address-book" element={<MyAddressesMain />} />
           <Route path="orders" element={<MyOrders />} />
           <Route path="voucher-exchange" element={<VoucherExchangeMain />} />
+          <Route path="lgpd" element={<MyDateLgpd />} />
           <Route path="add-address" element={<AddNewAddress />} />
           <Route path="edit-address" element={<AddNewAddress />} />
 
