@@ -36,7 +36,7 @@ const VoucherExchangeMain = () => {
   }, [nav]);
 
   return (
-    <div className="w-[70%] flex flex-col">
+    <div className="max-w-[753px] flex flex-col">
       <h1 className="text-4xl font-medium !mb-[20px]">Pendentes</h1>
       <h1 className="text-4xl font-medium !mb-[20px]">Reembolsos</h1>
       <h1 className="text-4xl font-medium">Vale Troca</h1>

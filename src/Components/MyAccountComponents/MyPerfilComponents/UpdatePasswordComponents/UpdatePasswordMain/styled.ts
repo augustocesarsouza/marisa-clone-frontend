@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 export const Span = styled.span``;
 
@@ -11,10 +11,11 @@ export const Input = styled.input``;
 export const Button = styled.button``;
 
 export const ContainerMain = styled.div`
-  width: 100%;
+  /* width: 100%; */
+  max-width: 753px;
   margin-bottom: 60px;
 
-  >h1 {
+  > h1 {
     font-size: 26px;
     font-weight: 500;
     text-transform: uppercase;
@@ -33,14 +34,14 @@ export const ContainerLabelAndInput = styled.div`
   padding: 0px 10px;
   /* position: relative; */
 
-  >label {
+  > label {
     font-size: 14px;
     font-weight: 600;
     margin-bottom: 6px;
     text-transform: uppercase;
   }
 
-  >input {
+  > input {
     padding: 8px 12px;
     outline: none;
     border: 1px solid rgba(0, 0, 0, 0.27);
@@ -50,7 +51,7 @@ export const ContainerLabelAndInput = styled.div`
 
     &:focus {
       outline: none;
-      border-color: #FF69B4;
+      border-color: #ff69b4;
     }
   }
 `;
@@ -59,7 +60,7 @@ export const ContainerInputAndEye = styled.div`
   display: flex;
   position: relative;
 
-  >input {
+  > input {
     padding: 8px 12px;
     outline: none;
     border: 1px solid rgba(0, 0, 0, 0.27);
@@ -70,7 +71,7 @@ export const ContainerInputAndEye = styled.div`
 
     &:focus {
       outline: none;
-      border-color: #FF69B4;
+      border-color: #ff69b4;
     }
   }
 `;
@@ -84,7 +85,7 @@ export const ContainerSvgEyeOpen = styled.div`
   right: 9px;
   top: 6px;
 
-  >svg {
+  > svg {
     display: flex;
     width: 22px;
     height: 22px;
@@ -100,7 +101,7 @@ export const ContainerSvgEyeClose = styled.div`
   right: 9px;
   top: 6px;
 
-  >svg {
+  > svg {
     display: flex;
     width: 22px;
     height: 22px;
@@ -116,14 +117,14 @@ export const SpanError = styled.span`
 `;
 
 export const ContainerNewPasswordAndConfirmNewPassword = styled.div`
-  display: flex;  
+  display: flex;
 `;
 
 export const ContainerSpanWarningAndButton = styled.div`
   display: flex;
   flex-direction: column;
 
-  >span {
+  > span {
     font-size: 16px;
     margin-bottom: 10px;
   }
@@ -133,9 +134,9 @@ export const ContainerButtons = styled.div`
   display: flex;
   justify-content: space-between;
   height: 50px;
-  gap: 20PX;
+  gap: 20px;
 
-  >button {
+  > button {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -149,14 +150,14 @@ export const ContainerButtons = styled.div`
     cursor: pointer;
   }
 
-  >button:nth-of-type(1){
+  > button:nth-of-type(1) {
     &:hover {
       background-color: black;
       color: #fff;
     }
   }
 
-  >button:nth-of-type(2){
+  > button:nth-of-type(2) {
     background-color: black;
     color: #fff;
 

@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 export const Span = styled.span``;
 
@@ -11,10 +11,11 @@ export const Input = styled.input``;
 export const Img = styled.img``;
 
 export const ContainerMain = styled.div`
-  width: 100%;
+  /* width: 100%; */
+  max-width: 753px;
   position: relative;
 
-  >h1 {
+  > h1 {
     font-size: 26px;
     font-weight: 500;
     text-transform: uppercase;
@@ -31,14 +32,14 @@ export const ContainerLabelAndInput = styled.div`
   padding: 0px 10px;
   /* position: relative; */
 
-  >label {
+  > label {
     font-size: 12px;
     font-weight: 500;
     margin-bottom: 6px;
     text-transform: uppercase;
   }
 
-  >input {
+  > input {
     padding: 8px 12px;
     outline: none;
     border: 1px solid rgba(0, 0, 0, 0.27);
@@ -48,7 +49,7 @@ export const ContainerLabelAndInput = styled.div`
 
     &:focus {
       outline: none;
-      border-color: #FF69B4;
+      border-color: #ff69b4;
     }
   }
 `;
@@ -63,7 +64,7 @@ export const ContainerInputAndEye = styled.div`
   position: relative;
   width: 100%;
 
-  >input {
+  > input {
     padding: 8px 12px;
     outline: none;
     border: 1px solid rgba(0, 0, 0, 0.27);
@@ -86,7 +87,7 @@ export const ContainerImgQuestionMark = styled.div`
   height: 14px;
   cursor: pointer;
 
-  >img {
+  > img {
     width: 100%;
     height: auto;
     object-fit: contain;

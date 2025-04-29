@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 export const Span = styled.span``;
 
@@ -28,7 +28,7 @@ export const ContainerBody = styled.div`
   flex-direction: column;
   width: 1005px;
 
-  >h1 {
+  > h1 {
     font-size: 25px;
     font-weight: 500;
     text-transform: uppercase;
@@ -45,7 +45,7 @@ export const ContainerWelcome = styled.div`
   display: flex;
   flex-direction: column;
 
-  >h1 {
+  > h1 {
     font-size: 24px;
     font-weight: 500;
     text-transform: uppercase;

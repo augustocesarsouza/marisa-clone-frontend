@@ -7,7 +7,8 @@ export const H1 = styled.h1``;
 export const ContainerMain = styled.div`
   display: flex;
   flex-direction: column;
-  width: 100%;
+  /* width: 100%; */
+  max-width: 753px;
 
   > h1 {
     font-size: 24px;

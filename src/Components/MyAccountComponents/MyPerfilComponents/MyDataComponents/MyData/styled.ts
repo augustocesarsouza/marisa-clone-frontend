@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 export const Span = styled.span``;
 
@@ -7,9 +7,10 @@ export const H1 = styled.h1``;
 export const Button = styled.button``;
 
 export const ContainerMain = styled.div`
-  width: 100%;
+  /* width: 100%; */
+  max-width: 753px;
 
-  >h1 {
+  > h1 {
     font-size: 26px;
     font-weight: 600;
     text-transform: uppercase;
@@ -43,7 +44,7 @@ export const ContainerButtons = styled.div`
   justify-content: space-between;
   height: 50px;
 
-  >button {
+  > button {
     display: flex;
     justify-content: center;
     align-items: center;

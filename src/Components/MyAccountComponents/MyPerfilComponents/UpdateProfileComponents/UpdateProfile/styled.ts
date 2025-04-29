@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 export const Span = styled.span``;
 
@@ -13,13 +13,14 @@ export const Container = styled.div``;
 export const Button = styled.button``;
 
 export const ContainerMain = styled.div`
-  width: 100%;
+  /* width: 100%; */
+  max-width: 753px;
 
-  >div:nth-of-type(1){
+  > div:nth-of-type(1) {
     margin-bottom: 20px;
   }
 
-  >div:nth-of-type(3){
+  > div:nth-of-type(3) {
     margin-bottom: 20px;
   }
 `;
@@ -36,14 +37,14 @@ export const ContainerLabelAndInput = styled.div`
   line-height: 1;
   /* position: relative; */
 
-  >label {
+  > label {
     font-size: 14px;
     font-weight: 600;
     margin-bottom: 6px;
     text-transform: uppercase;
   }
 
-  >input {
+  > input {
     padding: 8px 12px;
     outline: none;
     border: 1px solid rgba(0, 0, 0, 0.27);
@@ -53,7 +54,7 @@ export const ContainerLabelAndInput = styled.div`
 
     &:focus {
       outline: none;
-      border-color: #FF69B4;
+      border-color: #ff69b4;
     }
   }
 `;
@@ -71,7 +72,7 @@ export const ContainerGenderAndBirthDate = styled.div`
   display: flex;
   margin-bottom: 20px;
 
-  >div:nth-of-type(2){
+  > div:nth-of-type(2) {
     width: 50%;
   }
 `;
@@ -81,7 +82,7 @@ export const ContainerAllGendersMain = styled.div`
   flex-direction: column;
   width: 50%;
 
-  >h1 {
+  > h1 {
     font-size: 13px;
     text-transform: uppercase;
     color: #3d3d3d;
@@ -102,7 +103,7 @@ export const ContainerCheckboxMain = styled.div`
   line-height: 1;
   cursor: pointer;
 
-  >span {
+  > span {
     font-size: 16px;
     font-weight: 600;
   }
@@ -120,7 +121,7 @@ export const ContainerCheckbox = styled.div`
   overflow: hidden;
   margin-right: 5px;
 
-  >div {
+  > div {
     display: flex;
     background: #ec008c;
     width: 11px;
@@ -140,11 +141,11 @@ export const ContainerCellPhone = styled.div`
   gap: 20px;
   margin-bottom: 10px;
 
-  >div:nth-of-type(1){
+  > div:nth-of-type(1) {
     width: 30%;
   }
 
-  >div:nth-of-type(2){
+  > div:nth-of-type(2) {
     width: 60%;
   }
 `;
@@ -154,11 +155,11 @@ export const ContainerTelephone = styled.div`
   width: 50%;
   gap: 20px;
 
-  >div:nth-of-type(1){
+  > div:nth-of-type(1) {
     width: 30%;
   }
 
-  >div:nth-of-type(2){
+  > div:nth-of-type(2) {
     width: 60%;
   }
 `;
@@ -168,7 +169,7 @@ export const ContainerCheckboxButtonCompleteRegistration = styled.div`
   justify-content: center;
   flex-direction: column;
 
-  >button {
+  > button {
     background-color: rgb(172, 171, 171);
     color: #fff;
     border: none;
@@ -179,7 +180,7 @@ export const ContainerCheckboxButtonCompleteRegistration = styled.div`
     margin-bottom: 8px;
   }
 
-  >span {
+  > span {
     font-size: 14px;
     font-weight: 600;
     padding-bottom: 35px;
@@ -193,7 +194,7 @@ export const ContainerCheckboxIUnderstandAndAgree = styled.label`
   margin-top: 20px;
   margin-bottom: 30px;
 
-  >input {
+  > input {
     /* appearance: none; */
     width: 14px;
     height: 14px;

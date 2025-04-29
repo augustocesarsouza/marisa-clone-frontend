@@ -37,7 +37,7 @@ const MyOrders = () => {
   }, [nav]);
 
   return (
-    <div className="w-full flex flex-col items-center">
+    <div className="max-w-[753px] flex flex-col items-center">
       <h1 className="font-semibold text-4xl !mt-[20px] !mb-[10px]">
         VOCÊ AINDA NÃO POSSUI PEDIDOS!
       </h1>
