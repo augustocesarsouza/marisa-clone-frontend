@@ -266,6 +266,10 @@ const Navigation = ({ whichWasClickedNav, isMyAccount }: NavigationProps) => {
     if (value === 'my-date-lgpd') {
       nav('/my-account/lgpd');
     }
+
+    if (value === 'my-consents-lgpd') {
+      nav('/my-account/lgpd-consent');
+    }
   };
 
   const putAllSpansMyProfileBlack = () => {

@@ -14,6 +14,7 @@ import ChangePassword from '../../Components/RegisterComponents/ChangePassword/C
 import MyOrders from '../../Components/MyAccountComponents/MyOrdersComponents/MyOrders/MyOrders';
 import VoucherExchangeMain from '../../Components/MyAccountComponents/VoucherExchangeComponents/VoucherExchangeMain/VoucherExchangeMain';
 import MyDateLgpd from '../../Components/MyAccountComponents/MyDateLgpdComponents/MyDateLgpdMain/MyDateLgpd';
+import MyConsentsMain from '../../Components/MyAccountComponents/MyDateLgpdComponents/MyConsentsMain/MyConsentsMain';
 
 const AppContent = () => {
   return (
@@ -34,6 +35,7 @@ const AppContent = () => {
           <Route path="orders" element={<MyOrders />} />
           <Route path="voucher-exchange" element={<VoucherExchangeMain />} />
           <Route path="lgpd" element={<MyDateLgpd />} />
+          <Route path="lgpd-consent" element={<MyConsentsMain />} />
           <Route path="add-address" element={<AddNewAddress />} />
           <Route path="edit-address" element={<AddNewAddress />} />
 

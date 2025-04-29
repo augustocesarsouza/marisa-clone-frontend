@@ -3,7 +3,7 @@ import { MemoryRouter } from 'react-router-dom';
 import MyDateLgpd from './MyDateLgpd';
 
 describe('MyDateLgpd', () => {
-  test('should render', () => {
+  test('should render header and span', () => {
     const { container } = render(
       <MemoryRouter>
         <MyDateLgpd />
