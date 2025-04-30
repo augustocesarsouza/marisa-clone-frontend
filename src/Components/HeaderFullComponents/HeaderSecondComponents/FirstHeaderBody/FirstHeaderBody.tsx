@@ -53,7 +53,7 @@ const FirstHeaderBody = () => {
   };
 
   return (
-    <div className="w-[1024px] flex items-center justify-between">
+    <Styled.ContainerFirstHeaderBodyMain className="flex items-center justify-between">
       <div
         className="w-[175px] h-[40px] mr-[80px] flex cursor-pointer"
         onClick={onClickContainerImgMarisa}>
@@ -64,7 +64,7 @@ const FirstHeaderBody = () => {
         />
       </div>
 
-      <div className="w-[320px] h-[35px] mr-[30px] flex">
+      <Styled.ContainerInputSearch className="w-[320px] h-[35px] mr-[30px] flex">
         <input
           className="outline-none !pl-[10px] m-[0px] w-full border border-gray-300 focus:border-[#ec008c] transition-colors duration-100 ease-in-out"
           placeholder="O que você procura?"
@@ -74,7 +74,7 @@ const FirstHeaderBody = () => {
           data-testid="container-svg-loupa">
           <LoupaSvg />
         </div>
-      </div>
+      </Styled.ContainerInputSearch>
 
       {user === null && <UserLogged />}
 
@@ -105,7 +105,7 @@ const FirstHeaderBody = () => {
           <span className="text-2xl font-semibold text-[#777]">Sua sacola está vazia</span>
         </Styled.ContainerModalMyPurchase>
       </div>
-    </div>
+    </Styled.ContainerFirstHeaderBodyMain>
   );
 };
 

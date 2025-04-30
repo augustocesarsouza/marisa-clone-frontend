@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 export const Span = styled.span``;
 
@@ -7,6 +7,10 @@ export const ContainerNavigation = styled.div`
   justify-content: space-between;
   width: 1024px;
   height: 50px;
+
+  @media (min-width: 1400px) {
+    width: 1350px;
+  }
 `;
 
 export const ContainerNav = styled.div`
@@ -19,8 +23,12 @@ export const ContainerNav = styled.div`
   font-weight: 600;
   cursor: pointer;
 
+  @media (min-width: 1400px) {
+    font-size: 15px;
+  }
+
   &:hover {
     color: #fff;
-    background-color: #F9629F;
+    background-color: #f9629f;
   }
 `;

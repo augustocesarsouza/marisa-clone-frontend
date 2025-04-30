@@ -27,3 +27,17 @@ export const ContainerModalMyPurchase = styled.div`
     transform: rotate(45deg) translate(-100%, 20%) scale(1, 1);
   }
 `;
+
+export const ContainerFirstHeaderBodyMain = styled.div`
+  width: 1024px;
+
+  @media (min-width: 1400px) {
+    width: 1380px;
+  }
+`;
+
+export const ContainerInputSearch = styled.div`
+  @media (min-width: 1400px) {
+    width: 420px;
+  }
+`;

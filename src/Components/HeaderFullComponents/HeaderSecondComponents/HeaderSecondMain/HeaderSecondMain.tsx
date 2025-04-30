@@ -49,6 +49,45 @@ const HeaderSecondMain = () => {
     }
   }, [location.pathname, nav]);
 
+  const [whichNavigation, setWhichNavigation] = useState('');
+
+  const [mouseLeaveNavigationBoolean, setMouseLeaveNavigationBoolean] = useState(false);
+  const [mouseEnterContainerMainModal, setMouseEnterContainerMainModal] = useState(false);
+
+  const mouseEnterNavigation = (name: string) => {
+    setWhichNavigation(name);
+    setMouseLeaveNavigationBoolean(false);
+  };
+
+  const mouseLeaveNavigation = () => {
+    setMouseLeaveNavigationBoolean(true);
+    setMouseEnterContainerMainModal(false);
+  };
+
+  useEffect(() => {
+    if (!mouseEnterContainerMainModal) {
+      setWhichNavigation(whichNavigation);
+
+      if (mouseLeaveNavigationBoolean) {
+        setWhichNavigation('VAZIO');
+      }
+    }
+  }, [mouseEnterContainerMainModal, whichNavigation, mouseLeaveNavigationBoolean]);
+
+  useEffect(() => {
+    console.log(whichNavigation);
+  }, [whichNavigation]);
+
+  const onMouseEnterContainerMainModal = () => {
+    setMouseEnterContainerMainModal(true);
+    setMouseLeaveNavigationBoolean(false);
+  };
+
+  const onMouseLeaveContainerMainModal = () => {
+    setMouseEnterContainerMainModal(false);
+    setWhichNavigation('VAZIO');
+  };
+
   return (
     <ContextHome.Provider
       value={{
@@ -57,7 +96,35 @@ const HeaderSecondMain = () => {
       <Styled.ContainerMain>
         <FirstHeaderBody></FirstHeaderBody>
 
-        <NavigationBody></NavigationBody>
+        <NavigationBody
+          mouseEnterNavigation={mouseEnterNavigation}
+          mouseLeaveNavigation={mouseLeaveNavigation}
+        />
+
+        <Styled.ContainerModalFloating
+          className="flex w-[1050px] h-[644px] absolute top-[155px] bg-[#ff00002e]"
+          onMouseEnter={onMouseEnterContainerMainModal}
+          onMouseLeave={onMouseLeaveContainerMainModal}>
+          <h1>Feminino</h1>
+        </Styled.ContainerModalFloating>
+
+        {whichNavigation === 'feminino' && (
+          <Styled.ContainerModalFloating
+            className="flex w-[1050px] h-[644px] absolute top-[155px] bg-[#ff00002e]"
+            onMouseEnter={onMouseEnterContainerMainModal}
+            onMouseLeave={onMouseLeaveContainerMainModal}>
+            <h1>Feminino</h1>
+          </Styled.ContainerModalFloating>
+        )}
+
+        {whichNavigation === 'calcado' && (
+          <Styled.ContainerModalFloating
+            className="flex w-[1050px] h-[644px] absolute top-[155px] bg-[#ff00002e]"
+            onMouseEnter={onMouseEnterContainerMainModal}
+            onMouseLeave={onMouseLeaveContainerMainModal}>
+            <h1>Calçados</h1>
+          </Styled.ContainerModalFloating>
+        )}
       </Styled.ContainerMain>
     </ContextHome.Provider>
   );

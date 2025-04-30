@@ -1,8 +1,10 @@
+import * as Styled from './styled';
+
 const HeaderSecond = () => {
   return (
-    <div className="w-full mx-8 h-[45px] bg-black flex justify-center">
-      <div className="w-[1004px] h-full flex items-stretch ">
-        <ul className="h-full w-[110px] !mr-12">
+    <Styled.ContainerMainHeaderSecondMain className="w-full mx-8 h-[45px] flex justify-center">
+      <Styled.ContainerMainHeaderSecond className="w-[1004px] h-full flex items-stretch">
+        <Styled.UlImgMarisa className="h-full w-[110px]">
           <li className="flex justify-center items-center bg-white h-full px-[20px]">
             <a href="/" className="flex w-[70px] h-[20px]">
               <img
@@ -11,22 +13,22 @@ const HeaderSecond = () => {
               />
             </a>
           </li>
-        </ul>
-        <ul className="flex gap-[30px] w-[510px]">
+        </Styled.UlImgMarisa>
+        <ul className="flex gap-[30px] w-[600px]">
           <li className="flex justify-center items-center">
-            <a href="#" className="text-white text-xl font-medium">
+            <Styled.Link href="#" className="text-white text-xl font-medium">
               Meus Pedidos
-            </a>
+            </Styled.Link>
           </li>
           <li className="flex justify-center items-center">
-            <a href="#" className="text-white text-xl font-medium">
+            <Styled.Link href="#" className="text-white text-xl font-medium">
               Nossas Lojas
-            </a>
+            </Styled.Link>
           </li>
           <li className="flex justify-center items-center">
-            <a href="#" className="text-white text-xl font-medium">
+            <Styled.Link href="#" className="text-white text-xl font-medium">
               Atendimento
-            </a>
+            </Styled.Link>
           </li>
           <li className="flex justify-center items-center">
             <a href="#" className="flex bg-[#ec008c] !p-2 rounded-4xl">
@@ -34,8 +36,8 @@ const HeaderSecond = () => {
             </a>
           </li>
         </ul>
-      </div>
-    </div>
+      </Styled.ContainerMainHeaderSecond>
+    </Styled.ContainerMainHeaderSecondMain>
   );
 };
 

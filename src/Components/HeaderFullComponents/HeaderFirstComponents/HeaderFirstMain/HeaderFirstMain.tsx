@@ -4,7 +4,7 @@ import * as Styled from './styled';
 
 const HeaderFirstMain = () => {
   return (
-    <Styled.ContainerMain>
+    <Styled.ContainerMain className="bg-black">
       <HeaderFirst></HeaderFirst>
       <HeaderSecond></HeaderSecond>
     </Styled.ContainerMain>

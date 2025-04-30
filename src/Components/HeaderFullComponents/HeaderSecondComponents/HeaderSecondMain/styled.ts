@@ -8,4 +8,13 @@ export const ContainerMain = styled.div`
   flex-direction: column;
   padding-top: 35px;
   gap: 25px;
+  position: relative;
 `;
+
+export const ContainerModalFloating = styled.div`
+  @media (min-width: 1400px) {
+    width: 1365px;
+  }
+`;
+
+// 1365px
