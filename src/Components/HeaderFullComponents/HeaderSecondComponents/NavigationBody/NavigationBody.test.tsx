@@ -4,7 +4,16 @@ import NavigationBody from './NavigationBody';
 
 describe('NavigationBody', () => {
   test('should render itens', () => {
-    render(<NavigationBody />);
+    const fn1 = jest.fn();
+    const fn2 = jest.fn();
+
+    render(
+      <NavigationBody
+        whichNavigationOver=""
+        mouseEnterNavigation={fn1}
+        mouseLeaveNavigation={fn2}
+      />
+    );
 
     const spans = screen.getAllByTestId('span-nav');
     expect(spans.length).toBe(10);
