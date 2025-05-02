@@ -13,7 +13,12 @@ export const ContainerNavigation = styled.div`
   }
 `;
 
-export const ContainerNav = styled.div`
+interface ContainerNavProps {
+  $whichNavigationOver: string;
+  $whichNavigation: string;
+}
+
+export const ContainerNav = styled.div<ContainerNavProps>`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -31,4 +36,8 @@ export const ContainerNav = styled.div`
     color: #fff;
     background-color: #f9629f;
   }
+
+  color: ${(props) => (props.$whichNavigationOver === props.$whichNavigation ? '#fff' : 'black')};
+  background-color: ${(props) =>
+    props.$whichNavigationOver === props.$whichNavigation ? '#f9629f' : '#fff'};
 `;

@@ -7,6 +7,13 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { GetUserFromLocalStorage } from '../../../GetUserFromLocalStorage/GetUserFromLocalStorage';
 import { ContextHome } from '../Contexts/ContextHome';
 import { TokenExpiration } from '../../../TokenValidation/TokenExpiration';
+import NavModalFloatingMain from '../NavModalFloatingComponents/NavModalFloatingMain/NavModalFloatingMain';
+
+export interface imgNavigation {
+  img: string;
+  alt: string;
+  span: string;
+}
 
 const HeaderSecondMain = () => {
   const [user, setUser] = useState<User | null>(null);
@@ -74,9 +81,9 @@ const HeaderSecondMain = () => {
     }
   }, [mouseEnterContainerMainModal, whichNavigation, mouseLeaveNavigationBoolean]);
 
-  useEffect(() => {
-    console.log(whichNavigation);
-  }, [whichNavigation]);
+  // useEffect(() => {
+  //   console.log(whichNavigation);
+  // }, [whichNavigation]);
 
   const onMouseEnterContainerMainModal = () => {
     setMouseEnterContainerMainModal(true);
@@ -99,32 +106,14 @@ const HeaderSecondMain = () => {
         <NavigationBody
           mouseEnterNavigation={mouseEnterNavigation}
           mouseLeaveNavigation={mouseLeaveNavigation}
+          whichNavigationOver={whichNavigation}
         />
 
-        <Styled.ContainerModalFloating
-          className="flex w-[1050px] h-[644px] absolute top-[155px] bg-[#ff00002e]"
-          onMouseEnter={onMouseEnterContainerMainModal}
-          onMouseLeave={onMouseLeaveContainerMainModal}>
-          <h1>Feminino</h1>
-        </Styled.ContainerModalFloating>
-
-        {whichNavigation === 'feminino' && (
-          <Styled.ContainerModalFloating
-            className="flex w-[1050px] h-[644px] absolute top-[155px] bg-[#ff00002e]"
-            onMouseEnter={onMouseEnterContainerMainModal}
-            onMouseLeave={onMouseLeaveContainerMainModal}>
-            <h1>Feminino</h1>
-          </Styled.ContainerModalFloating>
-        )}
-
-        {whichNavigation === 'calcado' && (
-          <Styled.ContainerModalFloating
-            className="flex w-[1050px] h-[644px] absolute top-[155px] bg-[#ff00002e]"
-            onMouseEnter={onMouseEnterContainerMainModal}
-            onMouseLeave={onMouseLeaveContainerMainModal}>
-            <h1>Calçados</h1>
-          </Styled.ContainerModalFloating>
-        )}
+        <NavModalFloatingMain
+          whichNavigation={whichNavigation}
+          onMouseEnterContainerMainModal={onMouseEnterContainerMainModal}
+          onMouseLeaveContainerMainModal={onMouseLeaveContainerMainModal}
+        />
       </Styled.ContainerMain>
     </ContextHome.Provider>
   );
