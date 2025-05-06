@@ -16,17 +16,17 @@ const HeaderSecond = () => {
         </Styled.UlImgMarisa>
         <ul className="flex gap-[30px] w-[600px]">
           <li className="flex justify-center items-center">
-            <Styled.Link href="#" className="text-white text-xl font-medium">
+            <Styled.Link href="#" className="text-white text-xl font-medium text-[12px]">
               Meus Pedidos
             </Styled.Link>
           </li>
           <li className="flex justify-center items-center">
-            <Styled.Link href="#" className="text-white text-xl font-medium">
+            <Styled.Link href="#" className="text-white text-xl font-medium text-[12px]">
               Nossas Lojas
             </Styled.Link>
           </li>
           <li className="flex justify-center items-center">
-            <Styled.Link href="#" className="text-white text-xl font-medium">
+            <Styled.Link href="#" className="text-white text-xl font-medium text-[12px]">
               Atendimento
             </Styled.Link>
           </li>

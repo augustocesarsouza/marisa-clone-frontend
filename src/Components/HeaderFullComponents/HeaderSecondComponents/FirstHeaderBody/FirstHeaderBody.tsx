@@ -53,7 +53,7 @@ const FirstHeaderBody = () => {
   };
 
   return (
-    <Styled.ContainerFirstHeaderBodyMain className="flex items-center justify-between">
+    <Styled.ContainerFirstHeaderBodyMain className="flex items-center justify-between w-[1024px]">
       <div
         className="w-[175px] h-[40px] mr-[80px] flex cursor-pointer"
         onClick={onClickContainerImgMarisa}>

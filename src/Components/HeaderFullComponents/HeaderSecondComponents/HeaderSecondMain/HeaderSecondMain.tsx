@@ -57,7 +57,6 @@ const HeaderSecondMain = () => {
   }, [location.pathname, nav]);
 
   const [whichNavigation, setWhichNavigation] = useState('');
-
   const [mouseLeaveNavigationBoolean, setMouseLeaveNavigationBoolean] = useState(false);
   const [mouseEnterContainerMainModal, setMouseEnterContainerMainModal] = useState(false);
 
@@ -80,10 +79,6 @@ const HeaderSecondMain = () => {
       }
     }
   }, [mouseEnterContainerMainModal, whichNavigation, mouseLeaveNavigationBoolean]);
-
-  // useEffect(() => {
-  //   console.log(whichNavigation);
-  // }, [whichNavigation]);
 
   const onMouseEnterContainerMainModal = () => {
     setMouseEnterContainerMainModal(true);

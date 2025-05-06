@@ -4,7 +4,7 @@ import * as Styled from './styled';
 
 const Home = () => {
   return (
-    <Styled.ContainerMain>
+    <Styled.ContainerMain className="">
       <HeaderFullMain></HeaderFullMain>
       <HomeBodyMain></HomeBodyMain>
     </Styled.ContainerMain>

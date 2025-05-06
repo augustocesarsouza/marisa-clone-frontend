@@ -1,10 +1,20 @@
-import * as Styled from './styled';
+// import * as Styled from './styled';
+
+import HighlightImgs from '../HighlightComponents/HighlightImgs/HighlightImgs';
+import StoreBenefitsBar from '../HighlightComponents/StoreBenefitsBar/StoreBenefitsBar';
 
 const HomeBodyMain = () => {
   return (
-    <Styled.Container>
-      <Styled.Span>sdasdas</Styled.Span>
-    </Styled.Container>
+    <div className="!pb-[1000px]">
+      <div className="flex flex-col">
+        <HighlightImgs />
+        <StoreBenefitsBar />
+      </div>
+
+      <div>
+        <h1>other</h1>
+      </div>
+    </div>
   );
 };
 

@@ -110,8 +110,6 @@ const ModalFormAddress = ({ addressUser }: ModalFormAddressProps) => {
   }, [nav]);
 
   useEffect(() => {
-    console.log(addressUser);
-
     if (addressUser) {
       const inputAddressNicknameHere = inputAddressNickname.current as HTMLInputElement;
       inputAddressNicknameHere.value = addressUser.addressNickname ?? '';
@@ -212,7 +210,6 @@ const ModalFormAddress = ({ addressUser }: ModalFormAddressProps) => {
 
     if (valueCep.length > 7) {
       const resultCep: Cep | ObjErrorCep = await consultaCEP(valueCep);
-      console.log(resultCep);
 
       if ('erro' in resultCep && resultCep.erro === 'true') {
         const inputCepHere = inputCep.current as HTMLInputElement;

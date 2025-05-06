@@ -1,5 +1,17 @@
 import styled from 'styled-components';
 
+export const ContainerFirstHeaderBodyMain = styled.div`
+  @media (min-width: 1400px) {
+    width: 1380px;
+  }
+`;
+
+export const ContainerInputSearch = styled.div`
+  @media (min-width: 1400px) {
+    width: 420px;
+  }
+`;
+
 export const ContainerModalMyPurchase = styled.div`
   display: none;
   align-items: center;
@@ -25,19 +37,5 @@ export const ContainerModalMyPurchase = styled.div`
     left: 255px;
     top: 0px;
     transform: rotate(45deg) translate(-100%, 20%) scale(1, 1);
-  }
-`;
-
-export const ContainerFirstHeaderBodyMain = styled.div`
-  width: 1024px;
-
-  @media (min-width: 1400px) {
-    width: 1380px;
-  }
-`;
-
-export const ContainerInputSearch = styled.div`
-  @media (min-width: 1400px) {
-    width: 420px;
   }
 `;

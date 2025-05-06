@@ -22,7 +22,6 @@ export const ContainerNav = styled.div<ContainerNavProps>`
   display: flex;
   justify-content: center;
   align-items: center;
-
   width: 101px;
   font-size: 13px;
   font-weight: 600;
