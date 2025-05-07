@@ -1,4 +1,4 @@
-// import * as Styled from './styled';
+import * as Styled from './styled';
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 
 interface objsHighlight {
@@ -217,13 +217,15 @@ const HighlightImgs = () => {
   }, [activeScrollRightLeft]);
 
   return (
-    <div className="flex flex-col relative">
-      <div className="flex h-[39px]">
-        <img
-          className="w-full h-full"
-          src="https://res.cloudinary.com/dyqsqg7pk/image/upload/v1746447792/imgs-backend-frontend-marisa/frontend/Faixa-20241217-FRETE-GRATIS-BRASIL-249-Desktop_ikgbhv.gif"
-          alt="img-free-shiping"
-        />
+    <div className="flex items-center flex-col relative">
+      <div className="w-full flex items-center justify-center bg-[#272526]">
+        <Styled.ContainerImgTop className="flex h-[39px]">
+          <img
+            className="w-full h-full"
+            src="https://res.cloudinary.com/dyqsqg7pk/image/upload/v1746447792/imgs-backend-frontend-marisa/frontend/Faixa-20241217-FRETE-GRATIS-BRASIL-249-Desktop_ikgbhv.gif"
+            alt="img-free-shiping"
+          />
+        </Styled.ContainerImgTop>
       </div>
       <div
         className="hidden absolute left-[20px] top-[45%] w-[40px] h-[40px] cursor-pointer"
