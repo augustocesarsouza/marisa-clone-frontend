@@ -2,6 +2,7 @@
 
 import HighlightImgs from '../HighlightComponents/HighlightImgs/HighlightImgs';
 import StoreBenefitsBar from '../HighlightComponents/StoreBenefitsBar/StoreBenefitsBar';
+import BrowseByCategoryMain from '../BrowseByCategoryComponents/BrowseByCategoryMain/BrowseByCategoryMain';
 
 const HomeBodyMain = () => {
   return (
@@ -11,9 +12,7 @@ const HomeBodyMain = () => {
         <StoreBenefitsBar />
       </div>
 
-      <div>
-        <h1>other</h1>
-      </div>
+      <BrowseByCategoryMain />
     </div>
   );
 };

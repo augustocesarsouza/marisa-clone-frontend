@@ -13,10 +13,9 @@ const HighlightImgs = () => {
   const containerArrowRightRef = useRef<HTMLDivElement | null>(null);
 
   const [arrayImgHighlight, setArrayImgHighlight] = useState<objsHighlight[]>([]);
-  const isAnimatingRef = useRef(false);
 
-  const [whichImgIm, setWhichImgIm] = useState(0);
   const containerAllBallRef = useRef<HTMLDivElement[]>([]);
+  const lastValueIndexRef = useRef(0);
 
   useEffect(() => {
     const aarrayObjetos: objsHighlight[] = [];
@@ -60,14 +59,29 @@ const HighlightImgs = () => {
 
       // Centraliza novamente na imagem correta
       scrollElement.scrollTo({
-        left: imgWidth * whichImgIm,
+        left: imgWidth * lastValueIndexRef.current,
         behavior: 'auto',
       });
     };
 
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
-  }, [whichImgIm]);
+  }, []);
+
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const putSetIntervalToPassImgBall = () => {
+    timeoutRef.current = setInterval(async () => {
+      let value = lastValueIndexRef.current + 1;
+
+      if (value > 4) {
+        value = 0;
+      }
+
+      await onClickContainerBall(value);
+    }, 5000);
+  };
 
   useLayoutEffect(() => {
     setTimeout(() => {
@@ -77,13 +91,61 @@ const HighlightImgs = () => {
         el.style.backgroundColor = '#CFCFCF';
       });
 
-      const obj = array[whichImgIm];
+      const obj = array[0];
 
       if (obj) {
         obj.style.backgroundColor = '#ec008c';
       }
     }, 10);
-  }, [whichImgIm]);
+
+    if (timeoutRef.current) {
+      clearInterval(timeoutRef.current);
+    }
+
+    putSetIntervalToPassImgBall();
+  }, [putSetIntervalToPassImgBall]);
+
+  const isAnimatingRef = useRef(false);
+  const isAnimatingBallRef = useRef(false);
+
+  const onClickContainerBall = useCallback(
+    async (i: number) => {
+      if (isAnimatingBallRef.current) return;
+
+      if (timeoutRef.current) {
+        clearInterval(timeoutRef.current);
+      }
+
+      putSetIntervalToPassImgBall();
+
+      isAnimatingBallRef.current = true;
+
+      const scrollElement = containerOverflowImgsRef.current as HTMLDivElement;
+      const array = containerAllBallRef.current;
+
+      array.map((el) => {
+        el.style.backgroundColor = '#CFCFCF';
+      });
+
+      const obj = array[i];
+      if (obj) {
+        obj.style.backgroundColor = '#ec008c';
+      }
+
+      const value = Math.abs(i - lastValueIndexRef.current);
+      const valueQuantityWidth = scrollElement.clientWidth * value;
+
+      if (i > lastValueIndexRef.current) {
+        await animateScrollBy(scrollElement, valueQuantityWidth, 404);
+      } else {
+        await animateScrollBy(scrollElement, -valueQuantityWidth, 404);
+      }
+
+      lastValueIndexRef.current = i;
+      isAnimatingBallRef.current = false;
+    },
+    [putSetIntervalToPassImgBall] // adicione as dependências aqui se houver
+  );
 
   const activeScrollRightLeft = useCallback(() => {
     const scrollElement = containerOverflowImgsRef.current as HTMLDivElement;
@@ -94,10 +156,7 @@ const HighlightImgs = () => {
       if (isAnimatingRef.current) return;
       isAnimatingRef.current = true;
 
-      const valueQuantityWidth = scrollElement.clientWidth;
-
-      await animateScrollBy(scrollElement, -valueQuantityWidth, 404);
-      setWhichImgIm((prev) => prev - 1);
+      await onClickContainerBall(lastValueIndexRef.current - 1);
 
       isAnimatingRef.current = false;
     };
@@ -106,10 +165,7 @@ const HighlightImgs = () => {
       if (isAnimatingRef.current) return;
       isAnimatingRef.current = true;
 
-      const valueQuantityWidth = scrollElement.clientWidth;
-
-      await animateScrollBy(scrollElement, valueQuantityWidth, 404);
-      setWhichImgIm((prev) => prev + 1);
+      await onClickContainerBall(lastValueIndexRef.current + 1);
 
       isAnimatingRef.current = false;
     };
@@ -127,7 +183,7 @@ const HighlightImgs = () => {
     containerArrowLeft.addEventListener('click', scrollLeft);
     containerArrowRight.addEventListener('click', scrollRight);
     scrollElement.addEventListener('scroll', updateArrowsVisibility);
-  }, []);
+  }, [onClickContainerBall]);
 
   const animateScrollBy = (
     element: HTMLDivElement,
@@ -179,7 +235,7 @@ const HighlightImgs = () => {
         />
       </div>
       <div
-        className="container-all-imgs-highlight flex overflow-x-hidden scroll-smooth"
+        className="container-all-imgs-highlight flex overflow-x-hidden scroll-smooth cursor-pointer"
         ref={containerOverflowImgsRef}>
         {arrayImgHighlight.length > 0 &&
           arrayImgHighlight.map((el, i) => <img src={el.src} alt={el.alt} key={i} />)}
@@ -189,7 +245,8 @@ const HighlightImgs = () => {
         {arrayImgHighlight.length > 0 &&
           arrayImgHighlight.map((_el, i) => (
             <div
-              className="w-[14px] h-[14px] bg-[#CFCFCF] rounded-2xl"
+              className="w-[14px] h-[14px] bg-[#CFCFCF] rounded-2xl cursor-pointer"
+              onClick={() => onClickContainerBall(i)}
               key={i}
               ref={(el) => {
                 if (el) containerAllBallRef.current[i] = el;
