@@ -35,7 +35,7 @@ const UserLoggedOut = ({ user }: UserLoggedOutProps) => {
 
       const containerSvg = RefContainerSvgArrow.current as HTMLDivElement;
       const svg = containerSvg.firstChild as SVGElement;
-      svg.style.transform = valueClicked ? 'rotate(90deg)' : 'rotate(-90deg)';
+      svg.style.transform = valueClicked ? 'rotate(180deg)' : 'rotate(0deg)';
 
       if (valueClicked) {
         setShowModalInfoUser(true);
@@ -81,7 +81,7 @@ const UserLoggedOut = ({ user }: UserLoggedOutProps) => {
       </div>
 
       {showModalInfoUser && (
-        <div className="flex flex-col absolute left-[0px] top-[50px]">
+        <div className="flex flex-col absolute left-[0px] top-[50px] z-10">
           <Styled.ContainerModalInfoUser>
             <span
               className="text-2xl font-semibold !px-[25px] !py-[10px] hover:text-[#ec008c]"
