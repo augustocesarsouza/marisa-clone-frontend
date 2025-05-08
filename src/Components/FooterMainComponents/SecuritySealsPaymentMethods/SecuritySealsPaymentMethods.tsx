@@ -13,6 +13,7 @@ const SecuritySealsPaymentMethods = () => {
         </Styled.ContainerSecuritySealsSvgAndSpan>
 
         <Styled.Img
+          className="w-[70px]"
           src="https://res.cloudinary.com/dyqsqg7pk/image/upload/q_100/v1741775886/imgs-backend-frontend-marisa/frontend/SecuritySeals/em-avaliacao_ezh1yo.png"
           alt="img-em-avaliação"
         />
