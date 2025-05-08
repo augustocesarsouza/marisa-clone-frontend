@@ -24,7 +24,6 @@ const HomeBodyMain = () => {
       <BrowseByCategoryMain />
 
       <CardigansSweatshirtsJeans />
-      {/* Quando fazer o Product no backend de algum jeito colocar uma variavel que saiba qual é o 'blusa, acessorios-e-bolsas, tricos' só com Product */}
 
       <HomepageMasculineChildishPlusSize />
 
