@@ -3,7 +3,6 @@
 import HighlightImgs from '../HighlightComponents/HighlightImgs/HighlightImgs';
 import StoreBenefitsBar from '../HighlightComponents/StoreBenefitsBar/StoreBenefitsBar';
 import BrowseByCategoryMain from '../BrowseByCategoryComponents/BrowseByCategoryMain/BrowseByCategoryMain';
-import FooterMain from '../../FooterMainComponents/FooterMain/FooterMain';
 import CardigansSweatshirtsJeans from '../FashionCategoriesComponents/CardigansSweatshirtsJeans/CardigansSweatshirtsJeans';
 import HomepageMasculineChildishPlusSize from '../FashionCategoriesComponents/HomepageMasculineChildishPlusSize/HomepageMasculineChildishPlusSize';
 import WinterShoesAndCompleteYourLook from '../FashionCategoriesComponents/WinterShoesAndCompleteYourLook/WinterShoesAndCompleteYourLook';
@@ -23,9 +22,9 @@ const HomeBodyMain = () => {
 
       <BrowseByCategoryMain />
 
-      <CardigansSweatshirtsJeans />
-
       <HomepageMasculineChildishPlusSize />
+
+      <CardigansSweatshirtsJeans />
 
       <WinterShoesAndCompleteYourLook />
 
@@ -38,8 +37,6 @@ const HomeBodyMain = () => {
       <HomepageBasicBlousesCharactersWholeFamilyLittleFinds />
 
       <HomepageDownloadMarisaApp />
-
-      <FooterMain></FooterMain>
     </div>
   );
 };

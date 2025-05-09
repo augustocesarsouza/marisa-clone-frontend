@@ -15,6 +15,7 @@ import MyOrders from '../../Components/MyAccountComponents/MyOrdersComponents/My
 import VoucherExchangeMain from '../../Components/MyAccountComponents/VoucherExchangeComponents/VoucherExchangeMain/VoucherExchangeMain';
 import MyDateLgpd from '../../Components/MyAccountComponents/MyDateLgpdComponents/MyDateLgpdMain/MyDateLgpd';
 import MyConsentsMain from '../../Components/MyAccountComponents/MyDateLgpdComponents/MyConsentsMain/MyConsentsMain';
+import ProductMain from '../../Components/ProductComponents/ProductMain/ProductMain';
 
 const AppContent = () => {
   return (
@@ -38,6 +39,16 @@ const AppContent = () => {
           <Route path="lgpd-consent" element={<MyConsentsMain />} />
           <Route path="add-address" element={<AddNewAddress />} />
           <Route path="edit-address" element={<AddNewAddress />} />
+
+          {/* <Route path="voucher-wallet" element={<MyCupons />} /> */}
+          {/* <Route path="coin" element={<MyCoinsShopee />} /> */}
+        </Route>
+
+        <Route path="/hotsite" element={<ProductMain />}>
+          <Route index element={<Navigate to="" />}></Route>
+          <Route path="festival-de-blusas" element={<ProductMain />} />
+          <Route path="bolsas-e-acessorios" element={<ProductMain />} />
+          <Route path="tricos-geral" element={<ProductMain />} />
 
           {/* <Route path="voucher-wallet" element={<MyCupons />} /> */}
           {/* <Route path="coin" element={<MyCoinsShopee />} /> */}
