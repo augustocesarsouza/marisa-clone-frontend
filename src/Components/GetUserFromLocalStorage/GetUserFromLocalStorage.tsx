@@ -19,8 +19,8 @@ export const GetUserFromLocalStorage = (): IResultGetUserFromLocalStorage => {
   };
 
   if (userLocalStorage) {
-    const secretKey = import.meta.env.VITE__APP_SECRET_KEY_USER;
-    // const secretKey = process.env.VITE__APP_SECRET_KEY_USER;
+    const secretKey = import.meta.env.VITE_APP_SECRET_KEY_USER;
+    // const secretKey = process.env.VITE_APP_SECRET_KEY_USER;
 
     if (secretKey === undefined) {
       return ResultGetUserFromLocalStorage;

@@ -47,7 +47,7 @@ class UserService {
   private http: AxiosInstance;
 
   constructor() {
-    this.baseUrl = import.meta.env.VITE__APP_APP_BASE_URL;
+    this.baseUrl = import.meta.env.VITE_APP_BASE_URL;
     this.http = axios.create({
       baseURL: this.baseUrl,
       headers: {
