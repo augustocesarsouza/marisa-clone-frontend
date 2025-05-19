@@ -93,6 +93,7 @@ const MasculineCategory = ({
 
     setAllImgsFootwear(allImgs);
   }, []);
+
   return (
     <Styled.ContainerModalFloating
       className="flex flex-col !px-[20px] !pt-[20px] !pb-[20px] w-[1050px] h-[644px] absolute top-[155px] bg-[#ffffff] z-10 border border-[#0000003a]"

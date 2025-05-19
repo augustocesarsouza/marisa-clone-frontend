@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 export const Span = styled.span``;
 
@@ -30,9 +30,9 @@ export const ContainerSecondRegister = styled.div`
   flex-direction: column;
   width: 40%;
 
-  >div:nth-of-type(1),
+  > div:nth-of-type(1),
   div:nth-of-type(3),
-  div:nth-of-type(4){
+  div:nth-of-type(4) {
     margin-bottom: 20px;
   }
 `;
@@ -43,7 +43,7 @@ export const ContainerCheckboxMain = styled.div`
   line-height: 1;
   cursor: pointer;
 
-  >span {
+  > span {
     font-size: 16px;
     font-weight: 600;
   }
@@ -61,7 +61,7 @@ export const ContainerCheckbox = styled.div`
   overflow: hidden;
   margin-right: 5px;
 
-  >div {
+  > div {
     display: flex;
     background: #ec008c;
     width: 11px;
@@ -74,11 +74,11 @@ export const ContainerThird = styled.div`
   display: flex;
   flex-direction: column;
 
-  >:nth-of-type(1){
+  > :nth-of-type(1) {
     margin-bottom: 20px;
   }
 
-  >:nth-of-type(2){
+  > :nth-of-type(2) {
     margin-bottom: 8px;
   }
 `;
@@ -90,13 +90,13 @@ export const ContainerLabelAndInput = styled.div`
   margin-bottom: 10px;
   /* position: relative; */
 
-  >label {
+  > label {
     font-size: 14px;
     font-weight: 600;
     margin-bottom: 6px;
   }
 
-  >input {
+  > input {
     padding: 8px 12px;
     outline: none;
     border: 1px solid rgba(0, 0, 0, 0.27);
@@ -106,7 +106,7 @@ export const ContainerLabelAndInput = styled.div`
 
     &:focus {
       outline: none;
-      border-color: #FF69B4;
+      border-color: #ff69b4;
     }
   }
 `;
@@ -116,11 +116,11 @@ export const ContainerBirthdateAndCpf = styled.div`
   justify-content: space-between;
   gap: 20px;
 
-  >div:nth-of-type(1){
+  > div:nth-of-type(1) {
     width: 35%;
   }
 
-  >div:nth-of-type(2){
+  > div:nth-of-type(2) {
     width: 100%;
   }
 `;
@@ -130,7 +130,7 @@ export const ContainerFourth = styled.div`
   flex-direction: column;
   margin-bottom: 20px;
 
-  >h1 {
+  > h1 {
     font-size: 16px;
     font-weight: 800;
     margin-bottom: 16px;
@@ -155,11 +155,11 @@ export const ContainerCellPhone = styled.div`
   gap: 20px;
   margin-bottom: 10px;
 
-  >div:nth-of-type(1){
+  > div:nth-of-type(1) {
     width: 30%;
   }
 
-  >div:nth-of-type(2){
+  > div:nth-of-type(2) {
     width: 60%;
   }
 `;
@@ -169,11 +169,11 @@ export const ContainerTelephone = styled.div`
   width: 50%;
   gap: 20px;
 
-  >div:nth-of-type(1){
+  > div:nth-of-type(1) {
     width: 30%;
   }
 
-  >div:nth-of-type(2){
+  > div:nth-of-type(2) {
     width: 60%;
   }
 `;
@@ -183,7 +183,7 @@ export const ContainerButtonReceiveToken = styled.div`
   flex-direction: column;
   margin-bottom: 20px;
 
-  >button {
+  > button {
     background-color: rgb(172, 171, 171);
     color: #fff;
     border: none;
@@ -194,7 +194,7 @@ export const ContainerButtonReceiveToken = styled.div`
     margin-bottom: 8px;
   }
 
-  >span {
+  > span {
     font-size: 14px;
   }
 `;
@@ -220,12 +220,12 @@ export const ContainerSvgEyeOpen = styled.div`
   right: 5px;
   bottom: 6px;
 
-  >svg {
+  > svg {
     display: flex;
     width: 100%;
     height: 100%;
   }
-  
+
   cursor: pointer;
 `;
 
@@ -238,12 +238,12 @@ export const ContainerSvgEyeClose = styled.div`
   right: 5px;
   bottom: 6px;
 
-  >svg {
+  > svg {
     display: flex;
     width: 100%;
     height: 100%;
   }
-  
+
   cursor: pointer;
 `;
 
@@ -260,7 +260,7 @@ export const ContainerInputAndEye = styled.div`
   display: flex;
   position: relative;
 
-  >input {
+  > input {
     padding: 8px 12px;
     outline: none;
     border: 1px solid rgba(0, 0, 0, 0.27);
@@ -271,7 +271,7 @@ export const ContainerInputAndEye = styled.div`
 
     &:focus {
       outline: none;
-      border-color: #FF69B4;
+      border-color: #ff69b4;
     }
   }
 `;
@@ -281,7 +281,7 @@ export const ContainerCheckboxButtonCompleteRegistration = styled.div`
   justify-content: center;
   flex-direction: column;
 
-  >button {
+  > button {
     background-color: rgb(172, 171, 171);
     color: #fff;
     border: none;
@@ -300,7 +300,7 @@ export const ContainerCheckboxIUnderstandAndAgree = styled.label`
   margin-top: 20px;
   margin-bottom: 30px;
 
-  >input {
+  > input {
     /* appearance: none; */
     width: 14px;
     height: 14px;

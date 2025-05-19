@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 export const Span = styled.span``;
 
@@ -11,12 +11,12 @@ export const ContainerModal = styled.div`
   font-weight: 600;
   padding: 10px 15px;
 
-  >span {
+  > span {
     font-size: 12px;
   }
 
   &::before {
-    content: " ";
+    content: ' ';
     position: absolute;
     width: 15px;
     height: 15px;

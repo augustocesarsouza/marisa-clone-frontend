@@ -35,10 +35,10 @@ export const ContainerNavAfterClicked = styled.div<ContainerNavAfterClickedProps
   display: flex;
   flex-direction: column;
   gap: 6px;
+  overflow: hidden;
 
   max-height: ${(props) => (props.$clickMyProfile ? '200px' : '0px')};
   margin: ${(props) => (props.$clickMyProfile ? '7px 0 5px 7px' : '0px')};
-  overflow: hidden;
   opacity: ${(props) => (props.$clickMyProfile ? '1' : '0')};
   visibility: ${(props) => (props.$clickMyProfile ? 'visible' : 'hidden')};
 

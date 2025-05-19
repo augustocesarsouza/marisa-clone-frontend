@@ -33,13 +33,6 @@ const TimeRemainingAddress = ({ timeRemaining, endTimeRemaining }: TimeRemaining
   }, [endTimeRemaining, timeRemainingHere]);
 
   return (
-    // <>
-    //   {timeRemainingHere !== null && (
-    //     <Styled.ContainerCountdown>
-    //       Tente novamente em {timeRemainingHere} segundos
-    //     </Styled.ContainerCountdown>
-    //   )}
-    // </>
     <Styled.ContainerCountdown>
       Tente novamente em {timeRemainingHere} segundos
     </Styled.ContainerCountdown>

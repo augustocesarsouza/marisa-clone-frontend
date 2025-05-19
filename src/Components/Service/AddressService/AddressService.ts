@@ -208,7 +208,7 @@ class AddressService {
   ): Promise<ReturnGetAddress | ReturnErroCatch> {
     try {
       const response = await this.http.put<ReturnGetAddress>(
-        '/public/address/update-set-up-as-primary-address',
+        '/address/update-set-up-as-primary-address',
         addressData,
         {
           headers: {

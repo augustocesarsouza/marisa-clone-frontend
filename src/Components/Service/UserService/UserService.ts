@@ -183,9 +183,9 @@ class UserService {
     }
   }
 
-  async updateUser(userData: User, token: string): Promise<ReturnGetUser | null> {
+  async updateUser(userData: User, token: string): Promise<ResultReturnCreate | null> {
     try {
-      const response = await this.http.put<ReturnGetUser>('/user/update-profile', userData, {
+      const response = await this.http.put<ResultReturnCreate>('/user/update-profile', userData, {
         headers: {
           Authorization: `Bearer ${token}`,
           uid: userData.id,
@@ -198,10 +198,10 @@ class UserService {
       const error = err as AxiosError;
 
       if (error.status === 400) {
-        const dataAxios = error.response?.data;
-        const dataBack = dataAxios as ReturnGetUser;
+        // const dataAxios = error.response?.data;
+        // const dataBack = dataAxios as ReturnGetUser;
 
-        return dataBack;
+        return null;
       }
 
       if (error.status === 403 || error.status === 401) {

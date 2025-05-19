@@ -99,11 +99,6 @@ const MyAccountMain = () => {
             )}
             <HeaderMyAccount />
 
-            {/* {!isMyAccount && (
-              <Styled.SpanNav>
-                Home {'>'} <Styled.SpanNavMain>{whatShowUserClicked}</Styled.SpanNavMain>
-              </Styled.SpanNav>
-            )} */}
             <Styled.SpanNav>
               Home {'>'} <Styled.SpanNavMain>{whatShowUserClicked}</Styled.SpanNavMain>
             </Styled.SpanNav>

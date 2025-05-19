@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 export const Span = styled.span``;
 
@@ -32,12 +32,12 @@ export const ContainerFirst = styled.div`
   gap: 7px;
   margin-bottom: 20px;
 
-  >h1 {
+  > h1 {
     font-size: 19px;
     font-weight: 600;
   }
 
-  >span {
+  > span {
     font-size: 17px;
     font-weight: 400;
   }
@@ -56,7 +56,7 @@ export const ContainerCheckboxMain = styled.div`
   line-height: 1;
   cursor: pointer;
 
-  >span {
+  > span {
     font-size: 16px;
     font-weight: 600;
   }
@@ -74,7 +74,7 @@ export const ContainerCheckbox = styled.div`
   overflow: hidden;
   margin-right: 5px;
 
-  >div {
+  > div {
     display: flex;
     background: #ec008c;
     width: 11px;

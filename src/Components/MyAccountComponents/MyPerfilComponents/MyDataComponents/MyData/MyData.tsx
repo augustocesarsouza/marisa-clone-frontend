@@ -114,6 +114,7 @@ const MyData = () => {
 
   const onClickChangePassword = () => {
     nav('/my-account/update-password');
+    // fazer esse amanha
   };
 
   const onClickChangeEmail = () => {

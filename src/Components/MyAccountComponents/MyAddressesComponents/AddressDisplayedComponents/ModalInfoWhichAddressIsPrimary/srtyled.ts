@@ -19,7 +19,6 @@ interface ButtonAddNewAddressProps {
 
 export const ButtonAddNewAddress = styled.button<ButtonAddNewAddressProps>`
   display: flex;
-
   text-transform: uppercase;
   width: 100%;
   text-align: center;

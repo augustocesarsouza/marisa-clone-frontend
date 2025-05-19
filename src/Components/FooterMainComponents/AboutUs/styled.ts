@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 export const H1 = styled.h1``;
 
@@ -13,7 +13,7 @@ export const ContainerMain = styled.div`
   justify-content: center;
   margin-top: 25px;
 
-  >div {
+  > div {
     display: flex;
     justify-content: space-between;
     width: 1035px;
@@ -25,14 +25,14 @@ export const ContainerAllHighlighted = styled.div`
   flex-direction: column;
   width: 165px;
 
-  >h1 {
+  > h1 {
     font-size: 16px;
     font-weight: 600;
     color: #ec008c;
     margin-bottom: 13px;
   }
 
-  >span {
+  > span {
     font-size: 16px;
     font-weight: 600;
     color: #5d5d5d;
@@ -56,7 +56,7 @@ export const ContainerDidntFindWhatYouWereLookingFor = styled.div`
   flex-direction: column;
   width: 235px;
 
-  >h1 {
+  > h1 {
     font-size: 15px;
     font-weight: 600;
     color: #767676;
@@ -68,7 +68,7 @@ export const ContainerWeCanHelp = styled.div`
   display: flex;
   margin-bottom: 25px;
 
-  >img {
+  > img {
     width: 32px;
     height: 32px;
     margin-right: 5px;

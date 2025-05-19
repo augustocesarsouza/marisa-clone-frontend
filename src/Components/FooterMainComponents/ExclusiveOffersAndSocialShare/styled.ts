@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 export const Span = styled.span``;
 
@@ -29,13 +29,13 @@ export const ContainerReceiveNews = styled.div`
   align-items: center;
   width: 50%;
 
-  >span {
+  > span {
     text-align: center;
     line-height: 1.4;
     margin-bottom: 12px;
   }
 
-  >button {
+  > button {
     padding: 8px 12px;
     border: none;
     border-radius: 5px;
@@ -54,7 +54,7 @@ export const ContainerEnjoyAndShare = styled.div`
   align-items: center;
   width: 100%;
 
-  >span {
+  > span {
     margin-bottom: 20px;
   }
 `;
@@ -63,7 +63,7 @@ export const ContainerSocialMedia = styled.div`
   display: flex;
   gap: 20px;
 
-  >svg {
+  > svg {
     display: flex;
     width: 31px;
     height: 31px;
