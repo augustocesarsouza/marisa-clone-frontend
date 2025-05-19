@@ -392,7 +392,7 @@ const Individual = () => {
     }
 
     if (resp && resp.data.userDTO) {
-      const secretKey = import.meta.env.VITE_APP_SECRET_KEY_USER;
+      const secretKey = import.meta.env.VITE__APP_SECRET_KEY_USER;
       const userDTO = resp.data.userDTO;
 
       const encrypted = CryptoJS.AES.encrypt(JSON.stringify(userDTO), secretKey).toString();
