@@ -14,7 +14,7 @@ import HomepageDownloadMarisaApp from '../FashionCategoriesComponents/HomepageDo
 
 const HomeBodyMain = () => {
   return (
-    <div className="">
+    <div>
       <div className="flex flex-col">
         <HighlightImgs />
         <StoreBenefitsBar />

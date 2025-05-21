@@ -57,7 +57,7 @@ const UserLoggedOut = ({ user }: UserLoggedOutProps) => {
     localStorage.removeItem('user');
     setShowModalInfoUser(false);
     nav('/login');
-    window.location.reload();
+    // window.location.reload();
   };
 
   return (

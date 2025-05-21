@@ -4,7 +4,6 @@ const HomepageMasculineChildishPlusSize = () => {
   const nav = useNavigate();
 
   const onClickBannerWhich = (banner: string) => {
-    console.log(banner);
     if (banner === 'masculine') {
       nav('/hotsite/festival-de-blusas');
     }
