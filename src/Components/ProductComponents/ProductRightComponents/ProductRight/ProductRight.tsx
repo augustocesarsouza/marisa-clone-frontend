@@ -1,16 +1,86 @@
-// import * as Styled from './styled';
+import * as Styled from './styled';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { User } from '../../../Interfaces/Entity/User.';
+import productService, {
+  ReturnGetProductList,
+} from '../../../Service/ProductService/ProductService';
+import { ReturnErroCatch } from '../../../Service/UserService/UserService';
+import { GetUserFromLocalStorage } from '../../../GetUserFromLocalStorage/GetUserFromLocalStorage';
+import { useNavigate } from 'react-router-dom';
+import { TokenExpiration } from '../../../TokenValidation/TokenExpiration';
+import { Product } from '../../../Interfaces/Entity/Product';
+import StarSvg from '../../../Svg/StarSvg/StarSvg';
 
 const ProductRight = () => {
+  const nav = useNavigate();
   const [selected, setSelected] = useState(1);
   const [listPageNav] = useState([1, 2, 3, 4, 5]);
 
-  //   const onClickNumberNav = (value: number) => {};
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    const objUser = GetUserFromLocalStorage();
+
+    if (objUser.isNullUserLocalStorage) {
+      nav('/login');
+      return;
+    }
+
+    if (objUser.user === null) {
+      localStorage.removeItem('user');
+
+      nav('/login');
+      return;
+    }
+
+    const user = objUser.user;
+    const token = user.token;
+
+    if (token) {
+      const valueExpiration = TokenExpiration(token);
+
+      if (valueExpiration) {
+        localStorage.removeItem('user');
+        nav('/login');
+      }
+    }
+
+    const pathNameArray = location.pathname.split('/')[2];
+    getAllProductType(user, pathNameArray);
+  }, [nav]);
+
+  const [allProduct, setAllProduct] = useState<Product[]>([]);
+
+  const getAllProductType = async (user: User, type: string) => {
+    if (user.token) {
+      const respSend = await productService.getAllProduct(user, type);
+
+      if (respSend.isSucess) {
+        const resp = respSend as ReturnGetProductList;
+        const data = resp.data;
+
+        setAllProduct(data);
+      } else {
+        const respError = respSend as ReturnErroCatch;
+        console.log(respError);
+      }
+    }
+  };
+
+  const formatPriceTrunc = (price: number) => {
+    if (price !== undefined) {
+      const [int, dec = '00'] = String(price).split('.');
+      const formatted = `${int},${dec.substring(0, 2).padEnd(2, '0')}`;
+      return formatted;
+    }
+  };
 
   return (
     <div className="flex flex-col w-[805px]">
-      <div className="flex justify-end items-center gap-[30px] text-[12px] font-medium leading-6 h-[30px]">
+      <div className="flex justify-end items-center gap-[30px] text-[12px] font-medium leading-6 h-[30px] !mb-[60px]">
         <span>768 Produto(s)</span>
 
         <div className="flex items-center h-full">
@@ -36,7 +106,7 @@ const ProductRight = () => {
                 onClick={() => setSelected(num)}
                 className={`flex justify-center items-center w-[21px] cursor-pointer rounded
             ${selected === num ? 'border-2 border-[#00000041] rounded-md' : ''}`}>
-                {num}
+                <span className="!ml-[1px]">{num}</span>
               </div>
             ))}
           </div>
@@ -56,6 +126,66 @@ const ProductRight = () => {
             </svg>
           </div>
         </div>
+      </div>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+        {allProduct &&
+          allProduct.map((el, i) => (
+            <div className="flex flex-col w-[260px]" key={el.id}>
+              <div className="flex w-[250px] h-[300px] relative">
+                <div
+                  className="flex flex-col items-center justify-center leading-[16px] text-[14px] bg-[black] text-[#fff] 
+                w-[50px] h-[50px] absolute uppercase rounded-[50px] left-[10px] top-[10px]">
+                  <span>{el.discountPercentage}%</span>
+                  <span>Off</span>
+                </div>
+                <img className="w-full h-full" src={el.imageUrl} alt={'img-product' + i} />
+              </div>
+
+              <div className="flex flex-col">
+                <span className="text-[13px] min-h-[30px]">{el.title}</span>
+                <div className="flex items-center gap-[2px] leading-[16px] !mt-[10px] !mb-[10px]">
+                  <div className="flex gap-[2px]">
+                    <Styled.ContainerStarSvg className="flex">
+                      <StarSvg />
+                    </Styled.ContainerStarSvg>
+                    <Styled.ContainerStarSvg className="flex">
+                      <StarSvg />
+                    </Styled.ContainerStarSvg>
+                    <Styled.ContainerStarSvg className="flex">
+                      <StarSvg />
+                    </Styled.ContainerStarSvg>
+                    <Styled.ContainerStarSvg className="flex">
+                      <StarSvg />
+                    </Styled.ContainerStarSvg>
+                    <Styled.ContainerStarSvg className="flex">
+                      <StarSvg />
+                    </Styled.ContainerStarSvg>
+                  </div>
+                  <span className="text-[12px]">(0)</span>
+                </div>
+              </div>
+
+              <div className="flex">
+                <span className="line-through text-[#999999] text-[11px] font-medium">
+                  De: R$ {el.price}
+                </span>
+              </div>
+
+              <div className="flex">
+                <span className="text-[#EC008C] text-[15px] font-bold">
+                  Por R$ {formatPriceTrunc(el.priceDiscounted)}
+                </span>
+              </div>
+
+              <div className="flex text-[12px] font-normal leading-[16px] gap-[3px]">
+                <span className="text-[#EC008C]">{el.installmentTimesMarisaCard}x</span>
+                <span className="text-[#555555]">R$</span>
+                <span className="text-[#EC008C]">{formatPriceTrunc(el.installmentPrice)}</span>
+                <span className="text-[#555555]">sem juros no cartão marisa</span>
+              </div>
+            </div>
+          ))}
       </div>
     </div>
   );

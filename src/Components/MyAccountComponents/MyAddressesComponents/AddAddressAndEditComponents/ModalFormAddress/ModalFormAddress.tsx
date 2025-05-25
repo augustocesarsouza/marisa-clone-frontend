@@ -5,12 +5,12 @@ import { Address } from '../../../../Interfaces/Entity/Address';
 import { GetUserFromLocalStorage } from '../../../../GetUserFromLocalStorage/GetUserFromLocalStorage';
 import { TokenExpiration } from '../../../../TokenValidation/TokenExpiration';
 import addressService, {
-  ReturnErroCatch,
   ReturnSendCodeEmailTwo,
   SendCodeEmailTwo,
 } from '../../../../Service/AddressService/AddressService';
 import * as Styled from './styled';
 import CodeSendEmailModal from '../CodeSendEmailModal/CodeSendEmailModal';
+import { ReturnErroCatch } from '../../../../Service/UserService/UserService';
 
 interface Cep {
   bairro: string;

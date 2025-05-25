@@ -30,7 +30,7 @@ const ProductMain = () => {
   return (
     <div className="flex flex-col">
       <HeaderFullMain />
-      <div className="flex items-center justify-center">
+      <div className="flex items-center justify-center !mb-[120px]">
         <div className="flex flex-col items-center w-[1080px]">
           {/* !px-10 !py-10 */}
           <h1 className="text-[12px] font-semibold w-full !mb-[10px]">

@@ -121,6 +121,9 @@ const HighlightImgs = () => {
       isAnimatingBallRef.current = true;
 
       const scrollElement = containerOverflowImgsRef.current as HTMLDivElement;
+
+      if (scrollElement === null || scrollElement.clientWidth === 0) return;
+
       const array = containerAllBallRef.current;
 
       array.map((el) => {
@@ -133,6 +136,7 @@ const HighlightImgs = () => {
       }
 
       const value = Math.abs(i - lastValueIndexRef.current);
+
       const valueQuantityWidth = scrollElement.clientWidth * value;
 
       if (i > lastValueIndexRef.current) {

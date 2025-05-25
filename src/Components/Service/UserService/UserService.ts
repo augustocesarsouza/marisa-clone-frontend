@@ -42,6 +42,11 @@ export interface ResultUserTokenSentEmail {
   isSucess: boolean;
 }
 
+export interface ReturnErroCatch {
+  isSucess: boolean;
+  message: string;
+}
+
 class UserService {
   private baseUrl: string;
   private http: AxiosInstance;

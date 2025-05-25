@@ -2,6 +2,7 @@ import axios, { AxiosError, AxiosInstance } from 'axios';
 import { Address } from '../../Interfaces/Entity/Address';
 import { UserConfirmCodeEmailDTO } from '../../Interfaces/DTOs/UserConfirmCodeEmailDTO';
 import { User } from '../../Interfaces/Entity/User.';
+import { ReturnErroCatch } from '../UserService/UserService';
 
 export interface ReturnGetAddress {
   data: Address;
@@ -33,11 +34,6 @@ export interface SendCodeEmailTwo {
   code: string;
   codeSendToEmailSuccessfully: boolean;
   userAlreadyExist: boolean;
-}
-
-export interface ReturnErroCatch {
-  isSucess: boolean;
-  message: string;
 }
 
 class AddressService {
