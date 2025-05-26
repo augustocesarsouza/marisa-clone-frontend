@@ -12,3 +12,15 @@ export const ContainerMore = styled.div`
     height: 12px;
   }
 `;
+
+export const ContainerMoreCategory = styled.div`
+  display: flex;
+  width: 11px;
+  height: 11px;
+
+  > svg {
+    width: 100%;
+    height: auto;
+    display: flex;
+  }
+`;

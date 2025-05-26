@@ -27,6 +27,26 @@ const ProductMain = () => {
     setStringNameNav(stringNameNav);
   }, [location.pathname]);
 
+  const [arrayAllCategory, setArrayAllCategory] = useState<string[]>([]);
+
+  const handleCategoryClick = (category: string) => {
+    if (category.length > 0) {
+      setArrayAllCategory((prev) => {
+        let newArray = [...prev];
+
+        if (newArray.some((el) => el === category)) {
+          newArray = newArray.filter((el) => el !== category);
+        } else {
+          newArray.push(category);
+        }
+
+        return newArray;
+      });
+    } else {
+      setArrayAllCategory([]);
+    }
+  };
+
   return (
     <div className="flex flex-col">
       <HeaderFullMain />
@@ -37,8 +57,8 @@ const ProductMain = () => {
             Home {'>'} {stringNameNav}
           </h1>
           <div className="flex w-full justify-between">
-            <ProductLeftMain />
-            <ProductRight />
+            <ProductLeftMain handleCategoryClick={handleCategoryClick} />
+            <ProductRight arrayAllCategory={arrayAllCategory} />
           </div>
         </div>
       </div>

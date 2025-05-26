@@ -10,3 +10,13 @@ export const ContainerStarSvg = styled.div`
     height: 20px;
   }
 `;
+
+export const ContainerSvgX = styled.div`
+  display: flex;
+
+  > svg {
+    width: 12px;
+    height: 12px;
+    fill: #818181;
+  }
+`;
