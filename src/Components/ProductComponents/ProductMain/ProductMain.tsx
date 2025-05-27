@@ -47,6 +47,15 @@ const ProductMain = () => {
     }
   };
 
+  const [categoryRemoveMark, setCategoryRemoveMark] = useState<{ value: string; key: number }>({
+    value: '',
+    key: 0,
+  });
+
+  const handleRemoveCategoryMark = (category: string) => {
+    setCategoryRemoveMark({ value: category, key: Date.now() });
+  };
+
   return (
     <div className="flex flex-col">
       <HeaderFullMain />
@@ -57,8 +66,15 @@ const ProductMain = () => {
             Home {'>'} {stringNameNav}
           </h1>
           <div className="flex w-full justify-between">
-            <ProductLeftMain handleCategoryClick={handleCategoryClick} />
-            <ProductRight arrayAllCategory={arrayAllCategory} />
+            <ProductLeftMain
+              handleCategoryClick={handleCategoryClick}
+              categoryRemoveMark={categoryRemoveMark}
+            />
+            <ProductRight
+              arrayAllCategory={arrayAllCategory}
+              handleCategoryClick={handleCategoryClick}
+              handleRemoveCategoryMark={handleRemoveCategoryMark}
+            />
           </div>
         </div>
       </div>

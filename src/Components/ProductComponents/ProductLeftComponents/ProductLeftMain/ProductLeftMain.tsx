@@ -2,28 +2,31 @@ import * as Styled from './styled';
 
 import MoreSvg from '../../../Svg/MoreSvg/MoreSvg';
 import MinusSvg from '../../../Svg/MinusSvg/MinusSvg';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 interface ProductLeftMainProps {
   handleCategoryClick: (category: string) => void;
+  categoryRemoveMark: {
+    value: string;
+    key: number;
+  };
 }
 
-const ProductLeftMain = ({ handleCategoryClick }: ProductLeftMainProps) => {
+const ProductLeftMain = ({ handleCategoryClick, categoryRemoveMark }: ProductLeftMainProps) => {
   const containerCategoryAll = useRef<HTMLDivElement[]>([]);
   const containerMainCategoryAll = useRef<HTMLDivElement>(null);
 
-  const categories = ['Moda Feminina', 'Infantil', 'Moda Masculina', 'Marcas', 'Promoção'];
+  const [categories] = useState<string[]>([
+    'Moda Feminina',
+    'Infantil',
+    'Moda Masculina',
+    'Marcas',
+    'Promoção',
+  ]);
   // const [whichCategoryMain, setWhichCategoryMain] = useState<string>('');
 
   const onClickCategory = (category: string, index: number) => {
-    // handleCategoryClick('');
     handleCategoryClick(category);
-
-    // containerCategoryAll.current.forEach((div) => {
-    //   if (div) {
-    //     div.classList.remove('bg-[red]');
-    //   }
-    // });
 
     containerCategoryAll.current[index].classList.toggle('bg-[red]');
   };
@@ -50,9 +53,15 @@ const ProductLeftMain = ({ handleCategoryClick }: ProductLeftMainProps) => {
     }
   };
 
-  // useEffect(() => {
-  //   handleCategoryClick(whichCategoryMain);
-  // }, [handleCategoryClick, whichCategoryMain]);
+  useEffect(() => {
+    const index = categories.findIndex((el) => el === categoryRemoveMark.value);
+
+    const containerHere = containerCategoryAll.current[index];
+
+    if (!containerHere) return;
+
+    containerHere.classList.toggle('bg-[red]');
+  }, [categories, categoryRemoveMark]);
 
   return (
     <div className="flex flex-col w-[240px]">

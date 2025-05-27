@@ -10,14 +10,20 @@ import { GetUserFromLocalStorage } from '../../../GetUserFromLocalStorage/GetUse
 import { useNavigate } from 'react-router-dom';
 import { TokenExpiration } from '../../../TokenValidation/TokenExpiration';
 import { Product } from '../../../Interfaces/Entity/Product';
-import StarSvg from '../../../Svg/StarSvg/StarSvg';
 import SvgX from '../../../Svg/SvgX/SvgX';
+import ProductDisplay from '../ProductDisplay/ProductDisplay';
 
 interface ProductRightProps {
   arrayAllCategory: string[];
+  handleCategoryClick: (category: string) => void;
+  handleRemoveCategoryMark: (category: string) => void;
 }
 
-const ProductRight = ({ arrayAllCategory }: ProductRightProps) => {
+const ProductRight = ({
+  arrayAllCategory,
+  handleCategoryClick,
+  handleRemoveCategoryMark,
+}: ProductRightProps) => {
   const nav = useNavigate();
   const [selected, setSelected] = useState(1);
   const [listPageNav] = useState([1, 2, 3, 4, 5]);
@@ -70,6 +76,7 @@ const ProductRight = ({ arrayAllCategory }: ProductRightProps) => {
         const data = resp.data;
 
         setAllProduct(data);
+        //arrayAllCategory pegar esse array e fazer o fillter em cima do array de product com "category: string;"
       } else {
         const respError = respSend as ReturnErroCatch;
         console.log(respError);
@@ -77,12 +84,36 @@ const ProductRight = ({ arrayAllCategory }: ProductRightProps) => {
     }
   };
 
-  const formatPriceTrunc = (price: number) => {
-    if (price !== undefined) {
-      const [int, dec = '00'] = String(price).split('.');
-      const formatted = `${int},${dec.substring(0, 2).padEnd(2, '0')}`;
-      return formatted;
+  const [newProductFilter, setNewProductFilter] = useState<Product[] | null>(null);
+
+  useEffect(() => {
+    if (arrayAllCategory.length > 0) {
+      let arrayFinal: Product[] = [];
+
+      arrayAllCategory.forEach((here) => {
+        setAllProduct((prev) => {
+          prev.map((el) => {
+            if (el.category === here) {
+              if (!arrayFinal.some((item) => item.id === el.id)) {
+                arrayFinal.push(el);
+              }
+            } else {
+              arrayFinal = [];
+            }
+          });
+          return prev;
+        });
+      });
+
+      setNewProductFilter(arrayFinal);
+    } else {
+      setNewProductFilter([]);
     }
+  }, [arrayAllCategory]);
+
+  const onClickContainerCategory = (category: string) => {
+    handleCategoryClick(category);
+    handleRemoveCategoryMark(category);
   };
 
   return (
@@ -95,7 +126,7 @@ const ProductRight = ({ arrayAllCategory }: ProductRightProps) => {
             <span className="text-[14px] font-semibold">Você filtrou por:</span>
             <div className="flex flex-col gap-[2px]">
               {arrayAllCategory.map((el, i) => (
-                <div key={i}>
+                <div key={i} onClick={() => onClickContainerCategory(el)}>
                   <div className="inline-flex items-center leading-[16px] bg-[#E3E3E3] !p-[5px] border border-[#1111113a] cursor-pointer">
                     <span className="text-[11px] font-medium text-[#818181]">{el}</span>
                     <Styled.ContainerSvgX>
@@ -163,63 +194,12 @@ const ProductRight = ({ arrayAllCategory }: ProductRightProps) => {
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-        {allProduct &&
-          allProduct.map((el, i) => (
-            <div className="flex flex-col w-[260px]" key={el.id}>
-              <div className="flex w-[250px] h-[300px] relative">
-                <div
-                  className="flex flex-col items-center justify-center leading-[16px] text-[14px] bg-[black] text-[#fff] 
-                w-[50px] h-[50px] absolute uppercase rounded-[50px] left-[10px] top-[10px]">
-                  <span>{el.discountPercentage}%</span>
-                  <span>Off</span>
-                </div>
-                <img className="w-full h-full" src={el.imageUrl} alt={'img-product' + i} />
-              </div>
+        {arrayAllCategory.length <= 0 &&
+          allProduct.map((el, i) => <ProductDisplay product={el} key={i} />)}
 
-              <div className="flex flex-col">
-                <span className="text-[13px] min-h-[30px]">{el.title}</span>
-                <div className="flex items-center gap-[2px] leading-[16px] !mt-[10px] !mb-[10px]">
-                  <div className="flex gap-[2px]">
-                    <Styled.ContainerStarSvg className="flex">
-                      <StarSvg />
-                    </Styled.ContainerStarSvg>
-                    <Styled.ContainerStarSvg className="flex">
-                      <StarSvg />
-                    </Styled.ContainerStarSvg>
-                    <Styled.ContainerStarSvg className="flex">
-                      <StarSvg />
-                    </Styled.ContainerStarSvg>
-                    <Styled.ContainerStarSvg className="flex">
-                      <StarSvg />
-                    </Styled.ContainerStarSvg>
-                    <Styled.ContainerStarSvg className="flex">
-                      <StarSvg />
-                    </Styled.ContainerStarSvg>
-                  </div>
-                  <span className="text-[12px]">(0)</span>
-                </div>
-              </div>
-
-              <div className="flex">
-                <span className="line-through text-[#999999] text-[11px] font-medium">
-                  De: R$ {el.price}
-                </span>
-              </div>
-
-              <div className="flex">
-                <span className="text-[#EC008C] text-[15px] font-bold">
-                  Por R$ {formatPriceTrunc(el.priceDiscounted)}
-                </span>
-              </div>
-
-              <div className="flex text-[12px] font-normal leading-[16px] gap-[3px]">
-                <span className="text-[#EC008C]">{el.installmentTimesMarisaCard}x</span>
-                <span className="text-[#555555]">R$</span>
-                <span className="text-[#EC008C]">{formatPriceTrunc(el.installmentPrice)}</span>
-                <span className="text-[#555555]">sem juros no cartão marisa</span>
-              </div>
-            </div>
-          ))}
+        {arrayAllCategory.length > 0 &&
+          newProductFilter &&
+          newProductFilter.map((el, i) => <ProductDisplay product={el} key={i} />)}
       </div>
     </div>
   );

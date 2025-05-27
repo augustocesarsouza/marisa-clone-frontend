@@ -15,4 +15,5 @@ export interface Product {
   createdAt: string;
   updatedAt: string;
   type: string;
+  category: string;
 }
