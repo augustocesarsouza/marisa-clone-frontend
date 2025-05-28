@@ -1,6 +1,6 @@
 import * as Styled from './styled';
 
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { User } from '../../../Interfaces/Entity/User.';
 import productService, {
   ReturnGetProductList,
@@ -12,23 +12,54 @@ import { TokenExpiration } from '../../../TokenValidation/TokenExpiration';
 import { Product } from '../../../Interfaces/Entity/Product';
 import SvgX from '../../../Svg/SvgX/SvgX';
 import ProductDisplay from '../ProductDisplay/ProductDisplay';
+import { changeProductArray } from '../../ReduxProduct/productArraySlice';
+import { useProductArrayAppDispatch } from '../../ReduxProduct/productArrayDispatch';
 
 interface ProductRightProps {
   arrayAllCategory: string[];
+  arrayAllSize: string[];
   handleCategoryClick: (category: string) => void;
+  handleSizesClick: (size: string) => void;
   handleRemoveCategoryMark: (category: string) => void;
+  handleRemoveSizeMark: (size: string) => void;
 }
 
 const ProductRight = ({
   arrayAllCategory,
+  arrayAllSize,
   handleCategoryClick,
+  handleSizesClick,
   handleRemoveCategoryMark,
+  handleRemoveSizeMark,
 }: ProductRightProps) => {
   const nav = useNavigate();
   const [selected, setSelected] = useState(1);
   const [listPageNav] = useState([1, 2, 3, 4, 5]);
 
   const containerMyFilterCategory = useRef<HTMLDivElement>(null);
+
+  const [allProduct, setAllProduct] = useState<Product[]>([]);
+  const dispatch = useProductArrayAppDispatch();
+
+  const getAllProductType = useCallback(
+    async (user: User, type: string) => {
+      if (user.token) {
+        const respSend = await productService.getAllProduct(user, type);
+
+        if (respSend.isSucess) {
+          const resp = respSend as ReturnGetProductList;
+          const data = resp.data;
+
+          setAllProduct(data);
+          dispatch(changeProductArray(data));
+        } else {
+          const respError = respSend as ReturnErroCatch;
+          console.log(respError);
+        }
+      }
+    },
+    [dispatch] // dependências que a função usa
+  );
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
@@ -63,32 +94,20 @@ const ProductRight = ({
 
     const pathNameArray = location.pathname.split('/')[2];
     getAllProductType(user, pathNameArray);
-  }, [nav]);
-
-  const [allProduct, setAllProduct] = useState<Product[]>([]);
-
-  const getAllProductType = async (user: User, type: string) => {
-    if (user.token) {
-      const respSend = await productService.getAllProduct(user, type);
-
-      if (respSend.isSucess) {
-        const resp = respSend as ReturnGetProductList;
-        const data = resp.data;
-
-        setAllProduct(data);
-        //arrayAllCategory pegar esse array e fazer o fillter em cima do array de product com "category: string;"
-      } else {
-        const respError = respSend as ReturnErroCatch;
-        console.log(respError);
-      }
-    }
-  };
+  }, [getAllProductType, nav]);
 
   const [newProductFilter, setNewProductFilter] = useState<Product[] | null>(null);
+  const [showAllProduct, setShowAllProduct] = useState(true);
 
   useEffect(() => {
-    if (arrayAllCategory.length > 0) {
-      let arrayFinal: Product[] = [];
+    if (arrayAllSize.length <= 0 && arrayAllCategory.length <= 0) {
+      setShowAllProduct(true);
+    } else {
+      setShowAllProduct(false);
+    }
+
+    if (arrayAllCategory.length > 0 && arrayAllSize.length <= 0) {
+      const arrayFinal: Product[] = [];
 
       arrayAllCategory.forEach((here) => {
         setAllProduct((prev) => {
@@ -98,7 +117,7 @@ const ProductRight = ({
                 arrayFinal.push(el);
               }
             } else {
-              arrayFinal = [];
+              // arrayFinal = [];
             }
           });
           return prev;
@@ -107,26 +126,72 @@ const ProductRight = ({
 
       setNewProductFilter(arrayFinal);
     } else {
-      setNewProductFilter([]);
+      if (arrayAllCategory.length > 0 && arrayAllSize.length <= 0) {
+        setNewProductFilter([]);
+      }
     }
-  }, [arrayAllCategory]);
+    // console.log(arrayAllSize);
+
+    if (arrayAllSize.length > 0 && arrayAllCategory.length <= 0) {
+      const arrayFinal: Product[] = [];
+
+      arrayAllSize.forEach((here) => {
+        setAllProduct((prev) => {
+          prev.map((el) => {
+            el.sizesAvailable.map((elSize) => {
+              if (elSize === here) {
+                if (!arrayFinal.some((item) => item.id === el.id)) {
+                  arrayFinal.push(el);
+                }
+              } else {
+                // arrayFinal = [];
+              }
+            });
+          });
+          return prev;
+        });
+      });
+
+      setNewProductFilter(arrayFinal);
+    } else {
+      if (arrayAllSize.length > 0 && arrayAllCategory.length <= 0) {
+        setNewProductFilter([]);
+      }
+    }
+  }, [arrayAllCategory, arrayAllSize]);
 
   const onClickContainerCategory = (category: string) => {
     handleCategoryClick(category);
     handleRemoveCategoryMark(category);
   };
 
+  const onClickContainerSize = (size: string) => {
+    handleSizesClick(size);
+    handleRemoveSizeMark(size);
+  };
+
   return (
     <div className="flex flex-col w-[805px]">
       <div className="flex justify-between items-center !mb-[60px]">
-        {arrayAllCategory.length <= 0 && <div></div>}
+        {arrayAllCategory.length <= 0 && arrayAllSize.length <= 0 && <div></div>}
 
-        {arrayAllCategory.length > 0 && (
+        {(arrayAllCategory.length > 0 || arrayAllSize.length > 0) && (
           <div className="flex flex-col" ref={containerMyFilterCategory}>
             <span className="text-[14px] font-semibold">Você filtrou por:</span>
             <div className="flex flex-col gap-[2px]">
               {arrayAllCategory.map((el, i) => (
                 <div key={i} onClick={() => onClickContainerCategory(el)}>
+                  <div className="inline-flex items-center leading-[16px] bg-[#E3E3E3] !p-[5px] border border-[#1111113a] cursor-pointer">
+                    <span className="text-[11px] font-medium text-[#818181]">{el}</span>
+                    <Styled.ContainerSvgX>
+                      <SvgX />
+                    </Styled.ContainerSvgX>
+                  </div>
+                </div>
+              ))}
+
+              {arrayAllSize.map((el, i) => (
+                <div key={i} onClick={() => onClickContainerSize(el)}>
                   <div className="inline-flex items-center leading-[16px] bg-[#E3E3E3] !p-[5px] border border-[#1111113a] cursor-pointer">
                     <span className="text-[11px] font-medium text-[#818181]">{el}</span>
                     <Styled.ContainerSvgX>
@@ -194,10 +259,13 @@ const ProductRight = ({
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-        {arrayAllCategory.length <= 0 &&
-          allProduct.map((el, i) => <ProductDisplay product={el} key={i} />)}
+        {showAllProduct && allProduct.map((el, i) => <ProductDisplay product={el} key={i} />)}
 
         {arrayAllCategory.length > 0 &&
+          newProductFilter &&
+          newProductFilter.map((el, i) => <ProductDisplay product={el} key={i} />)}
+
+        {arrayAllSize.length > 0 &&
           newProductFilter &&
           newProductFilter.map((el, i) => <ProductDisplay product={el} key={i} />)}
       </div>
