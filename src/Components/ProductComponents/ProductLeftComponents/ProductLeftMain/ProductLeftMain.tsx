@@ -118,8 +118,6 @@ const ProductLeftMain = ({
       });
     }
 
-    console.log(elementsTrue);
-
     setItWasClickedSize(elementsTrue);
   }, [whichWasClickedSize]);
 
@@ -127,15 +125,12 @@ const ProductLeftMain = ({
     const containerSizes = containerCategoryMainAll.current as HTMLDivElement[];
 
     containerSizes.forEach((el) => {
-      console.log(el);
-
       el.classList.remove('bg-[#fff]', 'cursor-pointer');
       el.classList.add('bg-[#fff]', 'cursor-not-allowed');
     });
 
-    handleSizesClick(size);
-
     setItWasClickedSize(true);
+    handleSizesClick(size);
 
     setWhichWasClickedSize((prev) => {
       if (prev[index]) {
@@ -260,6 +255,7 @@ const ProductLeftMain = ({
           ))}
         </div>
       </div>
+
       <div className="flex flex-col items-start justify-between !mb-[40px] select-none">
         <div
           className="flex items-center w-full justify-between border-b-1 border-b-gray-300 cursor-pointer uppercase !mb-[15px]"

@@ -209,6 +209,7 @@ const ProductRight = ({
             </div>
           </div>
         )}
+
         <div className="flex justify-end items-center gap-[30px] text-[12px] font-medium leading-6 h-[30px]">
           <span>768 Produto(s)</span>
 
@@ -258,6 +259,7 @@ const ProductRight = ({
         </div>
       </div>
 
+      {/* FAZER CLICKED NO PRODUCT PARA REDIRECIONAR */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
         {showAllProduct && allProduct.map((el, i) => <ProductDisplay product={el} key={i} />)}
 
