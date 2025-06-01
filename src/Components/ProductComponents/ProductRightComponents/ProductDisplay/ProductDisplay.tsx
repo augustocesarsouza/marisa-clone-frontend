@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom';
 import { Product } from '../../../Interfaces/Entity/Product';
 import StarSvg from '../../../Svg/StarSvg/StarSvg';
 import * as Styled from './styled';
@@ -7,6 +8,8 @@ interface ProductDisplayProps {
 }
 
 const ProductDisplay = ({ product }: ProductDisplayProps) => {
+  const nav = useNavigate();
+
   const formatPriceTrunc = (price: number) => {
     if (price !== undefined) {
       const [int, dec = '00'] = String(price).split('.');
@@ -15,8 +18,14 @@ const ProductDisplay = ({ product }: ProductDisplayProps) => {
     }
   };
 
+  const onClickProductRedirect = () => {
+    const type = product.type;
+
+    nav(`/product/${type}`, { state: product });
+  };
+
   return (
-    <div className="flex flex-col w-[260px]">
+    <div className="flex flex-col w-[260px] cursor-pointer" onClick={onClickProductRedirect}>
       <div className="flex w-[250px] h-[300px] relative">
         <div
           className="flex flex-col items-center justify-center leading-[16px] text-[14px] bg-[black] text-[#fff] 

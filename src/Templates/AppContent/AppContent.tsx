@@ -16,6 +16,7 @@ import VoucherExchangeMain from '../../Components/MyAccountComponents/VoucherExc
 import MyDateLgpd from '../../Components/MyAccountComponents/MyDateLgpdComponents/MyDateLgpdMain/MyDateLgpd';
 import MyConsentsMain from '../../Components/MyAccountComponents/MyDateLgpdComponents/MyConsentsMain/MyConsentsMain';
 import ProductMain from '../../Components/ProductComponents/ProductMain/ProductMain';
+import ProductAfterClickedMain from '../../Components/ProductComponents/ProductAfterClickedComponents/ProductAfterClickedMain/ProductAfterClicked';
 
 const AppContent = () => {
   return (
@@ -53,6 +54,17 @@ const AppContent = () => {
           {/* <Route path="voucher-wallet" element={<MyCupons />} /> */}
           {/* <Route path="coin" element={<MyCoinsShopee />} /> */}
         </Route>
+
+        <Route path="/product/:slug" element={<ProductAfterClickedMain />} />
+
+        {/* <Route path="/product" element={<ProductMain />}>
+          <Route index element={<Navigate to="" />}></Route>
+
+          <Route path="voucher-wallet" element={<MyCupons />} />
+          <Route path="coin" element={<MyCoinsShopee />} />
+        </Route> */}
+
+        {/* ProductAfterClickedMain */}
 
         {/* <Route path="/verify" element={<VerifyPassword />} />
         <Route path="/verify/password" element={<VerifyPasswordStep2 />} /> */}

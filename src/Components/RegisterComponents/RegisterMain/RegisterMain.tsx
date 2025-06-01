@@ -1,4 +1,4 @@
-import { useLayoutEffect, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import FooterMain from '../../FooterMainComponents/FooterMain/FooterMain';
 import HeaderFullMain from '../../HeaderFullComponents/HeaderFullMain/HeaderFullMain';
 import * as Styled from './styled';
@@ -49,6 +49,11 @@ const RegisterMain = () => {
     container.style.background = '#ffd1ec';
     containerInner.style.backgroundColor = '#ec008c';
   };
+
+  useEffect(() => {
+    const seila = '';
+    console.log(seila);
+  }, []);
 
   return (
     <Styled.ContainerMain>

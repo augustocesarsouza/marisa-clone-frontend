@@ -19,6 +19,6 @@ module.exports = {
   },
   plugins: ['react', '@typescript-eslint', 'import'],
   rules: {
-    'import/no-unresolved': 'error',
+    'prefer-const': 'error',
   },
 };
