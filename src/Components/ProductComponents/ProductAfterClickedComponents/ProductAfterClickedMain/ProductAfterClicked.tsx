@@ -11,6 +11,7 @@ import MoreSvg from '../../../Svg/MoreSvg/MoreSvg';
 import SvgChanging from '../../../Svg/SvgChanging/SvgChanging';
 import SvgTable from '../../../Svg/SvgTable/SvgTable';
 import SvgArrow from '../../../Svg/SvgArrow/SvgArrow';
+import Inputmask from 'inputmask';
 
 const ProductAfterClickedMain = () => {
   // const { slug } = useParams();
@@ -26,6 +27,8 @@ const ProductAfterClickedMain = () => {
 
   const [whichSizeWasClicked, setWhichSizeWasClicked] = useState('');
   const [quantityOfItemsClicked, setQuantityOfItemsClicked] = useState(1);
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const inputCep = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     const state = location.state;
@@ -46,7 +49,11 @@ const ProductAfterClickedMain = () => {
   }, [location.state]);
 
   useLayoutEffect(() => {
-    setTimeout(() => {
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
+
+    timeoutRef.current = setTimeout(() => {
       const containerMinus = containerSvgMinusRef.current as HTMLDivElement;
       if (
         containerMinus.firstChild &&
@@ -62,10 +69,33 @@ const ProductAfterClickedMain = () => {
 
       if (product) {
         product.colors.forEach((color, i) => {
-          console.log(elements[i]);
           elements[i].style.borderColor = color.toLowerCase();
         });
       }
+
+      const applyMask = (
+        element: HTMLInputElement | null,
+        maskPattern: string,
+        placeholder: string
+      ) => {
+        if (!element) return;
+        const mask = new Inputmask({
+          mask: maskPattern,
+          placeholder,
+          insertMode: true,
+          showMaskOnHover: false,
+          showMaskOnFocus: false,
+        });
+        mask.mask(element);
+      };
+
+      const maskConfigs = [
+        { element: inputCep.current, mask: '99999-99', placeholder: '_____-__' },
+      ];
+
+      maskConfigs.forEach(({ element, mask, placeholder }) => {
+        applyMask(element as HTMLInputElement, mask, placeholder);
+      });
     }, 40);
   }, [containerColors, product]);
 
@@ -82,7 +112,6 @@ const ProductAfterClickedMain = () => {
     setWhichSizeWasClicked(size);
 
     arraySizes.forEach((el) => {
-      console.log(el);
       el.style.backgroundColor = '#fff';
       el.style.color = '#000000';
     });
@@ -144,7 +173,7 @@ const ProductAfterClickedMain = () => {
       <HeaderFullMain />
       <div className="flex justify-center !mb-[130px]">
         <Styled.ContainerMain className="flex flex-col w-[1300px]">
-          <h1 className="text-[10px] font-semibold w-full !mb-[10px] uppercase">
+          <h1 className="text-[10px] font-semibold w-full !mb-[30px] uppercase">
             <span className="text-[#989696]">{stringNameNav}</span> {'>'} {titleHereNav}
           </h1>
           {product && (
@@ -153,9 +182,11 @@ const ProductAfterClickedMain = () => {
                 <img src={product.imageUrl} alt="img-main" className="w-full" />
               </Styled.ContainerImgMain>
 
-              <div className="flex flex-col w-[460px] !pl-[80px] !pr-[10px]">
-                <h1 className="text-[28px] font-medium leading-[30px]">{product.title}</h1>
-                <span className="text-[12px] text-[#777777] font-normal">
+              <div className="flex flex-col w-[580px] !pl-[80px] !pr-[10px]">
+                <h1 className="text-[28px] font-medium leading-[30px] !mb-[10px]">
+                  {product.title}
+                </h1>
+                <span className="text-[12px] text-[#777777] font-normal !mb-[10px]">
                   MARISA {product.code}
                 </span>
 
@@ -179,36 +210,38 @@ const ProductAfterClickedMain = () => {
                   </div>
                   <span className="text-[11px] font-semibold">1 avaliação</span>
                 </div>
-                <div className="flex flex-col">
-                  <div className="flex leading-[16px]">
-                    <span className="line-through text-[#777777] text-[18px] font-medium">
-                      R$ {product.price}
-                    </span>
-                  </div>
+                <div className="flex flex-col !my-[15px]">
+                  <div className="flex flex-col">
+                    <div className="flex leading-[16px]">
+                      <span className="line-through text-[#777777] text-[18px] font-medium">
+                        R$ {product.price}
+                      </span>
+                    </div>
 
-                  <div className="flex leading-[40px]">
-                    <span className="text-[#454242] text-[40px] font-medium">
-                      R$ {formatPriceTrunc(product.priceDiscounted)}
-                    </span>
+                    <div className="flex leading-[40px]">
+                      <span className="text-[#454242] text-[40px] font-medium">
+                        R$ {formatPriceTrunc(product.priceDiscounted)}
+                      </span>
+                    </div>
+                  </div>
+                  <div className="flex text-[14px] font-semibold leading-[16px] gap-[3px] text-[#777777]">
+                    <span className="">{product.installmentTimesMarisaCard}x</span>
+                    <span className="">R$</span>
+                    <span className="">{formatPriceTrunc(product.installmentPrice)}</span>
+                    <span className="">sem juros no cartão marisa</span>
                   </div>
                 </div>
-                <div className="flex text-[14px] font-semibold leading-[16px] gap-[3px] text-[#777777]">
-                  <span className="">{product.installmentTimesMarisaCard}x</span>
-                  <span className="">R$</span>
-                  <span className="">{formatPriceTrunc(product.installmentPrice)}</span>
-                  <span className="">sem juros no cartão marisa</span>
-                </div>
 
-                <button className="flex text-[12px] text-[#EC008C] font-semibold cursor-pointer">
+                <button className="flex text-[12px] text-[#EC008C] font-semibold cursor-pointer !mb-[40px]">
                   VER AS FORMAS DE PARCELAMENTO
                 </button>
 
-                <span className="text-[#ACABAB] font-semibold">
+                <span className="text-[#ACABAB] font-semibold !mb-[5px]">
                   Vendido e entregue por: Lojas Marisa
                 </span>
 
-                <div className="flex flex-col">
-                  <span className="text-[14px] font-medium">
+                <div className="flex flex-col gap-[5px] !mb-[15px]">
+                  <span className="text-[15px] font-medium">
                     Escolha a cor: {product.colors[0]}
                   </span>
                   <div className="flex gap-[4px]">
@@ -223,8 +256,8 @@ const ProductAfterClickedMain = () => {
                   </div>
                 </div>
 
-                <div className="flex flex-col">
-                  <span className="text-[14px] font-medium">
+                <div className="flex flex-col gap-[12px] !mb-[40px]">
+                  <span className="text-[14px] font-semibold text-[#555555]">
                     Escolha a sua variação: {whichSizeWasClicked}
                   </span>
                   <div className="flex gap-[4px]">
@@ -242,7 +275,7 @@ const ProductAfterClickedMain = () => {
                   </div>
                 </div>
 
-                <div className="flex gap-[15px]">
+                <div className="flex gap-[15px] !mb-[40px]">
                   <Styled.ContainerSvgChanging className="flex items-center leading-[16px]">
                     <SvgChanging />
                     <span className="text-[#ec008c] text-[12px] font-semibold !mt-[2px]">
@@ -257,8 +290,8 @@ const ProductAfterClickedMain = () => {
                   </Styled.ContainerSvgTable>
                 </div>
 
-                <div className="flex flex-col">
-                  <span className="text-[14px] font-medium">Quantidade</span>
+                <div className="flex flex-col gap-[12px]">
+                  <span className="text-[14px] text-[#555] font-semibold">Quantidade</span>
 
                   <div className="flex items-center rounded-4xl w-[135px] leading-[16px] select-none border-t border-b border-[#e0e0e0]">
                     <div
@@ -284,7 +317,7 @@ const ProductAfterClickedMain = () => {
                 </div>
                 {/* font-family: "PT Sans", sans-serif; */}
 
-                <div className="flex flex-col !mt-[20px] border-b border-[#e0e0e0] !pb-[35px]">
+                <div className="flex flex-col !mt-[20px] border-b border-[#e0e0e0] !pb-[35px] !mb-[20px] w-[360px]">
                   <button className="text-[14px] font-medium !mb-[10px] text-[#2DDF89] border-1 border-[#2DDF89] h-[48px] rounded-[3%]">
                     ADICIONAR À SACOLA
                   </button>
@@ -293,7 +326,7 @@ const ProductAfterClickedMain = () => {
                   </button>
                 </div>
 
-                <div className="flex flex-col">
+                <div className="flex flex-col w-[360px]">
                   <Styled.h1EstimatedDelivery className="!my-[10px]">
                     Previsão de entrega
                   </Styled.h1EstimatedDelivery>
@@ -304,6 +337,7 @@ const ProductAfterClickedMain = () => {
                         type="text"
                         placeholder="Inserir CEP"
                         className="w-[80%] text-[15px] text-[#494949] font-semibold outline-none"
+                        ref={inputCep}
                       />
                       <Styled.ContainerArrowSvgRight className="outline-none">
                         <SvgArrow />
