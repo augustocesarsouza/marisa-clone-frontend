@@ -30,9 +30,10 @@ export const ContainerSvgMinusAndMore = styled.div`
 `;
 
 export const ContainerImgMain = styled.div`
-  width: 630px;
+  width: 100%;
   height: 700px;
   display: flex;
+  margin-bottom: 20px;
 
   @media (max-width: 1400px) {
     width: 492px;
@@ -72,4 +73,26 @@ export const ContainerArrowSvgRight = styled.div`
     transform: rotate(270deg);
     fill: #777777;
   }
+`;
+
+export const ContainerAboutTheProduct = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  line-height: 1;
+  padding: 10px 15px;
+  cursor: pointer;
+  height: 40px;
+  user-select: none;
+
+  > svg {
+    width: 15px;
+    height: 30px;
+    transform: rotate(0deg);
+    fill: #4f4f4f;
+  }
+`;
+
+export const ContainerOthers = styled.div`
+  padding: 15px 0px;
 `;
