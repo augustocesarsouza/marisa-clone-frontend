@@ -71,12 +71,8 @@ const ProductAfterClickedMain = () => {
           </h1>
           {product && (
             <div className="flex">
-              {product && (
-                <>
-                  <ProductFirstPart product={product} />
-                  <ProductSecondPart product={product} />
-                </>
-              )}
+              <ProductFirstPart product={product} />
+              <ProductSecondPart product={product} />
             </div>
           )}
         </Styled.ContainerMain>

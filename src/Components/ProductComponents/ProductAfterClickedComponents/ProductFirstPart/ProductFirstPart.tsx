@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import SvgArrow from '../../../Svg/SvgArrow/SvgArrow';
 import * as Styled from './styled';
 import { Product } from '../../../Interfaces/Entity/Product';
@@ -11,6 +11,9 @@ import productAdditionalInfoService, {
   ReturnGetProductAdditionalInfo,
 } from '../../../Service/ProductAdditionalInfoService/ProductAdditionalInfoService';
 import { ReturnErroCatch } from '../../../Service/UserService/UserService';
+import SvgArrowShowImgProduct from '../../../Svg/SvgArrowShowImgProduct/SvgArrowShowImgProduct';
+import SvgHeart from '../../../Svg/SvgHeart/SvgHeart';
+import SvgMagnifyingGlass from '../../../Svg/SvgMagnifyingGlass/SvgMagnifyingGlass';
 
 interface ProductFirstPartProps {
   product: Product;
@@ -20,7 +23,10 @@ const ProductFirstPart = ({ product }: ProductFirstPartProps) => {
   const [imgsSecondaryAll, setImgsSecondaryAll] = useState<string[] | []>([]);
   const nav = useNavigate();
 
+  const imgsSecondaryAllRef = useRef<string[]>([]);
+
   const containerDetailsSectionsAllRef = useRef<HTMLDivElement[]>([]);
+  const containerAllImgContainersRef = useRef<HTMLDivElement[]>([]);
   const [whichIndexDeatilsSectionsClicked, setWhichIndexDeatilsSectionsClicked] = useState(-1);
 
   const onClickDetailsSections = (index: number) => {
@@ -64,7 +70,9 @@ const ProductFirstPart = ({ product }: ProductFirstPartProps) => {
 
         const imgsSecondary = data.imgsSecondary;
         imgsSecondary.unshift(product.imageUrl);
+
         setImgsSecondaryAll(imgsSecondary);
+        imgsSecondaryAllRef.current = imgsSecondary;
 
         setProductAdditionalInfoList(data);
       } else {
@@ -104,18 +112,155 @@ const ProductFirstPart = ({ product }: ProductFirstPartProps) => {
     GetProductAdditionalInfoByProductId(user, product.id);
   }, [GetProductAdditionalInfoByProductId]);
 
+  const carouselCustom = useRef<HTMLDivElement>(null);
+  const containerArrowLeft = useRef<HTMLDivElement>(null);
+  const containerArrowRight = useRef<HTMLDivElement>(null);
+  const [_, setWhichImgIndex] = useState(0);
+
+  useLayoutEffect(() => {
+    if (typeof window === 'undefined') return;
+
+    const scrollElement = carouselCustom.current;
+    const containerLeft = containerArrowLeft.current;
+    const containerRight = containerArrowRight.current;
+
+    const scrollLeft = () => {
+      scrollElement?.scrollBy({ left: -630, behavior: 'smooth' });
+
+      setWhichImgIndex((prev) => {
+        if (prev > 0) {
+          const index = prev - 1;
+          applyBorder(index);
+          return index;
+        }
+        return prev;
+      });
+    };
+
+    const scrollRight = () => {
+      scrollElement?.scrollBy({ left: 630, behavior: 'smooth' });
+
+      setWhichImgIndex((prev) => {
+        if (prev < imgsSecondaryAllRef.current.length - 1) {
+          const index = prev + 1;
+
+          applyBorder(index);
+          return index;
+        }
+        return prev;
+      });
+    };
+
+    const updateArrowsVisibility = () => {
+      if (scrollElement) {
+        let maxScrollLeft = scrollElement.scrollWidth - scrollElement.clientWidth;
+
+        if (maxScrollLeft === 0) {
+          maxScrollLeft = 10;
+        }
+
+        containerLeft!.style.display = scrollElement.scrollLeft > 0 ? 'flex' : 'none';
+        containerRight!.style.display = scrollElement.scrollLeft >= maxScrollLeft ? 'none' : 'flex';
+      }
+    };
+
+    containerLeft?.addEventListener('click', scrollLeft);
+    containerRight?.addEventListener('click', scrollRight);
+    scrollElement?.addEventListener('scroll', updateArrowsVisibility);
+    window.addEventListener('resize', updateArrowsVisibility);
+
+    updateArrowsVisibility();
+
+    return () => {
+      containerLeft?.removeEventListener('click', scrollLeft);
+      containerRight?.removeEventListener('click', scrollRight);
+      scrollElement?.removeEventListener('scroll', updateArrowsVisibility);
+      window.removeEventListener('resize', updateArrowsVisibility);
+    };
+  }, []);
+
+  const onClickContainerImg = (index: number) => {
+    setWhichImgIndex(index);
+
+    const arrayContainer = containerAllImgContainersRef.current;
+
+    arrayContainer.forEach((el) => {
+      el.style.borderBottom = 'none';
+    });
+
+    const container = arrayContainer[index];
+    container.style.borderBottom = '3px solid #ec008c';
+
+    const scrollElement = carouselCustom.current;
+    const scrollLeftValue = index * 630;
+
+    scrollElement?.scrollTo({ left: scrollLeftValue, behavior: 'smooth' });
+  };
+
+  const applyBorder = (index: number) => {
+    const arrayContainer = containerAllImgContainersRef.current;
+
+    arrayContainer.forEach((el) => {
+      el.style.borderBottom = 'none';
+    });
+
+    const container = arrayContainer[index];
+    if (container) {
+      container.style.borderBottom = '3px solid #ec008c';
+    }
+  };
+
+  const onClickMagnifyingGlass = () => {};
+
   return (
     <div className="flex flex-col w-[630px]">
       <Styled.ContainerImgMain>
-        <img src={product.imageUrl} alt="img-main" className="w-full" />
+        <div className="flex items-center justify-center w-[64px] absolute left-4 top-4 !py-[2px] bg-[#2ddf89] text-[13px] font-semibold text-[#fff]">
+          <span>-{product.discountPercentage}%</span>
+        </div>
+        <Styled.containerSvgArrowLeft ref={containerArrowLeft}>
+          <SvgArrowShowImgProduct />
+        </Styled.containerSvgArrowLeft>
+
+        <div
+          className="flex flex-wrap overflow-y-hidden overflow-x-scroll flex-col"
+          ref={carouselCustom}>
+          {imgsSecondaryAll.length > 0 &&
+            imgsSecondaryAll.map((el, i) => (
+              <img src={el} key={i} alt="img-main" className={`w-[630px] h-[700px]`} />
+            ))}
+        </div>
+
+        <Styled.containerSvgArrowRight ref={containerArrowRight}>
+          <SvgArrowShowImgProduct />
+        </Styled.containerSvgArrowRight>
+
+        <div className="flex flex-col absolute right-4 top-4">
+          <div className="flex items-center justify-center w-[40px] h-[40px] rounded-4xl bg-[#fff] !mb-[5px] cursor-pointer">
+            <SvgHeart fill="#0000007a" width="16px" height="16px" />
+          </div>
+          <div
+            className="flex items-center justify-center w-[40px] h-[40px] rounded-4xl bg-[#fff] cursor-pointer"
+            onClick={onClickMagnifyingGlass}>
+            <SvgMagnifyingGlass fill="#0000007a" width="16px" height="16px" />
+          </div>
+        </div>
       </Styled.ContainerImgMain>
 
       <div className="flex flex-col">
         <div className="flex gap-[7px] !mb-[18px]">
           {imgsSecondaryAll.length > 0 &&
             imgsSecondaryAll.map((el, i) => (
-              <div className="flex w-[97px]" key={i}>
-                <img src={el} alt="img-secondary" />
+              <div
+                className={`w-[97px] cursor-pointer inline-block outline-none ${i === 0 ? 'border-b-3 border-[#ec008c]' : ''}`}
+                onClick={() => onClickContainerImg(i)}
+                ref={(ref) => {
+                  if (ref) {
+                    containerAllImgContainersRef.current[i] = ref;
+                  }
+                }}
+                key={i}>
+                <img className="block w-full h-full" src={el} alt="img-secondary" />
               </div>
             ))}
         </div>
