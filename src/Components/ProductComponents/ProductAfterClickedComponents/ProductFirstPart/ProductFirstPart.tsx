@@ -124,33 +124,6 @@ const ProductFirstPart = ({ product }: ProductFirstPartProps) => {
     const containerLeft = containerArrowLeft.current;
     const containerRight = containerArrowRight.current;
 
-    const scrollLeft = () => {
-      scrollElement?.scrollBy({ left: -630, behavior: 'smooth' });
-
-      setWhichImgIndex((prev) => {
-        if (prev > 0) {
-          const index = prev - 1;
-          applyBorder(index);
-          return index;
-        }
-        return prev;
-      });
-    };
-
-    const scrollRight = () => {
-      scrollElement?.scrollBy({ left: 630, behavior: 'smooth' });
-
-      setWhichImgIndex((prev) => {
-        if (prev < imgsSecondaryAllRef.current.length - 1) {
-          const index = prev + 1;
-
-          applyBorder(index);
-          return index;
-        }
-        return prev;
-      });
-    };
-
     const updateArrowsVisibility = () => {
       if (scrollElement) {
         let maxScrollLeft = scrollElement.scrollWidth - scrollElement.clientWidth;
@@ -191,10 +164,15 @@ const ProductFirstPart = ({ product }: ProductFirstPartProps) => {
     const container = arrayContainer[index];
     container.style.borderBottom = '3px solid #ec008c';
 
-    const scrollElement = carouselCustom.current;
-    const scrollLeftValue = index * 630;
+    const scrollElement = carouselCustom.current as HTMLDivElement;
+    const itemWidth = 630;
+    const targetScrollLeft = index * itemWidth;
 
-    scrollElement?.scrollTo({ left: scrollLeftValue, behavior: 'smooth' });
+    const distance = targetScrollLeft - scrollElement.scrollLeft;
+
+    smoothScrollBy(scrollElement, distance, 500, () => {
+      isScrollingRef.current = false;
+    });
   };
 
   const applyBorder = (index: number) => {
@@ -210,11 +188,124 @@ const ProductFirstPart = ({ product }: ProductFirstPartProps) => {
     }
   };
 
-  const onClickMagnifyingGlass = () => {};
+  function smoothScrollBy(
+    element: HTMLDivElement,
+    distance: number,
+    duration = 500,
+    callback?: () => void
+  ) {
+    if (!element) return;
+
+    const start = element.scrollLeft;
+    const startTime = performance.now();
+
+    function animate(time: number) {
+      const elapsed = time - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      element.scrollLeft = start + distance * easeInOutQuad(progress);
+
+      if (progress < 1) {
+        requestAnimationFrame(animate);
+      } else {
+        // Animação terminou
+        if (callback) callback();
+      }
+    }
+
+    function easeInOutQuad(t: number) {
+      return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
+    }
+
+    requestAnimationFrame(animate);
+  }
+
+  const isScrollingRef = useRef(false);
+
+  const scrollLeft = () => {
+    if (!isScrollingRef.current) {
+      isScrollingRef.current = true;
+
+      const scrollElement = carouselCustom.current as HTMLDivElement;
+
+      smoothScrollBy(scrollElement, -630, 500, () => {
+        isScrollingRef.current = false;
+      });
+
+      setWhichImgIndex((prev) => {
+        if (prev > 0) {
+          const index = prev - 1;
+          applyBorder(index);
+          return index;
+        }
+        return prev;
+      });
+    }
+  };
+
+  const scrollRight = () => {
+    if (!isScrollingRef.current) {
+      isScrollingRef.current = true;
+
+      const scrollElement = carouselCustom.current as HTMLDivElement;
+
+      smoothScrollBy(scrollElement, 630, 500, () => {
+        isScrollingRef.current = false;
+      });
+
+      setWhichImgIndex((prev) => {
+        if (prev < imgsSecondaryAllRef.current.length - 1) {
+          const index = prev + 1;
+          applyBorder(index);
+          return index;
+        }
+        return prev;
+      });
+    }
+  };
+
+  const containerImgMain = useRef<HTMLDivElement | null>(null);
+  const imgProductRef = useRef<HTMLImageElement | null>(null);
+
+  const [alreadyClickedContainerZoom, setAlreadyClickedContainerZoom] = useState(false);
+  const [origin, setOrigin] = useState({ x: 50, y: 50 });
+  // FAZER ISSO AMANHA NO ANGULAR
+
+  const onClickMagnifyingGlass = () => {
+    const container = containerImgMain.current as HTMLDivElement;
+
+    if (!alreadyClickedContainerZoom) {
+      container.style.cursor = 'zoom-in';
+      setAlreadyClickedContainerZoom(true);
+    } else {
+      container.style.cursor = 'pointer';
+      setAlreadyClickedContainerZoom(false);
+      const img = imgProductRef.current as HTMLImageElement;
+      img.style.transform = 'scale(1)';
+    }
+  };
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = ((e.clientX - rect.left) / rect.width) * 100;
+    const y = ((e.clientY - rect.top) / rect.height) * 100;
+    setOrigin({ x, y });
+  };
+
+  const onMouseEnterContainerImg = () => {};
+
+  const onMouseLeaveContainerImg = () => {
+    const container = containerImgMain.current as HTMLDivElement;
+    container.style.cursor = 'pointer';
+
+    setAlreadyClickedContainerZoom(false);
+  };
 
   return (
     <div className="flex flex-col w-[630px]">
-      <Styled.ContainerImgMain>
+      <Styled.ContainerImgMain
+        ref={containerImgMain}
+        onMouseEnter={onMouseEnterContainerImg}
+        onMouseLeave={onMouseLeaveContainerImg}>
         <div className="flex items-center justify-center w-[64px] absolute left-4 top-4 !py-[2px] bg-[#2ddf89] text-[13px] font-semibold text-[#fff]">
           <span>-{product.discountPercentage}%</span>
         </div>
@@ -223,11 +314,26 @@ const ProductFirstPart = ({ product }: ProductFirstPartProps) => {
         </Styled.containerSvgArrowLeft>
 
         <div
-          className="flex flex-wrap overflow-y-hidden overflow-x-scroll flex-col"
+          className="flex flex-wrap overflow-y-hidden overflow-x-hidden flex-col"
+          style={{ scrollBehavior: 'smooth' }}
           ref={carouselCustom}>
           {imgsSecondaryAll.length > 0 &&
             imgsSecondaryAll.map((el, i) => (
-              <img src={el} key={i} alt="img-main" className={`w-[630px] h-[700px]`} />
+              <div
+                key={i}
+                className="w-[630px] h-[700px] overflow-hidden relative"
+                onMouseMove={alreadyClickedContainerZoom ? handleMouseMove : undefined}>
+                <img
+                  src={el}
+                  alt="img-main"
+                  className="w-full h-full object-cover transition-transform duration-300"
+                  ref={imgProductRef}
+                  style={{
+                    transform: alreadyClickedContainerZoom ? 'scale(2)' : 'scale(1)',
+                    transformOrigin: `${origin.x}% ${origin.y}%`,
+                  }}
+                />
+              </div>
             ))}
         </div>
 
