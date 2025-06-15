@@ -14,6 +14,11 @@ import { ReturnErroCatch } from '../../../Service/UserService/UserService';
 import SvgArrowShowImgProduct from '../../../Svg/SvgArrowShowImgProduct/SvgArrowShowImgProduct';
 import SvgHeart from '../../../Svg/SvgHeart/SvgHeart';
 import SvgMagnifyingGlass from '../../../Svg/SvgMagnifyingGlass/SvgMagnifyingGlass';
+import SvgHeartColor from '../../../Svg/SvgHeartColor/SvgHeartColor';
+import userProductLikeService, {
+  ReturnGetUserProductLike,
+} from '../../../Service/UserProductLikeService/UserProductLikeService';
+import { UserProductLike } from '../../../Interfaces/Entity/UserProductLike';
 
 interface ProductFirstPartProps {
   product: Product;
@@ -24,6 +29,7 @@ const ProductFirstPart = ({ product }: ProductFirstPartProps) => {
   const nav = useNavigate();
 
   const imgsSecondaryAllRef = useRef<string[]>([]);
+  const [user, setUser] = useState<User | null>(null);
 
   const containerDetailsSectionsAllRef = useRef<HTMLDivElement[]>([]);
   const containerAllImgContainersRef = useRef<HTMLDivElement[]>([]);
@@ -82,6 +88,36 @@ const ProductFirstPart = ({ product }: ProductFirstPartProps) => {
     }
   }, []);
 
+  const [whichHeartShowRed, setWhichHeartShowRed] = useState(false);
+
+  const GetUserProductLikeByProductIdUserId = useCallback(
+    async (productId: string, userId: string, token: string) => {
+      const respSend = await userProductLikeService.GetUserProductLikeByProductIdUserId(
+        productId,
+        userId,
+        token
+      );
+
+      if (respSend.isSucess) {
+        const resp = respSend as ReturnGetUserProductLike;
+        const data = resp.data;
+
+        if (resp.message === 'object not found') {
+          setWhichHeartShowRed(false);
+        }
+        // amanha faça isso no ANGULAR E JAVA PORQUE EU ALTEREI O CREATE NO BACKEND
+        if (resp.message === undefined) {
+          setWhichHeartShowRed(true);
+          // se nao tiver claro isso pode criar uma class que te avisa e tem objeto ou nao
+        }
+      } else {
+        const respError = respSend as ReturnErroCatch;
+        console.log(respError);
+      }
+    },
+    []
+  );
+
   useEffect(() => {
     const objUser = GetUserFromLocalStorage();
 
@@ -99,6 +135,13 @@ const ProductFirstPart = ({ product }: ProductFirstPartProps) => {
 
     const user = objUser.user;
     const token = user.token;
+    const productId = product.id;
+    setUser(user);
+    // const productId = '5e565ac8-5e81-4991-a0ed-192abe689c03';
+
+    if (user.id && token) {
+      GetUserProductLikeByProductIdUserId(productId, user.id, token);
+    }
 
     if (token) {
       const valueExpiration = TokenExpiration(token);
@@ -110,7 +153,7 @@ const ProductFirstPart = ({ product }: ProductFirstPartProps) => {
     }
 
     GetProductAdditionalInfoByProductId(user, product.id);
-  }, [GetProductAdditionalInfoByProductId]);
+  }, [GetProductAdditionalInfoByProductId, GetUserProductLikeByProductIdUserId]);
 
   const carouselCustom = useRef<HTMLDivElement>(null);
   const containerArrowLeft = useRef<HTMLDivElement>(null);
@@ -268,7 +311,6 @@ const ProductFirstPart = ({ product }: ProductFirstPartProps) => {
 
   const [alreadyClickedContainerZoom, setAlreadyClickedContainerZoom] = useState(false);
   const [origin, setOrigin] = useState({ x: 50, y: 50 });
-  // FAZER ISSO AMANHA NO ANGULAR
 
   const onClickMagnifyingGlass = () => {
     const container = containerImgMain.current as HTMLDivElement;
@@ -298,6 +340,36 @@ const ProductFirstPart = ({ product }: ProductFirstPartProps) => {
     container.style.cursor = 'pointer';
 
     setAlreadyClickedContainerZoom(false);
+  };
+
+  const onClickCreateOrDeleteHeart = async () => {
+    if (user === null) return;
+    if (user.id === null) return;
+
+    const obj: UserProductLike = {
+      id: null,
+      productId: null,
+      productIdString: product.id,
+      product: null,
+      userId: null,
+      userIdString: user.id,
+      user: null,
+      likedAt: null,
+    };
+
+    const respSend = await userProductLikeService.create(obj);
+
+    if (respSend && respSend.isSucess) {
+      const data = respSend.data;
+
+      if (data.deleted) {
+        setWhichHeartShowRed(false);
+      }
+
+      if (data.created) {
+        setWhichHeartShowRed(true);
+      }
+    }
   };
 
   return (
@@ -342,9 +414,19 @@ const ProductFirstPart = ({ product }: ProductFirstPartProps) => {
         </Styled.containerSvgArrowRight>
 
         <div className="flex flex-col absolute right-4 top-4">
-          <div className="flex items-center justify-center w-[40px] h-[40px] rounded-4xl bg-[#fff] !mb-[5px] cursor-pointer">
-            <SvgHeart fill="#0000007a" width="16px" height="16px" />
-          </div>
+          {whichHeartShowRed ? (
+            <div
+              className="flex items-center justify-center w-[40px] h-[40px] rounded-4xl bg-[#fff] !mb-[5px] cursor-pointer"
+              onClick={onClickCreateOrDeleteHeart}>
+              <SvgHeartColor fill="#ec008d" width="16px" height="16px" />
+            </div>
+          ) : (
+            <div
+              className="flex items-center justify-center w-[40px] h-[40px] rounded-4xl bg-[#fff] !mb-[5px] cursor-pointer"
+              onClick={onClickCreateOrDeleteHeart}>
+              <SvgHeart fill="#0000007a" width="16px" height="16px" />
+            </div>
+          )}
           <div
             className="flex items-center justify-center w-[40px] h-[40px] rounded-4xl bg-[#fff] cursor-pointer"
             onClick={onClickMagnifyingGlass}>

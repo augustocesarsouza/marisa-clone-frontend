@@ -64,6 +64,7 @@ export const containerSvgArrowLeft = styled.div`
   top: 340px;
   width: 20px;
   height: 30px;
+  z-index: 10;
 
   > svg {
     width: 100%;
