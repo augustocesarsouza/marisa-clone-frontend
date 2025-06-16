@@ -40,7 +40,7 @@ class UserProductLikeService {
   ): Promise<ReturnGetUserProductLike | ReturnErroCatch> {
     try {
       const response = await this.http.get<ReturnGetUserProductLike>(
-        `/public/user-product-like/get-user-product-by-product-id/${productId}/${userId}`,
+        `/user-product-like/get-user-product-by-product-id/${productId}/${userId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -68,7 +68,7 @@ class UserProductLikeService {
   async create(userProductLike: UserProductLike): Promise<ReturnCreateUserProductLike | null> {
     try {
       const response = await this.http.post<ReturnCreateUserProductLike>(
-        '/public/user-product-like/create',
+        '/user-product-like/create',
         userProductLike
       );
       return response.data;

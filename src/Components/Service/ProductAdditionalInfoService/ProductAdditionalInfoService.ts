@@ -33,7 +33,7 @@ class ProductAdditionalInfoService {
   ): Promise<ReturnGetProductAdditionalInfo | ReturnErroCatch> {
     try {
       const response = await this.http.get<ReturnGetProductAdditionalInfo>(
-        `/public/product-additional-info/get-by-product-id/${productId}`,
+        `/product-additional-info/get-by-product-id/${productId}`,
         {
           headers: {
             Authorization: `Bearer ${user.token}`,

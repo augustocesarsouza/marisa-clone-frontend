@@ -30,7 +30,7 @@ class ProductService {
   async getAllProduct(user: User, type: string): Promise<ReturnGetProductList | ReturnErroCatch> {
     try {
       const response = await this.http.get<ReturnGetProductList>(
-        `/public/product/get-all-product-by-type/${type}`,
+        `/product/get-all-product-by-type/${type}`,
         {
           headers: {
             Authorization: `Bearer ${user.token}`,
