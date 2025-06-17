@@ -7,7 +7,7 @@ import { useEffect, useState } from 'react';
 import { Product } from '../../../Interfaces/Entity/Product';
 import { GetUserFromLocalStorage } from '../../../GetUserFromLocalStorage/GetUserFromLocalStorage';
 import { TokenExpiration } from '../../../TokenValidation/TokenExpiration';
-import ProductFirstPart from '../ProductFirstPart/ProductFirstPart';
+import ProductFirstPart from '../ProductFirstPartComponents/ProductFirstPart/ProductFirstPart';
 import ProductSecondPart from '../ProductSecondPart/ProductSecondPart';
 
 const ProductAfterClickedMain = () => {
@@ -22,6 +22,7 @@ const ProductAfterClickedMain = () => {
 
     if (state) {
       const product: Product = state;
+
       setProduct(product);
       const title = product.title;
 
@@ -66,7 +67,9 @@ const ProductAfterClickedMain = () => {
       <HeaderFullMain />
       <div className="flex justify-center !mb-[130px]">
         <Styled.ContainerMain className="flex flex-col w-[1300px]">
-          <h1 className="text-[10px] font-semibold w-full !mb-[30px] uppercase">
+          <h1
+            className="text-[10px] font-semibold w-full !mb-[30px] uppercase"
+            data-testid="header-string-name-nav">
             <span className="text-[#989696]">{stringNameNav}</span> {'>'} {titleHereNav}
           </h1>
           {product && (

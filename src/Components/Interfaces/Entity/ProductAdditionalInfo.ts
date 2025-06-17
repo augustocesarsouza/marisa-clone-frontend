@@ -7,7 +7,7 @@ export interface ProductAdditionalInfo {
   composition: string;
   shippingInformation: string;
   productId: string;
-  product: Product;
+  product: Product | null;
 }
 
 export interface ProductInfoSection {

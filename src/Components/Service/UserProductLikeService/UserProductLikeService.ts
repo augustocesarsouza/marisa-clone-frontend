@@ -65,12 +65,24 @@ class UserProductLikeService {
     }
   }
 
-  async create(userProductLike: UserProductLike): Promise<ReturnCreateUserProductLike | null> {
+  async create(
+    userProductLike: UserProductLike,
+    userId: string,
+    token: string
+  ): Promise<ReturnCreateUserProductLike | null> {
     try {
       const response = await this.http.post<ReturnCreateUserProductLike>(
         '/user-product-like/create',
-        userProductLike
+        userProductLike,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            uid: userId,
+            'Content-Type': 'application/json',
+          },
+        }
       );
+
       return response.data;
     } catch {
       return null;

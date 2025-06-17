@@ -33,13 +33,13 @@ const ProductDisplay = ({ product }: ProductDisplayProps) => {
           <span>{product.discountPercentage}%</span>
           <span>Off</span>
         </div>
-        <img className="w-full h-full" src={product.imageUrl} alt={'img-product' + product.id} />
+        <img className="w-full h-full" src={product.imageUrl} alt={'img-product-' + product.id} />
       </div>
 
       <div className="flex flex-col">
         <span className="text-[13px] min-h-[30px]">{product.title}</span>
         <div className="flex items-center gap-[2px] leading-[16px] !mt-[10px] !mb-[10px]">
-          <div className="flex gap-[2px]">
+          <div className="flex gap-[2px]" data-testid="my-div-all-stars">
             <Styled.ContainerStarSvg className="flex">
               <StarSvg />
             </Styled.ContainerStarSvg>
@@ -67,7 +67,7 @@ const ProductDisplay = ({ product }: ProductDisplayProps) => {
       </div>
 
       <div className="flex">
-        <span className="text-[#EC008C] text-[15px] font-bold">
+        <span className="text-[#EC008C] text-[15px] font-bold" data-testid="span-price-discount">
           Por R$ {formatPriceTrunc(product.priceDiscounted)}
         </span>
       </div>
@@ -75,7 +75,9 @@ const ProductDisplay = ({ product }: ProductDisplayProps) => {
       <div className="flex text-[12px] font-normal leading-[16px] gap-[3px]">
         <span className="text-[#EC008C]">{product.installmentTimesMarisaCard}x</span>
         <span className="text-[#555555]">R$</span>
-        <span className="text-[#EC008C]">{formatPriceTrunc(product.installmentPrice)}</span>
+        <span className="text-[#EC008C]" data-testid="span-install-price">
+          {formatPriceTrunc(product.installmentPrice)}
+        </span>
         <span className="text-[#555555]">sem juros no cartão marisa</span>
       </div>
     </div>
