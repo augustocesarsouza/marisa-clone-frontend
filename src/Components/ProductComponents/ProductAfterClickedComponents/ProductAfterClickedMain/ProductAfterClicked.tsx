@@ -8,7 +8,7 @@ import { Product } from '../../../Interfaces/Entity/Product';
 import { GetUserFromLocalStorage } from '../../../GetUserFromLocalStorage/GetUserFromLocalStorage';
 import { TokenExpiration } from '../../../TokenValidation/TokenExpiration';
 import ProductFirstPart from '../ProductFirstPartComponents/ProductFirstPart/ProductFirstPart';
-import ProductSecondPart from '../ProductSecondPart/ProductSecondPart';
+import ProductSecondPart from '../ProductSecondPartComponents/ProductSecondPart/ProductSecondPart';
 
 const ProductAfterClickedMain = () => {
   const nav = useNavigate();
