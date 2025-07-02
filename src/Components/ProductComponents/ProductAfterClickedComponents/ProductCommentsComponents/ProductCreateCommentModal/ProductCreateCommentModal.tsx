@@ -131,40 +131,22 @@ const ProductCreateCommentModal = ({
 
     if (user.id === null || user.token === null) return;
 
-    const objTest: ProductComment = {
-      comment: 'Blusa Muito Top Da Galaxia',
-      createdAt: '2025-07-02T15:17:44.9448683Z',
-      email: 'lucas@gmail.com',
-      id: 'e119f988-c31f-416e-b377-827322e12482',
-      name: 'Lucas',
-      productId: '90635a26-1e40-468e-b36c-c5ade6df7d22',
-      recommendProduct: false,
-      starQuantity: 4,
-      updatedAt: '2025-07-02T15:17:44.9448684Z',
-      productIdString: '',
-      productDTO: null,
-      imgProduct: '',
-    };
+    const res = await productCommentService.create(objEvaluate, user.id, user.token);
 
-    changeValueButtonEvaluate(false);
-    changeCommentsCreateNew(objTest);
+    if (res.isSucess) {
+      const data = res as ReturnGetProductComment;
 
-    // const res = await productCommentService.create(objEvaluate, user.id, user.token);
+      if (data.isSucess) {
+        const productCommentData = data.data;
 
-    // if (res.isSucess) {
-    //   const data = res as ReturnGetProductComment;
-
-    //   if (data.isSucess) {
-    //     const productCommentData = data.data;
-
-    //     changeValueButtonEvaluate(false);
-    //     changeCommentsCreateNew(productCommentData);
-    //     console.log(productCommentData);
-    //   }
-    // } else {
-    //   const error = res as ReturnErroCatch;
-    //   console.error(error);
-    // }
+        changeValueButtonEvaluate(false);
+        changeCommentsCreateNew(productCommentData);
+        console.log(productCommentData);
+      }
+    } else {
+      const error = res as ReturnErroCatch;
+      console.error(error);
+    }
   };
 
   const containerAllStarsRef = useRef<StarRefItem[]>([]);
