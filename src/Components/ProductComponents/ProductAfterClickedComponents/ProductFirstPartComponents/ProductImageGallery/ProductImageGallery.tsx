@@ -67,6 +67,24 @@ const ProductImageGallery = ({
   );
 
   useEffect(() => {
+    const handleResize = () => {
+      setWhichImgIndex((index) => {
+        const scrollElement = carouselCustom.current as HTMLDivElement;
+        const valueDistance = scrollElement.offsetWidth;
+        const targetScrollLeft = index * valueDistance;
+
+        const distance = targetScrollLeft - scrollElement.scrollLeft;
+
+        smoothScrollBy(scrollElement, distance, 30, () => {
+          isScrollingRef.current = false;
+        });
+
+        return index;
+      });
+    };
+
+    window.addEventListener('resize', handleResize);
+
     imgsSecondaryAllRef.current = imgsSecondaryAll;
 
     const token = user.token;
@@ -75,6 +93,10 @@ const ProductImageGallery = ({
     if (user.id && token) {
       GetUserProductLikeByProductIdUserId(productId, user.id, token);
     }
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
   }, [user, GetUserProductLikeByProductIdUserId, imgsSecondaryAll]);
 
   const onClickMagnifyingGlass = () => {
@@ -186,8 +208,9 @@ const ProductImageGallery = ({
       isScrollingRef.current = true;
 
       const scrollElement = carouselCustom.current as HTMLDivElement;
+      const valueDistance = scrollElement.offsetWidth;
 
-      smoothScrollBy(scrollElement, -630, 500, () => {
+      smoothScrollBy(scrollElement, -valueDistance, 500, () => {
         isScrollingRef.current = false;
       });
 
@@ -207,8 +230,9 @@ const ProductImageGallery = ({
       isScrollingRef.current = true;
 
       const scrollElement = carouselCustom.current as HTMLDivElement;
+      const valueDistance = scrollElement.offsetWidth;
 
-      smoothScrollBy(scrollElement, 630, 500, () => {
+      smoothScrollBy(scrollElement, valueDistance, 500, () => {
         isScrollingRef.current = false;
       });
 
@@ -287,9 +311,9 @@ const ProductImageGallery = ({
         data-testid="container-all-imgs-product">
         {imgsSecondaryAll.length > 0 &&
           imgsSecondaryAll.map((el, i) => (
-            <div
+            <Styled.ContainerImgSecond
               key={i}
-              className="w-[630px] h-[700px] overflow-hidden relative"
+              className="overflow-hidden relative"
               onMouseMove={alreadyClickedContainerZoom ? handleMouseMove : undefined}>
               <img
                 src={el}
@@ -301,7 +325,7 @@ const ProductImageGallery = ({
                   transformOrigin: `${origin.x}% ${origin.y}%`,
                 }}
               />
-            </div>
+            </Styled.ContainerImgSecond>
           ))}
       </div>
 

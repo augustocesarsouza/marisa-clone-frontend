@@ -15,7 +15,7 @@ export const ContainerImgMain = styled.div`
 
   @media (max-width: 1400px) {
     width: 492px;
-    height: auto;
+    height: 590px;
   }
 `;
 
@@ -49,5 +49,17 @@ export const containerSvgArrowLeft = styled.div`
     height: 100%;
     transform: rotate(180deg);
     cursor: pointer;
+  }
+`;
+
+export const ContainerImgSecond = styled.div`
+  width: 630px;
+  height: 700px;
+  /* width: 492px;
+  height: 590px; */
+
+  @media (max-width: 1400px) {
+    width: 492px;
+    height: 590px;
   }
 `;

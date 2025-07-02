@@ -9,6 +9,9 @@ import { GetUserFromLocalStorage } from '../../../GetUserFromLocalStorage/GetUse
 import { TokenExpiration } from '../../../TokenValidation/TokenExpiration';
 import ProductFirstPart from '../ProductFirstPartComponents/ProductFirstPart/ProductFirstPart';
 import ProductSecondPart from '../ProductSecondPartComponents/ProductSecondPart/ProductSecondPart';
+import ProductCommentsDisplay from '../ProductCommentsComponents/ProductCommentsDisplay/ProductCommentsDisplay';
+import { Provider } from 'react-redux';
+import { productStore } from '../ReduxSendProduct/productStore';
 
 const ProductAfterClickedMain = () => {
   const nav = useNavigate();
@@ -73,10 +76,15 @@ const ProductAfterClickedMain = () => {
             <span className="text-[#989696]">{stringNameNav}</span> {'>'} {titleHereNav}
           </h1>
           {product && (
-            <div className="flex">
-              <ProductFirstPart product={product} />
-              <ProductSecondPart product={product} />
-            </div>
+            <Provider store={productStore}>
+              <div className="flex flex-col">
+                <div className="flex !mb-[70px]">
+                  <ProductFirstPart product={product} />
+                  <ProductSecondPart product={product} />
+                </div>
+                <ProductCommentsDisplay product={product} />
+              </div>
+            </Provider>
           )}
         </Styled.ContainerMain>
       </div>

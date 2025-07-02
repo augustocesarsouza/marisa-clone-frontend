@@ -5,10 +5,10 @@ import { GetUserFromLocalStorage } from '../../../../GetUserFromLocalStorage/Get
 import { useNavigate } from 'react-router-dom';
 import { TokenExpiration } from '../../../../TokenValidation/TokenExpiration';
 import addressService, {
-  ReturnErroCatch,
   ReturnGetAddressList,
 } from '../../../../Service/AddressService/AddressService';
 import ModalAddress from '../ModalAddress/ModalAddress';
+import { ReturnErroCatch } from '../../../../Service/UserService/UserService';
 
 const AddressDisplayedMain = () => {
   const nav = useNavigate();

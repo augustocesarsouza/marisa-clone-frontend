@@ -32,8 +32,8 @@ const ImgSecondaryAll = ({
       container.style.borderBottom = '3px solid #ec008c';
 
       const scrollElement = carouselCustom.current as HTMLDivElement;
-      const itemWidth = 630;
-      const targetScrollLeft = index * itemWidth;
+      const valueDistance = scrollElement.offsetWidth;
+      const targetScrollLeft = index * valueDistance;
 
       const distance = targetScrollLeft - scrollElement.scrollLeft;
 

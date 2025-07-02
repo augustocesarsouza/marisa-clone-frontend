@@ -1,4 +1,4 @@
-// import * as Styled from './styled';
+import * as Styled from './styled';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Product } from '../../../../Interfaces/Entity/Product';
 import { ProductAdditionalInfo } from '../../../../Interfaces/Entity/ProductAdditionalInfo';
@@ -90,7 +90,7 @@ const ProductFirstPart = ({ product }: ProductFirstPartProps) => {
   const carouselCustom = useRef<HTMLDivElement>(null);
 
   return (
-    <div className="flex flex-col w-[630px]">
+    <Styled.ContainerMainProductFirst className="flex flex-col">
       {user && (
         <ProductImageGallery
           product={product}
@@ -117,7 +117,7 @@ const ProductFirstPart = ({ product }: ProductFirstPartProps) => {
           />
         )}
       </div>
-    </div>
+    </Styled.ContainerMainProductFirst>
   );
 };
 

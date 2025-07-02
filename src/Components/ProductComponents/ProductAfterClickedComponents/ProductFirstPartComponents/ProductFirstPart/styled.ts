@@ -4,6 +4,14 @@ export const Span = styled.span``;
 
 export const Container = styled.div``;
 
+export const ContainerMainProductFirst = styled.div`
+  width: 630px;
+
+  @media (max-width: 1400px) {
+    width: 492px;
+  }
+`;
+
 // export const ContainerAboutTheProduct = styled.div`
 //   display: flex;
 //   align-items: center;
