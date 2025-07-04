@@ -20,9 +20,19 @@ import SvgLikeThumb from '../../../../Svg/SvgLikeThumb/SvgLikeThumb';
 import { Product } from '../../../../Interfaces/Entity/Product';
 import { useProductAppDispatch } from '../../ReduxSendProduct/productDispatch';
 import { changeProduct } from '../../ReduxSendProduct/productSlice';
+import productCommentLikeService, {
+  ReturnGetProductCommentLike,
+  ReturnGetProductCommentLikeList,
+} from '../../../../Service/ProductCommentLikeService/ProductCommentLikeService';
+import { ProductCommentLike, Reaction } from '../../../../Interfaces/Entity/ProductCommentLike';
 
 interface ProductCommentsDisplayProsp {
   product: Product;
+}
+
+interface ObjLikeOrDislike {
+  productCommentId: string;
+  quantityLike: number;
 }
 
 const ProductCommentsDisplay = ({ product }: ProductCommentsDisplayProsp) => {
@@ -102,6 +112,36 @@ const ProductCommentsDisplay = ({ product }: ProductCommentsDisplayProsp) => {
     [nav]
   );
 
+  const [listCommentLikes, setListCommentLikes] = useState<ProductCommentLike[] | []>([]);
+
+  const getAllLikesAndDeslikeCommentsProduct = useCallback(
+    async (user: User) => {
+      const productId = product.id;
+      const res = await productCommentLikeService.getAllProductCommentLikeProductId(
+        user,
+        productId
+      );
+
+      if (res.isSucess) {
+        const data = res as ReturnGetProductCommentLikeList;
+        const listCommentLikes: ProductCommentLike[] = data.data;
+
+        // listCommentLikes.forEach((el) => {
+        //   const obj =
+        // });
+
+        setListCommentLikes(listCommentLikes);
+      } else {
+        const error = res as ReturnErroCatch;
+        console.error(error);
+
+        localStorage.removeItem('user');
+        nav('/login');
+      }
+    },
+    [nav]
+  );
+
   const editNameUserComment = (name: string) => {
     return name.charAt(0).toUpperCase() + name.slice(1).toLowerCase();
   };
@@ -142,6 +182,7 @@ const ProductCommentsDisplay = ({ product }: ProductCommentsDisplayProsp) => {
     if (user) {
       setUser(user);
       getAllCommentsProduct(user);
+      getAllLikesAndDeslikeCommentsProduct(user);
     }
   }, [nav]);
 
@@ -151,6 +192,306 @@ const ProductCommentsDisplay = ({ product }: ProductCommentsDisplayProsp) => {
 
       return array;
     });
+  };
+
+  const [listObjDislike, setListObjDislike] = useState<ObjLikeOrDislike[]>([]);
+  const [listObjLike, setListObjLike] = useState<ObjLikeOrDislike[]>([]);
+
+  const onClickLikeOrDislikeComment = async (productCommentId: string, reaction: Reaction) => {
+    if (!user || !user.id) return;
+
+    const userId = user.id;
+    const productId = product.id;
+
+    const hereUserComment = listCommentLikes.find(
+      (el) => el.productCommentId === productCommentId && el.userId === userId
+    );
+
+    let reactionValue = reaction;
+
+    if (!hereUserComment) {
+      reactionValue = reaction;
+    }
+
+    if (hereUserComment && hereUserComment.reaction === reaction) {
+      reactionValue = Reaction.None;
+    }
+
+    const objLike: ProductCommentLike = {
+      userId: userId,
+      productCommentId: productCommentId,
+      productId: productId,
+      reaction: reactionValue,
+      id: '',
+      productDTO: null,
+      UserDTO: null,
+      ProductCommentDTO: null,
+      createdAt: '',
+    };
+
+    const resp = await productCommentLikeService.create(objLike, user);
+
+    if (resp.isSucess) {
+      const data = resp as ReturnGetProductCommentLike;
+
+      if (data.isSucess) {
+        const productCommentData = data.data;
+
+        if (
+          hereUserComment &&
+          hereUserComment.reaction === Reaction.None &&
+          productCommentData.reaction === Reaction.Like
+        ) {
+          setListObjLike((array) => {
+            const map = array.map((el) => {
+              if (el.productCommentId === productCommentId) {
+                return { ...el, quantityLike: el.quantityLike + 1 };
+              }
+
+              return el;
+            });
+
+            return map;
+          });
+        }
+
+        if (
+          hereUserComment &&
+          hereUserComment.reaction === Reaction.None &&
+          productCommentData.reaction === Reaction.Dislike
+        ) {
+          setListObjDislike((array) => {
+            const map = array.map((el) => {
+              if (el.productCommentId === productCommentId) {
+                return { ...el, quantityLike: el.quantityLike + 1 };
+              }
+
+              return el;
+            });
+
+            return map;
+          });
+        }
+
+        if (
+          hereUserComment &&
+          hereUserComment.reaction === Reaction.Like &&
+          productCommentData.reaction === Reaction.None
+        ) {
+          setListObjLike((array) => {
+            const map = array.map((el) => {
+              if (el.productCommentId === productCommentId) {
+                return { ...el, quantityLike: el.quantityLike - 1 };
+              }
+
+              return el;
+            });
+
+            return map;
+          });
+        }
+
+        if (
+          hereUserComment &&
+          hereUserComment.reaction === Reaction.Dislike &&
+          productCommentData.reaction === Reaction.None
+        ) {
+          setListObjDislike((array) => {
+            const map = array.map((el) => {
+              if (el.productCommentId === productCommentId) {
+                return { ...el, quantityLike: el.quantityLike - 1 };
+              }
+
+              return el;
+            });
+
+            return map;
+          });
+        }
+
+        if (
+          hereUserComment &&
+          hereUserComment.reaction === Reaction.Dislike &&
+          productCommentData.reaction === Reaction.Like
+        ) {
+          setListObjLike((array) => {
+            const map = array.map((el) => {
+              if (el.productCommentId === productCommentId) {
+                return { ...el, quantityLike: el.quantityLike + 1 };
+              }
+
+              return el;
+            });
+
+            return map;
+          });
+
+          setListObjDislike((array) => {
+            const map = array.map((el) => {
+              if (el.productCommentId === productCommentId) {
+                return { ...el, quantityLike: el.quantityLike - 1 };
+              }
+
+              return el;
+            });
+
+            return map;
+          });
+        }
+
+        if (
+          hereUserComment &&
+          hereUserComment.reaction === Reaction.Like &&
+          productCommentData.reaction === Reaction.Dislike
+        ) {
+          setListObjLike((array) => {
+            const map = array.map((el) => {
+              if (el.productCommentId === productCommentId) {
+                return { ...el, quantityLike: el.quantityLike - 1 };
+              }
+
+              return el;
+            });
+            console.log(map);
+
+            return map;
+          });
+
+          setListObjDislike((array) => {
+            const map = array.map((el) => {
+              if (el.productCommentId === productCommentId) {
+                return { ...el, quantityLike: el.quantityLike + 1 };
+              }
+
+              return el;
+            });
+
+            return map;
+          });
+        }
+
+        if (!hereUserComment && productCommentData.reaction === Reaction.Like) {
+          setListObjLike((array) => {
+            const map = array.map((el) => {
+              if (el.productCommentId === productCommentId) {
+                return { ...el, quantityLike: el.quantityLike + 1 };
+              }
+
+              return el;
+            });
+
+            return map;
+          });
+        }
+
+        if (!hereUserComment && productCommentData.reaction === Reaction.Dislike) {
+          setListObjDislike((array) => {
+            const map = array.map((el) => {
+              if (el.productCommentId === productCommentId) {
+                return { ...el, quantityLike: el.quantityLike + 1 };
+              }
+
+              return el;
+            });
+
+            return map;
+          });
+        }
+
+        if (!hereUserComment) {
+          setListCommentLikes((array) => {
+            const newArray = [...array, productCommentData];
+
+            return newArray;
+          });
+        }
+
+        setListCommentLikes((array) => {
+          const map = array.map((el) => {
+            if (el.productCommentId === productCommentId && el.userId === userId) {
+              return { ...el, reaction: productCommentData.reaction };
+            }
+
+            return el;
+          });
+
+          return map;
+        });
+        // console.log(productCommentData);
+      }
+    } else {
+      const error = resp as ReturnErroCatch;
+      console.error(error);
+    }
+  };
+
+  const checkifUserLikeComment = (productCommentId: string, reaction: Reaction): boolean => {
+    if (!user || !user.id) return false;
+
+    const userId = user.id;
+
+    const value = listCommentLikes.find(
+      (el) => el.productCommentId === productCommentId && el.userId === userId
+    );
+
+    if (value && value.reaction === reaction) {
+      return value.userId === userId;
+    }
+
+    return false;
+  };
+
+  const checkifUserDislikeComment = (productCommentId: string, reaction: Reaction): boolean => {
+    if (!user || !user.id) return false;
+
+    const userId = user.id;
+
+    const value = listCommentLikes.find(
+      (el) => el.productCommentId === productCommentId && el.userId === userId
+    );
+
+    if (value && value.reaction === reaction) {
+      return value.userId === userId;
+    }
+
+    return false;
+  };
+
+  useEffect(() => {
+    comments.forEach((el) => {
+      quantityOfLikesComment(el.id);
+      quantityOfDislikeComment(el.id);
+    });
+  }, [comments]);
+
+  const quantityOfLikesComment = (productCommentId: string) => {
+    const contLikes = listCommentLikes.filter(
+      (like) => like.reaction === 1 && like.productCommentId === productCommentId
+    ).length;
+
+    const obj: ObjLikeOrDislike = {
+      productCommentId: productCommentId,
+      quantityLike: contLikes,
+    };
+
+    const arrayLikes: ObjLikeOrDislike[] = [];
+    arrayLikes.push(obj);
+    setListObjLike(arrayLikes);
+  };
+
+  const quantityOfDislikeComment = (productCommentId: string) => {
+    const contLikes = listCommentLikes.filter(
+      (like) => like.reaction === 2 && like.productCommentId === productCommentId
+    ).length;
+
+    const obj: ObjLikeOrDislike = {
+      productCommentId: productCommentId,
+      quantityLike: contLikes,
+    };
+
+    const arrayLikes: ObjLikeOrDislike[] = [];
+    arrayLikes.push(obj);
+    setListObjDislike(arrayLikes);
   };
 
   return (
@@ -256,18 +597,34 @@ const ProductCommentsDisplay = ({ product }: ProductCommentsDisplayProsp) => {
                       <span className="text-[#3E3E3E] font-semibold">{el.comment}</span>
 
                       <div className="flex gap-[10px]">
-                        <div className="flex gap-[5px] items-center border border-[#d8d8d8] !p-[7px] !px-[15px] rounded-[5px] w-[65px] cursor-pointer">
+                        <div
+                          className={`flex gap-[5px] items-center border !p-[7px] !px-[15px] rounded-[5px] w-[65px] 
+                            cursor-pointer ${checkifUserLikeComment(el.id, Reaction.Like) ? 'border-[#ec008c]' : 'border-[#d8d8d8]'}`}
+                          onClick={() => onClickLikeOrDislikeComment(el.id, Reaction.Like)}>
                           <Styled.ContainerSvgThumb>
                             <SvgLikeThumb />
                           </Styled.ContainerSvgThumb>
-                          <span className="text-[14px]">0</span>
+                          <span className="text-[14px]">
+                            {
+                              listObjLike.find((obj) => obj.productCommentId === el.id)
+                                ?.quantityLike
+                            }
+                          </span>
                         </div>
 
-                        <div className="flex gap-[5px] items-center border border-[#d8d8d8] !p-[7px] !px-[15px] rounded-[5px] w-[65px] cursor-pointer">
+                        <div
+                          className={`flex gap-[5px] items-center border border-[#d8d8d8] !p-[7px] !px-[15px] rounded-[5px] w-[65px] 
+                            cursor-pointer ${checkifUserDislikeComment(el.id, Reaction.Dislike) ? 'border-[#ec008c]' : 'border-[#d8d8d8]'}`}
+                          onClick={() => onClickLikeOrDislikeComment(el.id, Reaction.Dislike)}>
                           <Styled.ContainerSvgThumb>
                             <SvgDislikeThumb />
                           </Styled.ContainerSvgThumb>
-                          <span className="text-[14px]">1</span>
+                          <span className="text-[14px]">
+                            {
+                              listObjDislike.find((obj) => obj.productCommentId === el.id)
+                                ?.quantityLike
+                            }
+                          </span>
                         </div>
                       </div>
                     </div>

@@ -141,7 +141,6 @@ const ProductCreateCommentModal = ({
 
         changeValueButtonEvaluate(false);
         changeCommentsCreateNew(productCommentData);
-        console.log(productCommentData);
       }
     } else {
       const error = res as ReturnErroCatch;
@@ -150,7 +149,6 @@ const ProductCreateCommentModal = ({
   };
 
   const containerAllStarsRef = useRef<StarRefItem[]>([]);
-
   const wasClickedStarSvg = useRef(false);
 
   const onMouseEnterStarSvg = (index: number) => {
@@ -398,7 +396,7 @@ const ProductCreateCommentModal = ({
 
               {ringColorInputName === 'red' && (
                 <span className="text-[14px] text-[red] font-semibold">
-                  Erro preencha comentário precisa ter pelo menos 3 caracteres
+                  Erro preencha nome precisa ter pelo menos 3 caracteres
                 </span>
               )}
             </div>
